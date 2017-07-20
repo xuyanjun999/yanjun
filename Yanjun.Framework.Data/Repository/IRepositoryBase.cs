@@ -27,6 +27,9 @@ namespace Yanjun.Framework.Data.Repository
         int Update<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] expressions) where TEntity : class;
 
         int Update<TEntity>(IEnumerable<TEntity> entitys, params string[] columns) where TEntity : class;
+        int Update<TEntity>(TEntity entity) where TEntity : class;
+
+        int Update<TEntity>(IEnumerable<TEntity> entitys) where TEntity : class;
 
         int Update<TEntity>(IEnumerable<TEntity> entitys, params Expression<Func<TEntity, object>>[] expressions) where TEntity : class;
 

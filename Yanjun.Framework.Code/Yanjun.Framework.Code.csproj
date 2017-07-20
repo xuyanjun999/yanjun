@@ -45,7 +45,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ExpressionUtil.cs" />
     <Compile Include="Util\ReflectionUtil.cs" />
+    <Compile Include="Web\Dto\EntityResponseDto.cs" />
+    <Compile Include="Web\Dto\ResponseDtoBase.cs" />
+    <Compile Include="Web\Dto\RestResponseDto.cs" />
     <Compile Include="Web\Pagination.cs" />
+    <Compile Include="Web\Dto\BaseAjaxArgs.cs" />
+    <Compile Include="Web\Dto\BaseSearchItem.cs" />
+    <Compile Include="Web\Dto\CommonAjaxArgs.cs" />
     <Compile Include="Web\WebHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -282,6 +282,27 @@ namespace Yanjun.Framework.Data.Repository
             return ExecuteNonQuery(sql);
         }
 
+        public int Update<TEntity>(TEntity entity) where TEntity : class
+        {
+
+            SetCommonUpdateProperty(new object[] { entity });
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity).ToString();
+
+            return ExecuteNonQuery(sql);
+        }
+
+        public int Update<TEntity>(IEnumerable<TEntity> entitys) where TEntity : class
+        {
+            if (entitys == null || entitys.Count() <= 0) return 0;
+
+            SetCommonUpdateProperty(entitys.ToArray());
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys).ToString();
+
+            return ExecuteNonQuery(sql);
+        }
+
         public int Update<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] expressions) where TEntity : class
         {
             return Update(new TEntity[] { entity }, expressions);

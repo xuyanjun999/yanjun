@@ -55,7 +55,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         static void RegisterData(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MyDbContext)));
+            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MyDbContext))).AsImplementedInterfaces().AsSelf().PropertiesAutowired();
         }
 
 
@@ -66,7 +66,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
             // Register your MVC controllers. (MvcApplication is the name of
             // the class in Global.asax.)
-            builder.RegisterControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
 
             // OPTIONAL: Register model binders that require DI.
             //builder.RegisterModelBinders(typeof(MvcApplication).Assembly);
@@ -81,7 +81,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
             // OPTIONAL: Enable property injection into action filters.
             builder.RegisterFilterProvider();
-
+             
             // OPTIONAL: Enable action method parameter injection (RARE).
             //builder.InjectActionInvoker();
 
@@ -91,7 +91,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         static void RegisterApi(ContainerBuilder builder,HttpConfiguration config)
         {
-            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterApiControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
 
             // OPTIONAL: Register the Autofac filter provider.
             builder.RegisterWebApiFilterProvider(config);

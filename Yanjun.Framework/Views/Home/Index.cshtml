@@ -1,31 +1,51 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿
+@{
+    Layout = null;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Extjs/resources/theme-classic-all.css" rel="stylesheet" />
+    <link href="~/Extjs/crisp/resources/ux-all.css" rel="stylesheet" />
+    <link href="~/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/css/app.css" rel="stylesheet" />
+    <link href="~/css/icon.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <script type="text/javascript" src="~/Extjs/ext-all.js"></script>
+    <script src="~/Extjs/theme-classic.js"></script>
+    <script src="~/Extjs/ux.js"></script>
+    <script src="~/js/common.js"></script>
+    <script src="~/js/serverCommunication.js"></script>
+    <script src="~/js/lib.js"></script>
+
+    <script src="~/app/model/sys/Menu.js"></script>
+
+    <script type="text/javascript">
+
+        Ext.onReady(function () {
+
+            Ext.Loader.setConfig({
+                enable: true,
+                paths: {
+                    "xf": "/app",
+                    "xf.view": "/app/view",
+                    "xf.controller": "/app/controller",
+                    "xf.model": "/app/model",
+                }
+            });
+            Ext.toast("欢迎使用EAP", "欢迎", "t");
+
+
+            Ext.application("xf.Application");
+        });
+
+    </script>
+</body>
+</html>

@@ -17,7 +17,7 @@ namespace Yanjun.Framework.Data.DBContext
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            string assembleFileName = Assembly.GetExecutingAssembly().CodeBase.Replace("Yanjun.Framework.Data.dll", "Yanjun.Framework.Mapping.dll").Replace("file:///", "");
+            string assembleFileName = Assembly.GetExecutingAssembly().CodeBase.Replace("Yanjun.Framework.Data.DLL", "Yanjun.Framework.Mapping.DLL").Replace("file:///", "");
             Assembly asm = Assembly.LoadFile(assembleFileName);
             modelBuilder.Configurations.AddFromAssembly(asm);
             base.OnModelCreating(modelBuilder);

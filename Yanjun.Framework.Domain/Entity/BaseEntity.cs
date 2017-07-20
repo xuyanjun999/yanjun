@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace Yanjun.Framework.Domain.Entity
 {
@@ -12,9 +13,6 @@ namespace Yanjun.Framework.Domain.Entity
     /// </summary>
     public class BaseEntity : IBaseEntity<long>
     {
-
-
-
         /// <summary>
         /// 每个表实例映射主键ID
         /// </summary>
@@ -28,6 +26,7 @@ namespace Yanjun.Framework.Domain.Entity
         /// 数据记录状态
         /// </summary>
         [NotMapped]
+        [JsonIgnore]
         public BaseEntityStatus StatusEnum
         {
             get
