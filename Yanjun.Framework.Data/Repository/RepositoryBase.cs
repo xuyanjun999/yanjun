@@ -388,7 +388,14 @@ namespace Yanjun.Framework.Data.Repository
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if(_tran!=null)
+            {
+                _tran.Dispose();
+            }
+            if(MyContext!=null)
+            {
+                MyContext.Dispose();
+            }
         }
     }
 }
