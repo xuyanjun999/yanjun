@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Domain", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Code", "Yanjun.Framework.Code\Yanjun.Framework.Code.csproj", "{50B66296-4253-4A12-8FF4-DD84912C313D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Repository", "Yanjun.Framework.Repository\Yanjun.Framework.Repository.csproj", "{7BC35300-2005-46D7-82BF-C15868B4F304}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Service", "Yanjun.Framework.Service\Yanjun.Framework.Service.csproj", "{37E0CF46-11EE-4035-A787-73EC5FD1357F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{50B66296-4253-4A12-8FF4-DD84912C313D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50B66296-4253-4A12-8FF4-DD84912C313D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50B66296-4253-4A12-8FF4-DD84912C313D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BC35300-2005-46D7-82BF-C15868B4F304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BC35300-2005-46D7-82BF-C15868B4F304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BC35300-2005-46D7-82BF-C15868B4F304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BC35300-2005-46D7-82BF-C15868B4F304}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E0CF46-11EE-4035-A787-73EC5FD1357F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E0CF46-11EE-4035-A787-73EC5FD1357F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E0CF46-11EE-4035-A787-73EC5FD1357F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E0CF46-11EE-4035-A787-73EC5FD1357F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
