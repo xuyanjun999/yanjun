@@ -3,23 +3,7 @@
     layout: 'border',
     itemId: 'mainviewport',
     controller: Ext.create("xf.controller.main.Main"),
-    items: [{
-        region: 'north',
-        border: false,
-        margin: '0 0 3 0',
-        height: 35,
-       // layout:'column',
-        items: [{
-            xtype:'menubar',
-            items: [{
-                text: 'File',
-                menu: [{ text: 'Open...' },
-                    '-',
-                    { text: 'Close' }
-                ]
-            }]
-        }]
-    }, {
+    items: [ {
         region: 'west',
         title: '菜单导航',
         collapsible: true,

@@ -275,16 +275,16 @@ var serverNS = {
     },
 
     //Jquery和ext 兼容发送ajax通讯 参数为commuArgs对象
-    ajaxProSend: function (refcommuArgs) {
+    ajaxProSend: function (refcommuArgs, method) {
         if (typeof (Ext) == "object") {
-            this.extAjaxProSend(refcommuArgs);
+            this.extAjaxProSend(refcommuArgs, method);
         } else {
             this.$ajaxProSend(refcommuArgs);
         }
     },
 
     //ext  发送ajax通讯 参数为commuArgs对象
-    extAjaxProSend: function (refcommuArgs) {
+    extAjaxProSend: function (refcommuArgs, method) {
         //Ext.decode(Ext.encode(refcommuArgs ));
         var commuArgs = refcommuArgs.deepCopy();
         //重置通讯参数
@@ -292,18 +292,17 @@ var serverNS = {
         if (commuArgs.ajaxMethod == 'undefined' || commuArgs.ajaxMethod == '') {
             throw '没有设置异步通讯方式:ajaxMethod.';
         };
-        var ns = commuArgs.ajaxMethod.split('.');
-        var method_name = ns[ns.length - 1];
-        var full_ns = commuArgs.ajaxMethod.replace('.' + method_name, '');
+
         //full_ns = WEB_APP_NS_NAME + '.' + full_ns;
-        var url = '/ajaxpro/' + full_ns + ',' + commuArgs.ajaxProBll;
+        var url = commuArgs.ajaxMethod;
 
         var headerParams = {};
         headerParams['Content-Type'] = 'application/json';
-        headerParams[AJAXPRO_METHOD_HEADER_NAME] = method_name;
+        //headerParams[AJAXPRO_METHOD_HEADER_NAME] = method_name;
+        if (!method) method = "POST";
 
         Ext.Ajax.request({
-            method: 'POST',
+            method: method,
             url: url,
             timeout: AJAX_TIMEOUT,
             disableCaching: true,
@@ -312,23 +311,21 @@ var serverNS = {
             success: function (response, reqOption) {
                 try {
                     var data = Ext.decode(response.responseText);
-                    if (!data.value) {
+                    if (!data) {
                         console.log(data);
                         throw '服务端返回数据错误.';
                     }
                     if (commuArgs.callBack) {
-                        serverNS.packRespData(data.value);
-                        try {
-                            commuArgs.callBack(data.value);
-                        } catch (e) {
-                            console.log('获取服务器信息后，回调处理异常:' + e);
-                        }
+                        serverNS.packRespData(data);
                     }
+                    try {
+                        commuArgs.callBack(data);
+                    } catch (e) {
+                        console.log('获取服务器信息后，回调处理异常:' + e);
+                    }
+
                 } catch (e) {
                     console.log("解析获得服务器数据格式错误:" + e);
-                    if (!isDebug && commuArgs.ajaxMethod != ajaxProMethodNS.IsLogin && commuArgs.ajaxMethod != ajaxProMethodNS.Login) {
-                        serverNS.isLogin();
-                    }
                 }
             },
             failure: function (response, reqOption) {
@@ -407,18 +404,28 @@ var serverNS = {
     //包装服务器返回数据  CommonJsonReturn 为服务端返回数据类
     packRespData: function (commonJsonReturn) {
         try {
-            //合并额外参数
-            serverNS.extendObjAttr(commonJsonReturn.JsonExtraDatas, commonJsonReturn);
-            delete commonJsonReturn.JsonExtraDatas;
-            //合并实体额外属性
-            for (var i = 0; i < commonJsonReturn.JsonExtraEntityAttrs.length; i++) {
-                serverNS.extendObjAttr(commonJsonReturn.JsonExtraEntityAttrs[i], commonJsonReturn.Entitys[i]);
+            if (!Ext.isEmpty(commonJsonReturn.Entitys)) {
+                Ext.each(commonJsonReturn.Entitys, function (item, index) {
+                    item = serverNS.packRespDataN(item);
+                    commonJsonReturn.Entitys[index] = item;
+                });
+
             }
-            delete commonJsonReturn.JsonExtraEntityAttrs;
-            return commonJsonReturn;
         } catch (e) {
             throw '包装服务器返回额外数据异常:' + e
         }
+    },
+
+    packRespDataN: function (obj, namespace, newObj = {}) {
+        for (var k in obj) {
+            var thisNamespace = namespace ? `${namespace}.${k}` : k;
+            if (typeof obj[k] == 'object') {
+                serverNS.packRespDataN(obj[k], thisNamespace, newObj)
+            } else {
+                newObj[thisNamespace] = obj[k];
+            }
+        };
+        return newObj;
     },
 
     //把一个对象的属性和值扩展另外对象的属性 sObj扩展的模板对象,可以为json字符串，tObj待扩展的目标对象
@@ -1441,7 +1448,7 @@ var globalDicConfigKeyType = {
     PartPackType: 1211, //物料包装状态
     ParamType: 1220, //参数类别
     PartNameType: 6,
-    BJWOType:2050
+    BJWOType: 2050
 };
 
 //全局工作流程编号
@@ -1593,16 +1600,16 @@ var comboStaticData = {
     //报表数据对象
     ReportDataObjType: [['RP_Show_合同信息汇总表', 'GetCommonReport', 'ContractSummary'],
     ['Get_ContractSaler', 'GetCommonReport', 'GetContractSaler'],
-     ['Get_ContractSaler1', 'GetCommonReport', 'ContractSaler1'],
-     ['RP_Item_合同操作', 'GetCommonReport', 'ConteactPlan'],
-     ['RP_Show_电梯合同', 'GetCommonReport', 'ContractSummary_E'],
-     ['RP_Show_扶梯合同', 'GetCommonReport', 'ContractSummary_F'],
-     ['RP_Show_门套参数', 'GetCommonReport', 'DailyMJ'],
-     ['RP_Show_厅门参数', 'GetCommonReport', 'DailyTM'],
-     ['RP_Show_电梯物料结存', 'GetCommonReport', 'ElevatorPartStockRP'],
-     ['RP_Show_扶梯物料结存', 'GetCommonReport', 'EscalatorPartStockRP'],
-     ['V_InventoryDetailAddressSummary_zh_cn', 'GetCommonReport', 'V_InventoryDetailAddressSummary_zh_cn'],
-     ['V_VmiInventoryDetailAddressSummary_zh_cn', 'GetCommonReport', 'V_VmiInventoryDetailAddressSummary_zh_cn']
+    ['Get_ContractSaler1', 'GetCommonReport', 'ContractSaler1'],
+    ['RP_Item_合同操作', 'GetCommonReport', 'ConteactPlan'],
+    ['RP_Show_电梯合同', 'GetCommonReport', 'ContractSummary_E'],
+    ['RP_Show_扶梯合同', 'GetCommonReport', 'ContractSummary_F'],
+    ['RP_Show_门套参数', 'GetCommonReport', 'DailyMJ'],
+    ['RP_Show_厅门参数', 'GetCommonReport', 'DailyTM'],
+    ['RP_Show_电梯物料结存', 'GetCommonReport', 'ElevatorPartStockRP'],
+    ['RP_Show_扶梯物料结存', 'GetCommonReport', 'EscalatorPartStockRP'],
+    ['V_InventoryDetailAddressSummary_zh_cn', 'GetCommonReport', 'V_InventoryDetailAddressSummary_zh_cn'],
+    ['V_VmiInventoryDetailAddressSummary_zh_cn', 'GetCommonReport', 'V_VmiInventoryDetailAddressSummary_zh_cn']
     ],
     //消息模块
     messageClassificationType: [['接收消息', 1, 'ReceiveMessages'], ['发送消息', 2, 'SendMessage']],
@@ -1625,7 +1632,7 @@ var comboStaticData = {
     //合格证状态
     CertificateStatus: [['创建', 10, 'Create'], ['完成', 100, 'Complete']],
     //本公司开户银行
-    TheBank: [['中国建设银行杭州义蓬支行', '中国建设银行杭州义蓬支行' , '中国建设银行杭州义蓬支行']],
+    TheBank: [['中国建设银行杭州义蓬支行', '中国建设银行杭州义蓬支行', '中国建设银行杭州义蓬支行']],
     //本公司开户账号
     TheAccount: [['3305 0161 7093 0000 0045', '3305 0161 7093 0000 0045', '3305 0161 7093 0000 0045']],
     //公司名称
@@ -1644,59 +1651,59 @@ var comboStaticData = {
     ShipScanType: [['发运', 90], ['发运回退', 990]],
     //工单打印 所属车间
     WorkCententData: [
-                        ['100-电梯钣金车间', 100],
-                        ['200-电梯电气车间', 200],
-                        ['300-电梯主机门机车间', 300],
-                        ['400-扶梯钣金车间', 400],
-                        ['500-扶梯电气车间', 500],
-                        ['600-扶梯装配车间', 600],
-                        ['700-扶梯桁架车间', 700],
-                        ['800-电梯江东车间', 800]
+        ['100-电梯钣金车间', 100],
+        ['200-电梯电气车间', 200],
+        ['300-电梯主机门机车间', 300],
+        ['400-扶梯钣金车间', 400],
+        ['500-扶梯电气车间', 500],
+        ['600-扶梯装配车间', 600],
+        ['700-扶梯桁架车间', 700],
+        ['800-电梯江东车间', 800]
     ],
     ElevatorMetail: [['所有模板', 0],
-                    ['吊顶', 101],
-                    ['轿顶', 102],
-                    ['不锈钢轿壁板含前壁操纵壁门楣', 103],
-                    ['一体式轿顶', 104],
-                    ['轿底托架', 105],
-                    ['不锈钢厅轿门板', 106],
-                    ['轿底平台', 107],
-                    ['门机门头', 108],
-                    ['发泡轿壁彩钢盖板', 109],
-                    ['喷粉轿壁板含前壁操纵门楣', 110],
-                    ['喷粉厅轿门板', 111]],
+    ['吊顶', 101],
+    ['轿顶', 102],
+    ['不锈钢轿壁板含前壁操纵壁门楣', 103],
+    ['一体式轿顶', 104],
+    ['轿底托架', 105],
+    ['不锈钢厅轿门板', 106],
+    ['轿底平台', 107],
+    ['门机门头', 108],
+    ['发泡轿壁彩钢盖板', 109],
+    ['喷粉轿壁板含前壁操纵门楣', 110],
+    ['喷粉厅轿门板', 111]],
     //工单打印PDF模板选择
     PdfModelData: [
-                    ['101-吊顶', 101],
-                    ['102-轿顶', 102],
-                    ['103-不锈钢轿壁板含前壁操纵壁门楣', 103],
-                    ['104-一体式轿顶', 104],
-                    ['105-轿底托架', 105],
-                    ['106-不锈钢厅轿门板', 106],
-                    ['107-轿底平台', 107],
-                    ['108-门机门头', 108],
-                    ['109-发泡轿壁彩钢盖板', 109],
-                    ['110-喷粉轿壁板含前壁操纵门楣', 110],
-                    ['111-喷粉厅轿门板', 111],
-                    ['112-门机', 112],
-                    ['201-直梯召唤盒', 201],
-                    ['202-直梯操纵箱残疾人', 202],
-                    ['203-直梯操纵箱主操纵箱', 203],
-                    ['204-直梯控制柜', 204],
-                    ['205-直梯操纵箱副操纵箱', 205],
-                    ['801-电梯江东车间', 801],
-                    ['301-门机装配', 301],
-                    ['302-主机装配', 302],
-                    ['303-上坎', 303],
-                    ['401-扶梯人行道裙盖板(裙板)', 401],
-                    ['402-扶梯人行道裙盖板(盖板)', 402],
-                    ['501-扶梯控制柜', 501],
-                    ['601-XNT系列自动扶梯装配工单', 601],
-                    ['602-XNR系列自动人行道装配工单', 602],
-                    ['603-XNT系列自动扶梯装配参数', 603],
-                    ['604-XNR系列自动人行道装配参数', 604],
-                    ['701-人行道桁架', 701],
-                    ['702-扶梯桁架', 702]
+        ['101-吊顶', 101],
+        ['102-轿顶', 102],
+        ['103-不锈钢轿壁板含前壁操纵壁门楣', 103],
+        ['104-一体式轿顶', 104],
+        ['105-轿底托架', 105],
+        ['106-不锈钢厅轿门板', 106],
+        ['107-轿底平台', 107],
+        ['108-门机门头', 108],
+        ['109-发泡轿壁彩钢盖板', 109],
+        ['110-喷粉轿壁板含前壁操纵门楣', 110],
+        ['111-喷粉厅轿门板', 111],
+        ['112-门机', 112],
+        ['201-直梯召唤盒', 201],
+        ['202-直梯操纵箱残疾人', 202],
+        ['203-直梯操纵箱主操纵箱', 203],
+        ['204-直梯控制柜', 204],
+        ['205-直梯操纵箱副操纵箱', 205],
+        ['801-电梯江东车间', 801],
+        ['301-门机装配', 301],
+        ['302-主机装配', 302],
+        ['303-上坎', 303],
+        ['401-扶梯人行道裙盖板(裙板)', 401],
+        ['402-扶梯人行道裙盖板(盖板)', 402],
+        ['501-扶梯控制柜', 501],
+        ['601-XNT系列自动扶梯装配工单', 601],
+        ['602-XNR系列自动人行道装配工单', 602],
+        ['603-XNT系列自动扶梯装配参数', 603],
+        ['604-XNR系列自动人行道装配参数', 604],
+        ['701-人行道桁架', 701],
+        ['702-扶梯桁架', 702]
     ],
 
     EscalatorFile: [['发运物料清单', 10], ['配置表', 20], ['附件箱', 30]],

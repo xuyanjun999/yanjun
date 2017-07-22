@@ -18,7 +18,7 @@ var AJAXPRO_METHOD_HEADER_NAME = 'X-AjaxPro-Method';
 //AJAXPRO类库需要的HEADER名称
 var EDIT_PANEL_BACK_ITEMID = "SG_EDITPANEL_BACK";
 //编辑区返回用的ITEMID
-var REQUIRED_LABEL_TPL = '<span class="required-tpl" data-qtip="Required">*</span>';
+var REQUIRED_LABEL_TPL = '<span style="color:red;" data-qtip="Required">*</span>';
 
 //登录页名称
 var LOGIN_PAGE_NAME = 'userlogin.aspx';

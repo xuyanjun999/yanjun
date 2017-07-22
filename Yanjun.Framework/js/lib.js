@@ -12,7 +12,9 @@
 3.Grid 无数据时鼠标移动第一行第一列不断报错PageMap asked for range which it does not have
 4.define公用控件时，引用字段 必须在initComponent重新定义才能对象隔离，暂时这样用
 ExtJs's Bug************************************************************/
-
+var ClientInfo = {
+    LName: "EAP"
+};
 //basic tools
 function alert_error(msg, title) {
     if (Ext.isEmpty(title)) {
@@ -184,7 +186,7 @@ Ext.define('xf.Common.BindCombo', {
             this.clearStore();
         }
         this.callParent();
-        this.applyEmptyText();
+        //this.applyEmptyText();
     },
 
     initComponent: function () {
@@ -290,7 +292,8 @@ Ext.define('xf.Common.Reader', {
                 }
                 return;
             }
-            var data = result;//serverNS.packRespData(result.value);
+            var data = serverNS.packRespData(result);
+
 
             //分页时防止重新计算总数
             var count = data[this.totalProperty];
@@ -1295,8 +1298,11 @@ Ext.define('xf.Form', {
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
+                    
                     if (!Ext.isEmpty(data.Entitys) && option.autoSetValues) {
+                        console.log("formLoad:" + data.Entitys[0]);
                         formPanel.getForm().reset();
+
                         formPanel.record.raw = data.Entitys[0];
                         formPanel.getForm().setValues(data.Entitys[0]);
                     }
@@ -1318,7 +1324,7 @@ Ext.define('xf.Form', {
             }
         };
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs);
+        serverNS.ajaxProSend(this.commuArgs,'GET');
     },
 
     //数据添加 不能使用add,会覆盖父类方法
@@ -2449,7 +2455,8 @@ Ext.define('xf.Common.TreePanel', {
     rootVisible: false,
     //根节点显示文本，如果文本为空，则根节点不显示
     rootText: '',
-    listeners: {
+    //自带的监听
+    selfListeners: {
         checkchange: function (node, checked) {
             //递归修改所后代节点状态（节点,状态）
             var allChild = function (node, checked) {
@@ -2531,19 +2538,6 @@ Ext.define('xf.Common.TreePanel', {
                 }
             }
         },
-        itemcontextmenu(tree, record, item, index, e, eOpts) {
-            if (this.itemContextMenu) {
-                this.itemContextMenu(tree, record, item, index, e, eOpts);
-            }
-
-        }
-    },
-    //树节点点击事件
-    treeNodeClick: function (tree, record, item, index, e) {
-    },
-
-    itemContextMenu: function (tree, record, item, index, e) {
-
     },
 
     //通讯方式参数
@@ -2634,13 +2628,9 @@ Ext.define('xf.Common.TreePanel', {
             store: Ext.create('Ext.data.TreeStore', treeStoreConfig)
         });
         //end apply
+        Ext.applyIf(this.listeners, this.selfListeners);
 
         this.callParent(arguments);
-
-        if (this.treeNodeClick) {
-            //注册treeNodeClick事件
-            this.on('itemclick', this.treeNodeClick);
-        }
     }
 });
 

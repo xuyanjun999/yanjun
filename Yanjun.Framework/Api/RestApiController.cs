@@ -9,17 +9,18 @@ using Yanjun.Framework.Domain.Entity;
 
 namespace Yanjun.Framework.Mvc.Api
 {
-    public class RestApiController<T>:ApiControllerBase where T:BaseEntity,new()
+    public class RestApiController<T> : ApiControllerBase where T : BaseEntity, new()
     {
 
         [HttpGet]
-        public virtual JsonResult<RestResponseDto> Get(long id)
+        public virtual JsonResult<RestResponseDto> Get(long id,string include)
         {
             RestResponseDto res = new RestResponseDto();
             try
             {
-                T entity = Repository.QueryFirst<T>(x=>x.ID==id);
-                res.Entitys = entity;
+                var includes = string.IsNullOrEmpty(include) ? null : include.Split(new char[] { ',' });
+                T entity = Repository.QueryFirst<T>(x => x.ID == id, includes);
+                res.Entitys = new object[] { entity };
                 res.Success = true;
             }
             catch (Exception ex)
@@ -38,7 +39,7 @@ namespace Yanjun.Framework.Mvc.Api
             try
             {
                 Repository.Insert(entity);
-                res.Entitys = Repository.QueryFirst<T>(x=>x.ID==entity.ID);
+                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
                 res.Success = true;
             }
             catch (Exception ex)
@@ -57,7 +58,7 @@ namespace Yanjun.Framework.Mvc.Api
             try
             {
                 Repository.Update<T>(entity);
-                res.Entitys = Repository.QueryFirst<T>(x=>x.ID==entity.ID);
+                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
                 res.Success = true;
             }
             catch (Exception ex)

@@ -3,6 +3,7 @@
     layout: 'border',
     frame: true,
     requires: 'xf.model.sys.Menu',
+    controller: 'menu',
     title: '菜单管理',
     items: [{
         title: '发运日期',
@@ -15,52 +16,13 @@
         enableTextSearch: false,
         commonTreeConfig: {
             rootVisible: false,
-            itemContextMenu: function (tree, record, item, index, e) {
-                console.log(arguments);
-                e.preventDefault();
-                e.stopEvent(); 
-
-                var menu = new Ext.menu.Menu({
-                    //控制右键菜单位置 
-                    float: true,
-                    items: [{
-                        text: "添加顶级菜单",
-                        iconCls: 'add',
-                        handler: function () {
-                            //当点击时隐藏右键菜单 
-                           this.up("menu").hide();
-                           alert("添加顶级菜单");
-                        }
-                    }, {
-                        text: "添加子菜单",
-                        iconCls: 'add',
-                        handler: function () {
-                            this.up("menu").hide();
-                            alert("添加子菜单");
-                        }
-                    }, {
-                        text: "编辑",
-                        iconCls: 'edit',
-                        handler: function () {
-                            this.up("menu").hide();
-                            alert("编辑");
-                        }
-                    }, {
-                        text: "删除",
-                        iconCls: 'remove',
-                        handler: function () {
-                            this.up("menu").hide();
-                            alert("删除");
-                        }
-                    }
-                    ]
-                }).showAt(e.getXY());//让右键菜单跟随鼠标位置
-
+            listeners: {
+                itemcontextmenu: 'treeItemContextMenu',
+                itemclick: 'treeItemclick'
             },
             storeBeforeLoad: function (tree, store, operation, eOpts) {
 
-                var dataArgs = new serverNS.dataArgs()
-
+                var dataArgs = new serverNS.dataArgs();
 
                 var searchArgs = new serverNS.searchArgs();
                 searchArgs.FieldName = 'ParentID';
@@ -72,37 +34,16 @@
                     searchArgs.Values.push(operation.node.raw.ID);
                 dataArgs.Query.Searchs.push(searchArgs);
 
-                tree.commuArgs.ajaxMethod = 'Menu/Gets';
+                tree.commuArgs.ajaxMethod = '/Menu/Gets';
                 tree.commuArgs.dataArgs = dataArgs;
             },
-            treeNodeClick: function (tree, record, item, index, e) {
-                if (record.parentNode == null) {
-                    var treeobj = tree.up('CommonTreeSearchPanel');
-                    var grid = this.up('SGView').down('sggrid');
-                    this.treeRootNodeClick(this, record, grid);
-                }
-                if (record.raw.Level == 1) {
-                    var grid = this.up('SGView').down('sggrid');
-                    grid.tempFilterSearchItems = [];
 
-                    // var searchArg = new serverNS.searchArgs(); 
-                    // searchArg.FieldName = 'FM.SO.DeliveryDate'; 
-                    // searchArg.Values.push(record.raw.Date); 
-                    // searchArg.SearchGroupID = 2; 
-                    // grid.tempFilterSearchItems.push(searchArg); 
-
-                    grid.resetData();
-                }
-            }
         }
-    }, {
-        xtype: "panel",
-        region: 'east',
-        width: 220
     }, {
         xtype: 'panel',
         region: 'center',
         itemId: 'content',
+        reference: 'content',
         layout: 'card',
         items: [{
             xtype: "sggrid",
@@ -114,6 +55,10 @@
             }, {
                 text: '名称',
                 dataIndex: 'Name',
+                width: 100
+            }, {
+                text: '父级菜单',
+                dataIndex: 'Parent.Name',
                 width: 100
             }, {
                 text: '图标',
@@ -143,7 +88,7 @@
             getDataArg: function () {
                 var dataArgs = new serverNS.dataArgs();
                 dataArgs.ActionDes = '';
-
+                dataArgs.Query.IncludeEntityPaths.push('Parent');
                 //var searchArgs = new serverNS.searchArgs();
                 //searchArgs.FieldName = 'Status';
                 //searchArgs.Values.push(0);
@@ -154,7 +99,7 @@
             },
             beforeload: function (store, action) {
                 this.commuArgs.dataArgs = this.getDataArg();
-                this.commuArgs.ajaxMethod = "Menu/Gets";
+                this.commuArgs.ajaxMethod = "/Menu/Gets";
             },
             quickSearchCols: ['Name'],
             modelName: 'xf.model.sys.Menu',
@@ -182,20 +127,120 @@
                 }
             }]
         }, {
-            xtype: "SGForm",
+            xtype: 'SGForm',
             layout: 'column',
+            defaults: {
+                margin: '2 5 0 2',
+                xtype: 'textfield',
+                labelAlign: 'top',
+                columnWidth: .5,
+                labelSeparator: '',
+                msgTarget: 'side'
+            },
+            split: true,
+            autoScroll: true,
+            title: '明细',
+            border: false,
+            modelName: 'xf.model.sys.Menu',
+            beforeshow: function () {
+                this.getForm().reset();
+                var sgform = this;
+                if (this.record) {
+                    var dataArgs = this.commuArgs.dataArgs;
+                    dataArgs.ActionDes = '获取数据';
+                    var include = ["Parent"].join(",");
+                    // dataArgs.Query.IncludeEntityPaths.push('');
+                    sgform.commuArgs.ajaxMethod = "/api/Menu/" + this.record.raw.ID + "?include=" + include;
+                    sgform.load();
+                }
+                else {
+                    this.getForm().reset();
+                }
+            },
             items: [{
                 xtype: 'textfield',
-                fieldLabel: '名称',
-                columnWidth: 0.5,
                 allowBlank: false,
-            }],
+                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                fieldLabel: '菜单名称',
+                name: 'Name'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '图标',
+                name: 'IconResource'
+            }, {
+                xtype: 'CommonBindCombo',
+                allowBlank: false,
+                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                store: serverNS.getComboStaticStore(comboStaticData.yesNo),
+                fieldLabel: '是否显示',
+                name: 'IsVisible'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '描述',
+                name: 'Des'
+            }, {
+                xtype: 'numberfield',
+                allowBlank: false,
+                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                allowDecimals: false,
+                fieldLabel: '序号',
+                name: 'SequenceIndex'
+            }, {
+                xtype: 'textfield', allowBlank: false, afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                fieldLabel: '代号',
+                name: 'Code'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '路径',
+                name: 'Url'
+            }, {
+                xtype: 'textfield',
+                readOnly: true,
+                fieldLabel: '父级菜单',
+                name: 'Parent.Name'
+            }, {
+                xtype: 'hiddenfield',
+                readOnly: true,
+                name: 'ParentID'
+            }, {
+                xtype: 'textarea',
+                columnWidth: 1,
+                fieldLabel: '备注',
+                name: 'Remark'
+            },],
             tbar: [{
-                text: '返回',
                 xtype: 'button',
+                text: '保存',
+                iconCls: 'save',
+                handler: function () {
+                    var form = this.up('SGForm');
+                    var commuArgs = form.commuArgs;
+                    var dataArgs = commuArgs.dataArgs;
+                    var option = {};
+                    option.callBack = function (data) {
+                        var sgView = form.up('SGView');
+                        sgcard.getLayout().setActiveItem(cardenum.mainGrid);
+                        sgView.down('sggrid').refresh();
+                    }
+                    if (form.record) {
+                        dataArgs.ActionDes = '保存数据';
+                        dataArgs.EntityTypeFullName = 'SG.Eap.Trunk.Entity.MenuEntity';
+                        commuArgs.ajaxMethod = ajaxProMethodNS.Update;
+                        form.save(option);
+                    }
+                    else {
+                        dataArgs.ActionDes = '新增数据';
+                        dataArgs.EntityTypeFullName = 'SG.Eap.Trunk.Entity.MenuEntity';
+                        commuArgs.ajaxMethod = ajaxProMethodNS.Add;
+                        form.addNew(option);
+                    }
+                }
+            }, '-', {
+                xtype: 'button',
+                text: '返回',
                 iconCls: 'back',
                 handler: function () {
-                    this.up('#content').getLayout().setActiveItem(0);
+                    this.up("#content").getLayout().setActiveItem(0);
                 }
             }]
         }]

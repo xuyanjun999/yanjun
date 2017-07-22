@@ -1,7 +1,48 @@
-﻿@{
-    ViewBag.Title = "About";
-}
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
+﻿
 
-<p>Use this area to provide additional information.</p>
+<script>
+
+    let obj = {
+        name: '关中大侠吕轻侯',
+        parent: {
+            age: 44,
+            id: 1,
+            root: {
+                name: '七侠镇吕知府'
+            }
+        }
+    };
+
+
+    let fun = obj => {
+        let newObj = {},
+            fun1 = (obj, namespace) => {
+                Object.keys(obj).forEach(k => {
+                    let thisNamespace = namespace ? `${namespace}.${k}` : k;
+                    if (typeof obj[k] == 'object') {
+                        fun1(obj[k], thisNamespace)
+                    } else {
+                        newObj[thisNamespace] = obj[k];
+                    }
+                })
+            }
+        fun1(obj);
+        return newObj;
+    };
+
+    packRespDataN=function (obj, namespace, newObj = {}) {
+        for (var k in obj) {
+            var thisNamespace = namespace ? `${namespace}.${k}` : k;
+            if (typeof obj[k] == 'object') {
+                packRespDataN(obj[k], thisNamespace, newObj)
+            } else {
+                newObj[thisNamespace] = obj[k];
+            }
+        };
+        return newObj;
+    }
+
+    console.log(packRespDataN(obj));
+
+
+</script>
