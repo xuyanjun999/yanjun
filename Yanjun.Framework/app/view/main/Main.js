@@ -5,11 +5,20 @@
     controller: Ext.create("xf.controller.main.Main"),
     items: [{
         region: 'north',
-        html: '<h4 style="line-height:0px;">&nbsp;&nbsp;通用后台任务管理系统(EAP V9.5)</h4>',
         border: false,
         margin: '0 0 3 0',
         height: 35,
-        rbar: [{ text: 'test', handler: 'addUser' }]
+       // layout:'column',
+        items: [{
+            xtype:'menubar',
+            items: [{
+                text: 'File',
+                menu: [{ text: 'Open...' },
+                    '-',
+                    { text: 'Close' }
+                ]
+            }]
+        }]
     }, {
         region: 'west',
         title: '菜单导航',

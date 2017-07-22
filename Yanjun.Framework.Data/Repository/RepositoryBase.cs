@@ -186,7 +186,7 @@ namespace Yanjun.Framework.Data.Repository
                 resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(TEntity), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExp));
             }
             tempData = tempData.Provider.CreateQuery<TEntity>(resultExp);
-            pagination.records = tempData.Count();
+           // pagination.records = tempData.Count();
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToArray();
         }

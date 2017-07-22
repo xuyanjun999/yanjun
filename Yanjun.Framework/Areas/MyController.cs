@@ -9,6 +9,7 @@ using Yanjun.Framework.Code.Util;
 using Yanjun.Framework.Code.Web;
 using Yanjun.Framework.Code.Web.Dto;
 using Yanjun.Framework.Data.Repository;
+using static Yanjun.Framework.Code.Web.Dto.QueryArg;
 
 namespace Yanjun.Framework.Mvc.Areas
 {
@@ -24,7 +25,7 @@ namespace Yanjun.Framework.Mvc.Areas
         /// </summary>
         public IRepositoryBase Repository { get; set; }
 
-        public virtual JsonResult GetPage(CommonAjaxArgs args)
+        public virtual JsonResult Gets(CommonAjaxArgs args)
         {
             EntityResponseDto res = new EntityResponseDto();
             try
@@ -33,7 +34,17 @@ namespace Yanjun.Framework.Mvc.Areas
                 var predicate = ExpressionUtil.GetSearchExpression(typeof(T), args.Query.Searchs) as Expression<Func<T, bool>>;
 
                 var page = args.Query.Page;
-                var sort = args.Query.Sorters.FirstOrDefault();
+
+                if(page.PageSize<=0)
+                {
+                    page.PageSize = 500;
+                }
+
+                Sorter sort = new Sorter() { SortField = "ID", SortOrder = System.Data.SqlClient.SortOrder.Descending };
+                if(args.Query.Sorters!=null&&args.Query.Sorters.Count>0)
+                {
+                    sort = args.Query.Sorters.First();
+                }
                 string[] includes = args.Query.IncludeEntityPaths == null ? null : args.Query.IncludeEntityPaths.ToArray();
                 res.Count = Repository.GetQueryExp<T>(predicate, includes).Count();
                 res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = page.PageIndex, rows = page.PageSize, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" });

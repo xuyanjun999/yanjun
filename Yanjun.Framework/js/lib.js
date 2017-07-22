@@ -108,7 +108,7 @@ Ext.selection.Model.override({
         var store = this.store, records, len, id, i;
 
         if (record.hasId() && /*store.getById(record)*/
-		store.getById(record.getId())) {
+            store.getById(record.getId())) {
             return true;
         } else {
             records = store.data.items;
@@ -314,7 +314,7 @@ Ext.define('xf.Common.Reader', {
 
 /*通讯方式********************************************************/
 //设置通讯超时
-Ext.Ajax.timeout = 30*1000;
+Ext.Ajax.timeout = 30 * 1000;
 //Grid通用通讯方式
 Ext.define('xf.Common.Proxy', {
     extend: 'Ext.data.proxy.Ajax',
@@ -334,7 +334,7 @@ Ext.define('xf.Common.Proxy', {
     cacheCommuArgs: null,
     //监听store 是否重新从服务器加载数据
     isReloadData: true,
- 
+
     buildUrl: function (request) {
         var me = this;
         var tempCommuArgs = me.commuArgs;
@@ -369,12 +369,12 @@ Ext.define('xf.Common.Proxy', {
         }
         var ns = tempCommuArgs.ajaxMethod.split('.');
         var method_name = ns[ns.length - 1];
-       
+
 
         request._url = tempCommuArgs.ajaxMethod;
-      
+
         request.jsonData = serverNS.packDataArgs(tempCommuArgs.dataArgs);
-        
+
         me._headers = {};
         me._headers[AJAXPRO_METHOD_HEADER_NAME] = method_name;
         //me.setExtraParams(request.jsonData);
@@ -1105,8 +1105,8 @@ Ext.define('xf.Common.GridAdvSearch', {
                 items: [logicCombo, {
                     xtype: 'splitter'
                 }, fieldCombo, {
-                    xtype: 'splitter'
-                }, operatorCombo]
+                        xtype: 'splitter'
+                    }, operatorCombo]
             }, {
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
@@ -1977,7 +1977,7 @@ Ext.define('xf.GridPanel', {
                 store: store,   // GridPanel中使用的数据
                 dock: 'bottom',
                 displayInfo: true
-            
+
             }],
             viewConfig: {
                 forceFit: true,
@@ -2512,7 +2512,8 @@ Ext.define('xf.Common.TreePanel', {
 
             }
         },
-        load: function (tree, node, records) {
+        load: function (tree, records, successful, operation, node, eOpts) {
+            console.log(arguments);
             if (!Ext.isEmpty(node.data.checked)) {
                 if (node.data.checked == true) {
                     node.eachChild(function (child) {
@@ -2529,10 +2530,20 @@ Ext.define('xf.Common.TreePanel', {
 
                 }
             }
+        },
+        itemcontextmenu(tree, record, item, index, e, eOpts) {
+            if (this.itemContextMenu) {
+                this.itemContextMenu(tree, record, item, index, e, eOpts);
+            }
+
         }
     },
     //树节点点击事件
     treeNodeClick: function (tree, record, item, index, e) {
+    },
+
+    itemContextMenu: function (tree, record, item, index, e) {
+
     },
 
     //通讯方式参数
@@ -2801,6 +2812,7 @@ Ext.define('xf.Common.TreeSearchPanel', {
                     }
                 }, {
                     xtype: 'button',
+                    itemId: 'treeSearchBtn',
                     iconCls: 'SJicon_all btn_runquery',
                     columnWidth: .1,
                     handler: function () {
@@ -2810,6 +2822,7 @@ Ext.define('xf.Common.TreeSearchPanel', {
                 }, {
                     xtype: 'button',
                     columnWidth: .1,
+                    itemId: 'treeResetBtn',
                     iconCls: 'SJicon_all btn_refresh',
                     handler: function () {
                         //刷新==重置数据
@@ -2819,20 +2832,24 @@ Ext.define('xf.Common.TreeSearchPanel', {
             }, treeConfig]
         });
 
-        //添加数据加载事件
-        this.addEvents({//custom event
-            "storeBeforeLoad": true
-        });
+        Ext.apply(this, {
+            listeners: {
+                storeBeforeLoad: function (tree, store, operation, eOpts) {
+                    treeConfig.storeBeforeLoad(tree, store, operation, eOpts);
+                }
+            },
+        })
 
-        //原本树加载函数，避免覆盖
-        var sourceTreeBeforeLoadEvt = treeConfig.storeBeforeLoad;
-        //注册节点加载之前事件
-        treeConfig.storeBeforeLoad = function (tree, store, operation, eOpts) {
-            searchTreePanel.fireEvent('storeBeforeLoad', tree, store, operation, eOpts);
-            if (Ext.isFunction(sourceTreeBeforeLoadEvt)) {
-                sourceTreeBeforeLoadEvt(tree, store, operation, eOpts);
-            }
-        };
+
+        ////原本树加载函数，避免覆盖
+        //var sourceTreeBeforeLoadEvt = treeConfig.storeBeforeLoad;
+        ////注册节点加载之前事件
+        //treeConfig.storeBeforeLoad = function (tree, store, operation, eOpts) {
+        //    searchTreePanel.fireEvent('storeBeforeLoad', tree, store, operation, eOpts);
+        //    if (Ext.isFunction(sourceTreeBeforeLoadEvt)) {
+        //        sourceTreeBeforeLoadEvt(tree, store, operation, eOpts);
+        //    }
+        //};
 
         this.callParent(arguments);
 
@@ -2850,6 +2867,11 @@ Ext.define('xf.Common.TreeSearchPanel', {
         //是否隐藏文本搜索框
         if (!this.enableTextSearch) {
             this.getSearchTB().hide();
+        }
+
+        if (!this.enableDateSearch && !this.enableTextSearch) {
+            this.down("#treeSearchBtn").hide();
+            this.down("#treeResetBtn").hide();
         }
 
         if (this.treeNodeClick) {
@@ -3469,32 +3491,32 @@ Ext.define('SG.web.widget.MarkDatePicker', {
     showDisableDays: true,
     renderTpl: [
         '<div id="{id}-innerEl" data-ref="innerEl" role="grid">',
-            '<div role="presentation" class="{baseCls}-header">',
-                '<a id="{id}-prevEl" style="display:{monthBtnVisible}" data-ref="prevEl" class="{baseCls}-prev {baseCls}-arrow" role="button" title="{prevText}" hidefocus="on" ></a>',
-                '<div id="{id}-middleBtnEl" data-ref="middleBtnEl" class="{baseCls}-month">{%this.renderMonthBtn(values, out)%}</div>',
-                '<a id="{id}-nextEl" style="display:{monthBtnVisible}" data-ref="nextEl" class="{baseCls}-next {baseCls}-arrow" role="button" title="A{nextText}" hidefocus="on" ></a>',
-            '</div>',
-            '<table id="{id}-eventEl" data-ref="eventEl" class="{baseCls}-inner" cellspacing="0" role="grid">',
-                '<thead role="presentation"><tr role="row">',
-                    '<tpl for="dayNames">',
-                        '<th role="columnheader" class="{parent.baseCls}-column-header" title="{.}">',
-                            '<div class="{parent.baseCls}-column-header-inner">{.:this.firstInitial}</div>',
-                        '</th>',
-                    '</tpl>',
-                '</tr></thead>',
-                '<tbody role="presentation"><tr role="row">',
-                    '<tpl for="days">',
-                        '{#:this.isEndOfWeek}',
-                        '<td role="gridcell" id="{[Ext.id()]}">',
-    // The '#' is needed for keyboard navigation
-                            '<a href="#" role="button" hidefocus="on" class="{parent.baseCls}-date"></a>',
-                        '</td>',
-                    '</tpl>',
-                '</tr></tbody>',
-            '</table>',
-            '<tpl if="showToday">',
-                '<div id="{id}-footerEl" data-ref="footerEl" role="presentation" class="{baseCls}-footer">{%this.renderTodayBtn(values, out)%}</div>',
-            '</tpl>',
+        '<div role="presentation" class="{baseCls}-header">',
+        '<a id="{id}-prevEl" style="display:{monthBtnVisible}" data-ref="prevEl" class="{baseCls}-prev {baseCls}-arrow" role="button" title="{prevText}" hidefocus="on" ></a>',
+        '<div id="{id}-middleBtnEl" data-ref="middleBtnEl" class="{baseCls}-month">{%this.renderMonthBtn(values, out)%}</div>',
+        '<a id="{id}-nextEl" style="display:{monthBtnVisible}" data-ref="nextEl" class="{baseCls}-next {baseCls}-arrow" role="button" title="A{nextText}" hidefocus="on" ></a>',
+        '</div>',
+        '<table id="{id}-eventEl" data-ref="eventEl" class="{baseCls}-inner" cellspacing="0" role="grid">',
+        '<thead role="presentation"><tr role="row">',
+        '<tpl for="dayNames">',
+        '<th role="columnheader" class="{parent.baseCls}-column-header" title="{.}">',
+        '<div class="{parent.baseCls}-column-header-inner">{.:this.firstInitial}</div>',
+        '</th>',
+        '</tpl>',
+        '</tr></thead>',
+        '<tbody role="presentation"><tr role="row">',
+        '<tpl for="days">',
+        '{#:this.isEndOfWeek}',
+        '<td role="gridcell" id="{[Ext.id()]}">',
+        // The '#' is needed for keyboard navigation
+        '<a href="#" role="button" hidefocus="on" class="{parent.baseCls}-date"></a>',
+        '</td>',
+        '</tpl>',
+        '</tr></tbody>',
+        '</table>',
+        '<tpl if="showToday">',
+        '<div id="{id}-footerEl" data-ref="footerEl" role="presentation" class="{baseCls}-footer">{%this.renderTodayBtn(values, out)%}</div>',
+        '</tpl>',
         '</div>',
         {
             firstInitial: function (value) {
@@ -4663,7 +4685,7 @@ Ext.ux.MonthPickerPlugin = function () {
         var el = new Ext.Element(t);
         if (el.parent()
             && (el.parent().is('td.x-date-mp-month')
-            || el.parent().is('td.x-date-mp-year'))) {
+                || el.parent().is('td.x-date-mp-year'))) {
 
             var p = picker.menu.picker;
             p.setValue(p.activeDate);

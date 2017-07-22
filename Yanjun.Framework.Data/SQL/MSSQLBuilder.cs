@@ -187,42 +187,6 @@ namespace Yanjun.Framework.Data.SQL
         }
         #endregion
 
-        //#region 获取ID属性
-        ///// <summary>
-        ///// 获取ID属性
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <returns></returns>
-        //PropertyInfo GetIdPropertyInfo(object entity)
-        //{
-        //    var propertyInfos = entity.GetType().GetProperties();
-        //    foreach (var propertyInfo in propertyInfos)
-        //    {
-        //        if (propertyInfo.Name.ToLower() == "id") return propertyInfo;
-        //    }
-        //    return null;
-        //}
-        //#endregion
-
-        //#region 获取属性
-        ///// <summary>
-        ///// 获取属性
-        ///// </summary>
-        ///// <param name="entity"></param>
-        ///// <returns></returns>
-        //PropertyInfo[] GetPropertyInfos(object entity, string[] columns)
-        //{
-        //    List<PropertyInfo> result = new List<PropertyInfo>();
-        //    var propertyInfos = entity.GetType().GetProperties();
-
-        //    foreach (var propertyInfo in propertyInfos)
-        //    {
-        //        if (columns.FirstOrDefault(x => x.ToLower() == propertyInfo.Name.ToLower()) != null)
-        //            result.Add(propertyInfo);
-        //    }
-        //    return result.ToArray();
-        //}
-        //#endregion
 
         #region 获取需要处理的字段信息
         /// <summary>
