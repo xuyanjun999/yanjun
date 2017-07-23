@@ -168,6 +168,7 @@
   <ItemGroup>
     <Compile Include="Api\ApiControllerBase.cs" />
     <Compile Include="Api\RestApiController.cs" />
+    <Compile Include="Api\Sys\DicConfigController.cs" />
     <Compile Include="Api\Sys\MenuController.cs" />
     <Compile Include="App_Start\AutoFacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\MyController.cs" />
+    <Compile Include="Areas\Sys\Controllers\DicConfigController.cs" />
     <Compile Include="Areas\Sys\Controllers\MenuController.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -187,11 +189,14 @@
     <Content Include="app\Application.js" />
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
+    <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
     <Content Include="app\model\org\Company.js" />
+    <Content Include="app\model\sys\DicConfig.js" />
     <Content Include="app\model\sys\Menu.js" />
     <Content Include="app\view\main\Main.js" />
     <Content Include="app\view\org\Company.js" />
+    <Content Include="app\view\sys\DicConfig.js" />
     <Content Include="app\view\sys\Menu.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -2386,6 +2391,10 @@
     <Content Include="icons\vcard\Thumbs.db" />
     <Content Include="icons\world\Thumbs.db" />
     <Content Include="icons\zoom\Thumbs.db" />
+    <None Include="Dockerfile" />
+    <None Include=".dockerignore">
+      <DependentUpon>Dockerfile</DependentUpon>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2415,6 +2424,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Sys\Models\" />
+    <Folder Include="Areas\Sys\Views\DicConfig\" />
     <Folder Include="Areas\Sys\Views\Menu\" />
     <Folder Include="Areas\Sys\Views\Shared\" />
     <Folder Include="Models\" />

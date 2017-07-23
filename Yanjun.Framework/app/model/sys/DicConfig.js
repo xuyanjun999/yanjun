@@ -1,0 +1,46 @@
+﻿Ext.define('xf.model.sys.DicConfig', {
+    extend: 'Ext.data.Model',
+    fields: [{
+        name: 'ID',
+        text: ''
+    }, {
+        name: 'Status',
+        text: ''
+    }, {
+        name: 'CreateBy',
+        text: ''
+    }, {
+        name: 'CreateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'UpdateBy',
+        text: ''
+    }, {
+        name: 'UpdateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'KeyName',
+        text: ''
+    }, {
+        name: 'KeyType',
+        text: ''
+    }, {
+        name: 'CnKeyValue',
+        text: ''
+    }, {
+        name: 'EnKeyValue',
+        text: ''
+    },{
+        name: 'ParentID',
+        text: ''
+    }, {
+        name: 'Parent.Name'
+    }, {
+        name: 'Remark',
+        dtype: 'string',
+        text: ''
+    }],
+    idProperty: 'ID'
+});

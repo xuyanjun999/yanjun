@@ -48,19 +48,18 @@ namespace Yanjun.Framework.Domain.Entity.Sys
         /// </summary>
         public long? ParentID { get; set; }
         /// <summary>
+        /// 获得父键
+        /// </summary>
+        public DicConfigEntity Parent { get; set; }
+        /// <summary>
         /// 键显示次序
         /// </summary>
-        public int SeqID { get; set; }
+        public int Sort { get; set; }
         /// <summary>
         /// 描述
         /// </summary>
-        public string Des { get; set; }
+        public string Remark { get; set; }
 
-        /// <summary>
-        /// 获得父键
-        /// </summary>
-        public  DicConfigEntity Parent { get; set; }
-        
 
         /// <summary>
         /// 节点显示名
