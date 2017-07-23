@@ -1,10 +1,43 @@
-﻿.add{background-image:url(../icons/common/add.gif)!important;}
-.edit{background-image:url(../icons/common/edit.gif)!important;}
-.cancel{background-image:url(../icons/common/cancel.gif)!important;}
-.remove{background-image:url(../icons/common/remove.gif)!important;}
-.print{background-image:url(../icons/common/print.gif)!important;}
-.save{background-image:url(../icons/common/save.gif)!important;}
-.search{background-image:url(../icons/common/search.gif)!important;}
-.ok{background-image:url(../icons/common/ok.png)!important;}
-.reload{background-image:url(../icons/common/reload.png)!important;}
-.back{background-image:url(../icons/common/undo.gif)!important;}
+﻿.add {
+    background-image: url(../icons/common/add.gif) !important;
+}
+
+.edit {
+    background-image: url(../icons/common/edit.gif) !important;
+}
+
+.cancel {
+    background-image: url(../icons/common/cancel.gif) !important;
+}
+
+.remove {
+    background-image: url(../icons/common/remove.gif) !important;
+}
+
+.print {
+    background-image: url(../icons/common/print.gif) !important;
+}
+
+.save {
+    background-image: url(../icons/common/save.gif) !important;
+}
+
+.search {
+    background-image: url(../icons/common/search.gif) !important;
+}
+
+.ok {
+    background-image: url(../icons/common/ok.png) !important;
+}
+
+.reload {
+    background-image: url(../icons/common/reload.png) !important;
+}
+
+.back {
+    background-image: url(../icons/common/undo.gif) !important;
+}
+
+.tip {
+    background-image: url(../icons/common/tip.png) !important;
+}

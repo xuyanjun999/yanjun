@@ -29,6 +29,27 @@ function alert_error(msg, title) {
     });
 }
 
+function toast_success(message, title, align, iconCls) {
+    if (!title) title = "消息";
+    if (!align) align = 't';
+    if (!iconCls) iconCls = 'ok';
+    Ext.toast(message, title, align, iconCls);
+}
+
+function toast_error(message, title, align, iconCls) {
+    if (!title) title = "消息";
+    if (!align) align = 't';
+    if (!iconCls) iconCls = 'remove';
+    Ext.toast(message, title, align, iconCls);
+}
+
+function toast_info(message, title, align, iconCls) {
+    if (!title) title = "消息";
+    if (!align) align = 't';
+    if (!iconCls) iconCls = 'tip';
+    Ext.toast(message, title, align, iconCls);
+}
+
 function alert_info(msg, title, callBack) {
 
     if (Ext.isEmpty(title)) {
@@ -1260,6 +1281,8 @@ Ext.define('xf.Form', {
     record: null,
     //通讯方式参数
     commuArgs: new serverNS.commuArgs(),
+    apiUrl: '',
+    includePath: [],
     //是否自动加载数据
     //如果需要手工调用load写callback方法的，请设置为false；
     autoLoadData: true,
@@ -1295,10 +1318,12 @@ Ext.define('xf.Form', {
             return;
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(this.record.raw);
+        var include = this.includePath.join(",");
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", this.apiUrl, this.record.raw.ID, include);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
-                    
+
                     if (!Ext.isEmpty(data.Entitys) && option.autoSetValues) {
                         console.log("formLoad:" + data.Entitys[0]);
                         formPanel.getForm().reset();
@@ -1324,7 +1349,7 @@ Ext.define('xf.Form', {
             }
         };
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs,'GET');
+        serverNS.ajaxProSend(this.commuArgs, 'get');
     },
 
     //数据添加 不能使用add,会覆盖父类方法
@@ -1341,6 +1366,7 @@ Ext.define('xf.Form', {
         var editData = form.getValues();
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(editData);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}", this.apiUrl);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1349,12 +1375,13 @@ Ext.define('xf.Form', {
                         formPanel.record = {};
                         formPanel.record.raw = data.Entitys[0];
                     }
+                    toast_success('保存成功!');
                     if (option.callBack) {
                         option.callBack(data);
                     }
-                    if (formPanel.isInSGView) {
-                        formPanel.up('SGView').changeView(false, null, true);
-                    }
+                    //if (formPanel.isInSGView) {
+                    //    formPanel.up('SGView').changeView(false, null, true);
+                    //}
                     return;
                 }
                 throw data.Message;
@@ -1371,7 +1398,7 @@ Ext.define('xf.Form', {
         };
 
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs);
+        serverNS.ajaxProSend(this.commuArgs, 'post', true);
     },
 
     //通用删除
@@ -1384,15 +1411,17 @@ Ext.define('xf.Form', {
             return;
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(this.record.raw);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}", this.apiUrl, this.record.raw.ID);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
+
+                    toast_success('删除成功!');
+
                     if (option.callBack) {
                         option.callBack(data);
                     }
-                    if (formPanel.isInSGView) {
-                        formPanel.up('SGView').changeView(false, null, true);
-                    }
+
                     return;
                 }
                 throw data.Message;
@@ -1409,7 +1438,7 @@ Ext.define('xf.Form', {
         }
 
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs);
+        serverNS.ajaxProSend(this.commuArgs, "delete");
     },
 
     //通用保存
@@ -1429,18 +1458,18 @@ Ext.define('xf.Form', {
         var editData = form.getValues();
         //合并数据实例
         editData = Ext.Object.merge(this.record.raw, editData);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}", this.apiUrl);
         this.commuArgs.dataArgs.Entitys = new Array(editData);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
                     formPanel.record.raw = editData;
                     //formPanel.record.load(formPanel.record.id)
+                    toast_success('保存成功!');
                     if (option.callBack) {
                         option.callBack(data);
                     }
-                    if (formPanel.isInSGView) {
-                        formPanel.up('SGView').changeView(false, null, true);
-                    }
+
                     return;
                 }
                 throw data.Message;
@@ -1457,7 +1486,7 @@ Ext.define('xf.Form', {
         };
 
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs);
+        serverNS.ajaxProSend(this.commuArgs, "put", true);
     },
 
     //重置form数据

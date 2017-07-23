@@ -17,6 +17,8 @@ namespace Yanjun.Framework.Data.Repository
 
         void BeginTran(IsolationLevel isolationLevel);
         void Commit();
+
+        void Rollback();
         long Insert<TEntity>(TEntity entity) where TEntity : class;
         void Insert<TEntity>(IEnumerable<TEntity> entitys) where TEntity : class;
 

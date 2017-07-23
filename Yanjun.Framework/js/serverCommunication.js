@@ -242,6 +242,15 @@ var serverNS = {
         }
     },
 
+    //私有变量 包装通讯参数数据直接用于发射 data可以为json字符串
+    packDataArgsN: function (data, argName) {
+        try {
+            return JSON.stringify(data);
+        } catch (err) {
+            throw '包装通讯的发送数据时出错：' + err;
+        }
+    },
+
     //通讯参数
     commuArgs: function () {
         //是否可以调用reset重置参数
@@ -275,16 +284,16 @@ var serverNS = {
     },
 
     //Jquery和ext 兼容发送ajax通讯 参数为commuArgs对象
-    ajaxProSend: function (refcommuArgs, method) {
+    ajaxProSend: function (refcommuArgs, method, onlyData) {
         if (typeof (Ext) == "object") {
-            this.extAjaxProSend(refcommuArgs, method);
+            this.extAjaxProSend(refcommuArgs, method, onlyData);
         } else {
             this.$ajaxProSend(refcommuArgs);
         }
     },
 
     //ext  发送ajax通讯 参数为commuArgs对象
-    extAjaxProSend: function (refcommuArgs, method) {
+    extAjaxProSend: function (refcommuArgs, method, onlyData) {
         //Ext.decode(Ext.encode(refcommuArgs ));
         var commuArgs = refcommuArgs.deepCopy();
         //重置通讯参数
@@ -301,13 +310,17 @@ var serverNS = {
         //headerParams[AJAXPRO_METHOD_HEADER_NAME] = method_name;
         if (!method) method = "POST";
 
+        var data = serverNS.packDataArgs(commuArgs.dataArgs);
+        if (onlyData)
+            data = serverNS.packDataArgsN(commuArgs.dataArgs.Entitys[0]);
+
         Ext.Ajax.request({
             method: method,
             url: url,
             timeout: AJAX_TIMEOUT,
             disableCaching: true,
             headers: headerParams,
-            jsonData: serverNS.packDataArgs(commuArgs.dataArgs),
+            jsonData: data,
             success: function (response, reqOption) {
                 try {
                     var data = Ext.decode(response.responseText);

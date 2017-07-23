@@ -8,6 +8,7 @@
     items: [{
         title: '发运日期',
         xtype: 'CommonTreeSearchPanel',
+        reference: 'tree',
         width: 250,
         collapsible: true,
         collapsed: false,
@@ -141,16 +142,14 @@
             autoScroll: true,
             title: '明细',
             border: false,
-            modelName: 'xf.model.sys.Menu',
+            apiUrl: '/api/Menu',
+            includePath: ["Parent"],
             beforeshow: function () {
                 this.getForm().reset();
                 var sgform = this;
                 if (this.record) {
                     var dataArgs = this.commuArgs.dataArgs;
                     dataArgs.ActionDes = '获取数据';
-                    var include = ["Parent"].join(",");
-                    // dataArgs.Query.IncludeEntityPaths.push('');
-                    sgform.commuArgs.ajaxMethod = "/api/Menu/" + this.record.raw.ID + "?include=" + include;
                     sgform.load();
                 }
                 else {
@@ -212,29 +211,7 @@
                 xtype: 'button',
                 text: '保存',
                 iconCls: 'save',
-                handler: function () {
-                    var form = this.up('SGForm');
-                    var commuArgs = form.commuArgs;
-                    var dataArgs = commuArgs.dataArgs;
-                    var option = {};
-                    option.callBack = function (data) {
-                        var sgView = form.up('SGView');
-                        sgcard.getLayout().setActiveItem(cardenum.mainGrid);
-                        sgView.down('sggrid').refresh();
-                    }
-                    if (form.record) {
-                        dataArgs.ActionDes = '保存数据';
-                        dataArgs.EntityTypeFullName = 'SG.Eap.Trunk.Entity.MenuEntity';
-                        commuArgs.ajaxMethod = ajaxProMethodNS.Update;
-                        form.save(option);
-                    }
-                    else {
-                        dataArgs.ActionDes = '新增数据';
-                        dataArgs.EntityTypeFullName = 'SG.Eap.Trunk.Entity.MenuEntity';
-                        commuArgs.ajaxMethod = ajaxProMethodNS.Add;
-                        form.addNew(option);
-                    }
-                }
+                handler: "formSave"
             }, '-', {
                 xtype: 'button',
                 text: '返回',

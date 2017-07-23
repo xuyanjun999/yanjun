@@ -12,6 +12,7 @@ using Yanjun.Framework.Data.DBContext;
 using Yanjun.Framework.Data.SQL;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
+using Yanjun.Framework.Code.Web.Dto;
 
 namespace Yanjun.Framework.Data.Repository
 {
@@ -47,6 +48,7 @@ namespace Yanjun.Framework.Data.Repository
             if (_conn.State == System.Data.ConnectionState.Closed)
                 _conn.Open();
             _tran = _conn.BeginTransaction();
+            MyContext.Database.UseTransaction(_tran);
         }
 
         /// <summary>
@@ -69,6 +71,15 @@ namespace Yanjun.Framework.Data.Repository
         {
             if (_tran != null)
                 _tran.Commit();
+        }
+
+        /// <summary>
+        /// 提交事务
+        /// </summary>
+        public void Rollback()
+        {
+            if (_tran != null)
+                _tran.Rollback();
         }
 
 
@@ -186,7 +197,7 @@ namespace Yanjun.Framework.Data.Repository
                 resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(TEntity), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExp));
             }
             tempData = tempData.Provider.CreateQuery<TEntity>(resultExp);
-           // pagination.records = tempData.Count();
+            // pagination.records = tempData.Count();
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToArray();
         }
@@ -197,7 +208,7 @@ namespace Yanjun.Framework.Data.Repository
 
             string sql = SQLBuilder.BuildAddSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity).ToString();
 
-            long id = (long)ExecuteScalar(sql);
+            long id = Convert.ToInt64((ExecuteScalar(sql).ToString()));
 
             ReflectionUtil.SetPropertyValue(entity, "id", id);
 
@@ -261,7 +272,16 @@ namespace Yanjun.Framework.Data.Repository
         public IQueryable<TEntity> FilterInvalidData<TEntity>(IQueryable<TEntity> query)
             where TEntity : class
         {
-            return query;
+            BaseSearchItem searchItem = new BaseSearchItem()
+            {
+                FieldName = "Status",
+                Operator = SearchOperator.Equal,
+                Values = new object[] { 0 }
+            };
+            var list = new List<BaseSearchItem>();
+            list.Add(searchItem);
+            var expression = ExpressionUtil.GetSearchExpression(typeof(TEntity), list) as Expression<Func<TEntity, bool>>;
+            return query.Where(expression);
         }
 
 
@@ -362,8 +382,10 @@ namespace Yanjun.Framework.Data.Repository
             {
                 long id = (long)ReflectionUtil.GetPropertyValue(user, "id");
                 ReflectionUtil.SetPropertyValue(objs, "createby", id);
-                ReflectionUtil.SetPropertyValue(objs, "createon", DateTime.Now);
+                ReflectionUtil.SetPropertyValue(objs, "updateby", id);
             }
+            ReflectionUtil.SetPropertyValue(objs, "createon", DateTime.Now);
+            ReflectionUtil.SetPropertyValue(objs, "updateon", DateTime.Now);
         }
         #endregion
 
@@ -379,8 +401,9 @@ namespace Yanjun.Framework.Data.Repository
             {
                 long id = (long)ReflectionUtil.GetPropertyValue(user, "id");
                 ReflectionUtil.SetPropertyValue(objs, "updateby", id);
-                ReflectionUtil.SetPropertyValue(objs, "updateon", DateTime.Now);
+
             }
+            ReflectionUtil.SetPropertyValue(objs, "updateon", DateTime.Now);
         }
         #endregion
 
@@ -409,7 +432,7 @@ namespace Yanjun.Framework.Data.Repository
 
         public void Dispose()
         {
-            if(MyContext!=null)
+            if (MyContext != null)
             {
                 MyContext.Dispose();
             }

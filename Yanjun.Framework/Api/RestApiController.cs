@@ -13,7 +13,7 @@ namespace Yanjun.Framework.Mvc.Api
     {
 
         [HttpGet]
-        public virtual JsonResult<RestResponseDto> Get(long id,string include)
+        public virtual JsonResult<RestResponseDto> Get(long id, string include)
         {
             RestResponseDto res = new RestResponseDto();
             try
@@ -38,12 +38,15 @@ namespace Yanjun.Framework.Mvc.Api
             RestResponseDto res = new RestResponseDto();
             try
             {
+                Repository.BeginTran();
                 Repository.Insert(entity);
                 res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+                Repository.Commit();
                 res.Success = true;
             }
             catch (Exception ex)
             {
+                Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;
                 Log.Error(ex);
@@ -57,12 +60,15 @@ namespace Yanjun.Framework.Mvc.Api
             RestResponseDto res = new RestResponseDto();
             try
             {
+                Repository.BeginTran();
                 Repository.Update<T>(entity);
                 res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+                Repository.Commit();
                 res.Success = true;
             }
             catch (Exception ex)
             {
+                Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;
                 Log.Error(ex);
@@ -71,17 +77,25 @@ namespace Yanjun.Framework.Mvc.Api
         }
 
         [HttpDelete]
-        public virtual JsonResult<RestResponseDto> Delete(T entity)
+        public virtual JsonResult<RestResponseDto> Delete(long id)
         {
             RestResponseDto res = new RestResponseDto();
             try
             {
+                Repository.BeginTran();
+                var entity = Repository.QueryFirst<T>(x => x.ID == id);
+                if (entity == null)
+                {
+                    throw new Exception(string.Format("不存在ID为[{0}]的对象!url:{1}",id,Request.RequestUri.AbsolutePath));
+                }
                 entity.StatusEnum = BaseEntityStatus.Delete;
-                Repository.Update(entity);
+                Repository.Delete(entity);
+                Repository.Commit();
                 res.Success = true;
             }
             catch (Exception ex)
             {
+                Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;
                 Log.Error(ex);
