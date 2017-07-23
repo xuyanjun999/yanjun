@@ -2613,7 +2613,7 @@ Ext.define('xf.Common.TreePanel', {
         if (this.enableCheckbox) {
             modelName = 'xf.Common.CheckBoxTreeNodeData';
         }
-
+        var me = this;
         var treeStoreConfig = {
             model: modelName,
             defaultRootProperty: 'Entitys',
@@ -2629,9 +2629,10 @@ Ext.define('xf.Common.TreePanel', {
                 beforeload: function (store, action, eOpts) {
                     //通知proxy需要重新到服务器获取
                     store.getProxy().isReloadData = true;
-                    if (this.storeBeforeLoad) {
-                        this.storeBeforeLoad(this, store, action, eOpts);
+                    if (me.hasListeners.storebeforeload) {
+                        me.fireEvent('storebeforeload', me, store, action, eOpts);
                     }
+
                 },
                 scope: this
             }

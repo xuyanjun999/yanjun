@@ -2,7 +2,6 @@
     extend: 'Ext.panel.Panel',
     layout: 'border',
     frame: true,
-    requires: 'xf.model.sys.Menu',
     controller: 'menu',
     title: '菜单管理',
     items: [{
@@ -19,26 +18,9 @@
             rootVisible: false,
             listeners: {
                 itemcontextmenu: 'treeItemContextMenu',
-                itemclick: 'treeItemclick'
+                itemclick: 'treeItemclick',
+                storebeforeload:'treeStoreBeforeLoad'
             },
-            storeBeforeLoad: function (tree, store, operation, eOpts) {
-
-                var dataArgs = new serverNS.dataArgs();
-
-                var searchArgs = new serverNS.searchArgs();
-                searchArgs.FieldName = 'ParentID';
-                searchArgs.Operator = serverNS.searchOperator.Equal;
-
-                if (operation.isRootLoad)
-                    searchArgs.Values.push(null);
-                else
-                    searchArgs.Values.push(operation.node.raw.ID);
-                dataArgs.Query.Searchs.push(searchArgs);
-
-                tree.commuArgs.ajaxMethod = '/Menu/Gets';
-                tree.commuArgs.dataArgs = dataArgs;
-            },
-
         }
     }, {
         xtype: 'panel',
@@ -106,23 +88,27 @@
             modelName: 'xf.model.sys.Menu',
             tbar: [{
                 text: '新建',
+                hidden: true,
                 iconCls: 'add',
                 handler: function () {
                 }
             }, {
                 text: '编辑',
                 iconCls: 'edit',
+                hidden: true,
                 handler: function () {
                     console.log(this.up('panel'));
                     this.up('#content').getLayout().setActiveItem(1);
                 }
             }, {
                 text: '删除',
+                hidden: true,
                 iconCls: 'remove',
                 handler: function () {
                 }
             }, {
                 text: '打印',
+                hidden: true,
                 iconCls: 'print',
                 handler: function () {
                 }

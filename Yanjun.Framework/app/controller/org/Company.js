@@ -1,7 +1,6 @@
 ﻿Ext.define('xf.controller.org.Company', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.main',
-    requires: 'xf.model.org.Company',
+    alias: 'controller.company',
 
     onItemdblclick: function (me, record, item, index, e, eOpts) {
 

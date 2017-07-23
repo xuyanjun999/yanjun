@@ -1,7 +1,26 @@
 ﻿Ext.define('xf.controller.sys.Menu', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.menu',
-    //左边树节点右键单击事件
+    treeStoreBeforeLoad: function (tree, store, operation, eOpts) {
+
+        var dataArgs = new serverNS.dataArgs();
+
+        var searchArgs = new serverNS.searchArgs();
+
+        searchArgs.FieldName = 'ParentID';
+
+        searchArgs.Operator = serverNS.searchOperator.Equal;
+
+        if (operation.isRootLoad)
+            searchArgs.Values.push(null);
+        else
+            searchArgs.Values.push(operation.node.raw.ID);
+
+        dataArgs.Query.Searchs.push(searchArgs);
+
+        tree.commuArgs.ajaxMethod = '/Menu/Gets';
+        tree.commuArgs.dataArgs = dataArgs;
+    },
     treeItemContextMenu: function (tree, record, item, index, e) {
 
         e.preventDefault();

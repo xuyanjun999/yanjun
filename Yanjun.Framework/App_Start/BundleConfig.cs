@@ -19,6 +19,14 @@ namespace Yanjun.Framework.Mvc
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/app/model").IncludeDirectory(
+                       "~/app/model","*.js",true));
+
+            bundles.Add(new ScriptBundle("~/app/controller").IncludeDirectory(
+                      "~/app/controller", "*.js", true));
+
+
+
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));

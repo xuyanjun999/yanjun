@@ -188,7 +188,6 @@
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
     <Content Include="app\controller\sys\Menu.js" />
-    <Content Include="app\controller\sys\Sys.js" />
     <Content Include="app\model\org\Company.js" />
     <Content Include="app\model\sys\Menu.js" />
     <Content Include="app\view\main\Main.js" />

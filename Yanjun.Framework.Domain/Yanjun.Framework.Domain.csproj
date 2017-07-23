@@ -59,6 +59,10 @@
     <Compile Include="Entity\IAccessRecordEntity.cs" />
     <Compile Include="Entity\IBaseEntity.cs" />
     <Compile Include="Entity\ITreeNodeEntity.cs" />
+    <Compile Include="Entity\Org\CompanyEntity.cs" />
+    <Compile Include="Entity\Org\DepartmentEntity.cs" />
+    <Compile Include="Entity\Org\StaffEntity.cs" />
+    <Compile Include="Entity\Sys\DicConfigEntity.cs" />
     <Compile Include="Entity\Sys\MenuEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\Sys\IMenuService.cs" />
