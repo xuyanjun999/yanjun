@@ -12,6 +12,7 @@ using log4net;
 using Yanjun.Framework.Data.DBContext;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
+using Yanjun.Framework.Service.Sys;
 
 namespace Yanjun.Framework.Mvc.App_Start
 {
@@ -28,6 +29,8 @@ namespace Yanjun.Framework.Mvc.App_Start
             RegisterDb(builder);
 
             RegisterData(builder);
+
+            RegisterService(builder);
 
             RegisterMvc(builder);
 
@@ -58,7 +61,10 @@ namespace Yanjun.Framework.Mvc.App_Start
             builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MyDbContext))).AsImplementedInterfaces().AsSelf().PropertiesAutowired();
         }
 
-
+        static void RegisterService(ContainerBuilder builder)
+        {
+            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MenuService))).AsImplementedInterfaces().AsSelf().PropertiesAutowired();
+        }
 
 
         static void RegisterMvc(ContainerBuilder builder)

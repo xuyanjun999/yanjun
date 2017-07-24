@@ -1,0 +1,139 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/Extjs/resources/theme-classic-all.css" rel="stylesheet" />
+    <link href="~/Extjs/crisp/resources/ux-all.css" rel="stylesheet" />
+    <link href="~/css/app.css" rel="stylesheet" />
+    <link href="~/css/icon.css" rel="stylesheet" />
+</head>
+<body>
+
+
+    <script type="text/javascript" src="~/Extjs/ext-all.js"></script>
+    <script src="~/Extjs/theme-classic.js"></script>
+    <script src="~/Extjs/ux.js"></script>
+    <script src="~/js/common.js"></script>
+    <script src="~/js/serverCommunication.js"></script>
+    <script src="~/js/lib.js"></script>
+
+    <script language="javascript">
+
+        var uname = new Ext.form.TextField({
+            fieldLabel: '用户名',
+            columnWidth:1,
+            name: 'name',//元素名称
+            //anchor:'95%',//也可用此定义自适应宽度
+            allowBlank: false,//不允许为空
+            value: "admin",
+            blankText: '用户名不能为空',//错误提示内容,
+            margin:'20 10 10 10',
+        });
+        var pwd = new Ext.form.TextField({
+            columnWidth: 1,
+            //xtype: 'textfield',
+            inputType: 'password',
+            fieldLabel: '密　码',
+            name: 'password',
+            allowBlank: false,
+            margin: '10 10 10 10',
+            blankText: '密码不能为空'
+        });
+
+        function save() {
+            var userName = uname.getValue();
+            var userPass = pwd.getValue();
+            var url = Ext.String.format("/Staff/Login?userName={0}&pwd={1}", userName, userPass);
+            //验证合法后使用加载进度条
+            if (simple.form.isValid()) {
+                //提交到服务器操作
+                simple.form.submit({
+                    waitMsg: '正在进行登陆验证,请稍后...',
+                    url: url,
+                    method: 'post',
+                    params: {
+                        userName: userName,
+                        userPass: userPass
+                    },
+                    //提交成功的回调函数
+                    success: function (form, action) {
+                        console.log(action);
+                        if (action.result.msg == 'OK') {
+                            window.location.href = "login!index.action?userName=" + userName;
+                        } else if (action.result.msg == 'ERROR') {
+                            window.location.href = "index.jsp";
+                        }
+                    },
+                    //提交失败的回调函数
+                    failure: function (form, action) {
+                        switch (action.failureType) {
+                            case Ext.form.Action.CLIENT_INVALID:
+                                Ext.Msg.alert('错误提示', '表单数据非法请核实后重新输入！');
+                                break;
+                            case Ext.form.Action.CONNECT_FAILURE:
+                                Ext.Msg.alert('错误提示', '网络连接异常！');
+                                break;
+                            case Ext.form.Action.SERVER_INVALID:
+                                Ext.Msg.alert('错误提示', "您的输入用户信息有误，请核实后重新输入！");
+                                simple.form.reset();
+                        }
+                    }
+                });
+            }
+        };
+
+
+        var btnLogin = Ext.create("Ext.button.Button", {
+            text: '登录',
+            type: 'submit',
+            //定义表单提交事件
+            handler: save
+        });
+
+
+
+        var simple = new Ext.FormPanel({
+            layout: 'column',
+            defaults: {
+                labelWidth: 80
+            },
+            defaultType: 'textfield',//默认字段类型
+            items: [uname, pwd],
+            buttons: [btnLogin]
+        });
+
+        Ext.onReady(function () {
+            //使用表单提示
+            Ext.QuickTips.init();
+            Ext.form.Field.prototype.msgTarget = 'side';
+
+            //定义表单
+    
+
+            //定义窗体
+            var win = new Ext.Window({
+                title:"用户登录",
+                layout: 'fit', //自适应布局
+                width: 330,
+                height: 182,
+                resizable: false,
+                draggable: false,
+                border: false,
+                maximizable: false,//禁止最大化
+                closeAction: 'close',
+                closable: false,//禁止关闭,
+                items: simple
+                //将表单作为窗体元素嵌套布局
+            });
+            win.show();//显示窗体
+        });
+    </script>  
+</body>
+</html>

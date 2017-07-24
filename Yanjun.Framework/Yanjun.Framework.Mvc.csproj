@@ -2424,6 +2424,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2464,6 +2465,10 @@
     <ProjectReference Include="..\Yanjun.Framework.Domain\Yanjun.Framework.Domain.csproj">
       <Project>{1150f6ac-2f6d-47cc-94ff-41866449eadc}</Project>
       <Name>Yanjun.Framework.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yanjun.Framework.Service\Yanjun.Framework.Service.csproj">
+      <Project>{37e0cf46-11ee-4035-a787-73ec5fd1357f}</Project>
+      <Name>Yanjun.Framework.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

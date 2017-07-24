@@ -57,13 +57,6 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// </summary>
         public string Address { get; set; }
         /// <summary>
-        /// 部门ID
-        /// </summary>
-        public long? DeptID { get; set; }
-        /// <summary>
-        /// 所属部门
-        /// </summary>
-        public DepartmentEntity Department { get; set; }
 
         public string LastLoginIp { get; set; }
 

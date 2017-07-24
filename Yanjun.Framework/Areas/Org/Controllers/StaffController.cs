@@ -10,16 +10,17 @@ using Yanjun.Framework.Domain.Service;
 
 namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
 {
+
+
     public class StaffController : MyController<StaffEntity>
     {
-        IStaffService StaffService { get; set; }
+        public IStaffService StaffService { get; set; }
         // GET: Org/Staff
-        public virtual JsonResult IsLogin(CommonAjaxArgs args)
+        public virtual JsonResult IsLogin()
         {
             EntityResponseDto res = new EntityResponseDto();
             try
             {
-                long id = args.GetLong("id").Value;
                 string ip = Request.UserHostAddress;
                 StaffEntity staff = WebHelper.GetSessionObj(WebHelper.USER_LOGIN_SESSION) as StaffEntity;
                 if (staff == null)
@@ -28,15 +29,7 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
                 }
                 else
                 {
-                    if (staff.LastLoginIp == ip)
-                    {
-                        res.Dic.Add("isLogin", true);
-                    }
-                    else
-                    {
-                        res.Dic.Add("isLogin", false);
-                    }
-
+                    res.Dic.Add("isLogin", true);
                 }
                 res.Success = true;
             }
@@ -50,20 +43,26 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
         }
 
         // GET: Org/Staff
-        public virtual JsonResult Login(CommonAjaxArgs args)
+        public virtual JsonResult Login(string userName, string pwd)
         {
             EntityResponseDto res = new EntityResponseDto();
             try
             {
-                StaffService.Repository.BeginTran();
-                string userName = args.GetStr("userName");
-                string pwd = args.GetStr("pwd");
                 string ip = Request.UserHostAddress;
-                if(string.IsNullOrEmpty(userName)||string.IsNullOrEmpty(pwd))
+                if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(pwd))
                 {
                     throw new Exception("用户名和密码不能为空!");
                 }
-                StaffService.Login(userName,pwd,ip);
+                StaffService.Repository.BeginTran();
+                StaffEntity staff = StaffService.Login(userName, pwd, ip);
+                if (staff != null)
+                {
+                    res.Dic.Add("user", staff);
+                }
+                else
+                {
+                    throw new Exception("登陆失败!");
+                }
 
                 StaffService.Repository.Commit();
                 res.Success = true;

@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Yanjun.Framework.Domain.Service;
 
 namespace Yanjun.Framework.Mvc.Controllers
 {
     public class HomeController : Controller
     {
+        public IStaffService StaffService { get; set; }
+
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Login()
         {
             return View();
         }

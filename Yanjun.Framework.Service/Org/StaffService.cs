@@ -13,18 +13,15 @@ namespace Yanjun.Framework.Service.Org
 
     public class StaffService : ServiceBase, IStaffService
     {
+
         public StaffEntity Login(string userName, string pwd, string ip)
         {
             //判断当前session钟存不存在此用户
             StaffEntity staff = WebHelper.GetSessionObj(WebHelper.USER_LOGIN_SESSION) as StaffEntity;
             if (staff != null)
             {
-                //判断ip和此现在的登录ip是否相同
-                if (staff.LastLoginIp != ip)
-                {
-                    WebHelper.RemoveSession(WebHelper.USER_LOGIN_SESSION);
-                    throw new Exception(string.Format("此用户已登录,请重新登录。"));
-                }
+                staff.LastLoginIp = ip;
+                Repository.Update<StaffEntity>(staff, x => x.LastLoginIp);
             }
             else
             {
