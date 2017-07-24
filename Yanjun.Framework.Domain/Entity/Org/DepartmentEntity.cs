@@ -7,7 +7,7 @@ using Yanjun.Framework.Domain.Entity;
 using Newtonsoft.Json;
 using Yanjun.Framework.Domain.Entity.Org;
 
-namespace SG.Eap.Lib.Rule.Entity.CompanyOrg
+namespace Yanjun.Framework.Domain.Entity.Org
 {
     /// <summary>
     /// 公司部门

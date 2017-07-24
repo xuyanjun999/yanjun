@@ -48,11 +48,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Org\StaffService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceBase.cs" />
     <Compile Include="Sys\MenuService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Yanjun.Framework.Code\Yanjun.Framework.Code.csproj">
+      <Project>{50B66296-4253-4A12-8FF4-DD84912C313D}</Project>
+      <Name>Yanjun.Framework.Code</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yanjun.Framework.Data\Yanjun.Framework.Data.csproj">
       <Project>{452a4353-8845-4e87-b8cb-aaebcc123086}</Project>
       <Name>Yanjun.Framework.Data</Name>

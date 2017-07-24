@@ -65,11 +65,20 @@
     <Compile Include="Entity\Sys\DicConfigEntity.cs" />
     <Compile Include="Entity\Sys\MenuEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ILog.cs" />
+    <Compile Include="Service\IServiceBase.cs" />
+    <Compile Include="Service\Org\IStaffService.cs" />
     <Compile Include="Service\Sys\IMenuService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yanjun.Framework.Data\Yanjun.Framework.Data.csproj">
+      <Project>{452A4353-8845-4E87-B8CB-AAEBCC123086}</Project>
+      <Name>Yanjun.Framework.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

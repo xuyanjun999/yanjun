@@ -5,7 +5,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations.Schema;
 using Yanjun.Framework.Domain.Entity;
 
-namespace SG.Eap.Lib.Rule.Entity.CompanyOrg
+namespace Yanjun.Framework.Domain.Entity.Org
 {
     /// <summary>
     /// 员工表映射类
@@ -22,6 +22,11 @@ namespace SG.Eap.Lib.Rule.Entity.CompanyOrg
         /// 英文名
         /// </summary>
         public string EnName { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        public string Pwd { get; set; }
         /// <summary>
         /// 中文名
         /// </summary>
@@ -59,6 +64,8 @@ namespace SG.Eap.Lib.Rule.Entity.CompanyOrg
         /// 所属部门
         /// </summary>
         public DepartmentEntity Department { get; set; }
+
+        public string LastLoginIp { get; set; }
 
 
         [NotMapped]

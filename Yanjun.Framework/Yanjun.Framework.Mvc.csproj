@@ -176,6 +176,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\MyController.cs" />
+    <Compile Include="Areas\Org\Controllers\StaffController.cs" />
+    <Compile Include="Areas\Org\OrgAreaRegistration.cs" />
     <Compile Include="Areas\Sys\Controllers\DicConfigController.cs" />
     <Compile Include="Areas\Sys\Controllers\MenuController.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
@@ -2392,6 +2394,7 @@
     <Content Include="icons\vcard\Thumbs.db" />
     <Content Include="icons\world\Thumbs.db" />
     <Content Include="icons\zoom\Thumbs.db" />
+    <Content Include="Areas\Org\Views\web.config" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -2424,6 +2427,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Org\Models\" />
+    <Folder Include="Areas\Org\Views\Shared\" />
+    <Folder Include="Areas\Org\Views\Staff\" />
     <Folder Include="Areas\Sys\Models\" />
     <Folder Include="Areas\Sys\Views\DicConfig\" />
     <Folder Include="Areas\Sys\Views\Menu\" />
