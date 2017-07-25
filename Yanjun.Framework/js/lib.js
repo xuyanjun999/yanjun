@@ -327,7 +327,7 @@ Ext.define('xf.Common.Reader', {
             console.log("解析服务器返回数据错误.");
             console.log(err);
             if (!isDebug) {
-                //serverNS.isLogin();
+                serverNS.isLogin();
             }
         }
         return this.callParent([result]);

@@ -19,27 +19,18 @@ namespace Yanjun.Framework.Domain.Entity.Org
         public string Code { get; set; }
 
         /// <summary>
-        /// 英文名
-        /// </summary>
-        public string EnName { get; set; }
-
-        /// <summary>
         /// 密码
         /// </summary>
         public string Pwd { get; set; }
         /// <summary>
         /// 中文名
         /// </summary>
-        public string CnName { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 性别
         /// </summary>
         public bool Gender { get; set; }
 
-        /// <summary>
-        /// 头像路径
-        /// </summary>
-        public string PortraitPath { get; set; }
         /// <summary>
         /// 电话
         /// </summary>
@@ -61,12 +52,15 @@ namespace Yanjun.Framework.Domain.Entity.Org
         public string LastLoginIp { get; set; }
 
 
+        public long CompanyID { get; set; }
+
+
         [NotMapped]
         public override string Text
         {
             get
             {
-                return CnName;
+                return Name;
             }
         }
     }

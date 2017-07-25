@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Yanjun.Framework.Mvc.Filter;
 
 namespace Yanjun.Framework.Mvc
 {
@@ -10,7 +11,7 @@ namespace Yanjun.Framework.Mvc
         public static void Register(HttpConfiguration config)
         {
             // Web API 配置和服务
-
+            config.Filters.Add(new LoginApiFilter());
             // Web API 路由
             config.MapHttpAttributeRoutes();
 

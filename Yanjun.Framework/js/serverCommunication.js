@@ -339,17 +339,30 @@ var serverNS = {
 
                 } catch (e) {
                     console.log("解析获得服务器数据格式错误:" + e);
+                    serverNS.isLogin();
                 }
             },
             failure: function (response, reqOption) {
+                console.log(response);
                 var data = {};
                 data.Success = false;
                 data.Message = response.responseText;
-                if (commuArgs.callBack) {
-                    commuArgs.callBack(data);
+                if (response.status == 403) {
+                    Ext.Msg.show({
+                        title: "消息",
+                        msg: '登录状态失效,请重新登录!',
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.Msg.ERROR
+                    });
                 }
-                console.log(data.Message);
-                console.log(response);
+                else {
+                    if (commuArgs.callBack) {
+                        commuArgs.callBack(data);
+                    }
+                    console.log(data.Message);
+                }
+
+
             }
         });
     },
@@ -462,30 +475,24 @@ var serverNS = {
 
     //检查是否登录 如果未登录就导航到登录界面 否则导航到主页面
     isLogin: function () {
-        var commuArgs = new serverNS.commuArgs();
-
-        var dataArgs = commuArgs.dataArgs;
-        dataArgs.ActionDes = "检查是否已登录";
-
-        commuArgs.ajaxMethod = ajaxProMethodNS.IsLogin;
-        commuArgs.callBack = function (data) {
-            try {
-                var url = location.href.toLocaleLowerCase();
-                if (data.Success) {
-                    if (url.indexOf(MAIN_PAGE_NAME) >= 0)
-                        return;
-                    location.href = MAIN_PAGE_LOCATION;
-                } else {
-                    if (url.indexOf(LOGIN_PAGE_NAME) >= 0)
-                        return;
-                    location.href = LOGIN_PAGE_LOCATION;
+        Ext.Ajax.request({
+            method: 'get',
+            url: '/Staff/IsLogin',
+            success: function (response, opts) {
+                var obj = Ext.decode(response.responseText);
+                if (!obj.Success) {
+                    location.href = "/Home/Login";
                 }
-
-            } catch (e) {
-                console.log('异常:' + e);
+            },
+            failure: function (response, opts) {
+                Ext.Msg.show({
+                    title: '消息',
+                    msg: '服务器返回异常,请检查服务器是否正常!',
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.ERROR
+                });
             }
-        };
-        serverNS.ajaxProSend(commuArgs);
+        });
     },
 
     //退出登录 needConfirm 是否需要用户手动确认

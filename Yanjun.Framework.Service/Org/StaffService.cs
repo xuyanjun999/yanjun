@@ -16,28 +16,25 @@ namespace Yanjun.Framework.Service.Org
 
         public StaffEntity Login(string userName, string pwd, string ip)
         {
-            //判断当前session钟存不存在此用户
+            //判断当前session存不存在此用户
             StaffEntity staff = WebHelper.GetSessionObj(WebHelper.USER_LOGIN_SESSION) as StaffEntity;
             if (staff != null)
             {
-                staff.LastLoginIp = ip;
-                Repository.Update<StaffEntity>(staff, x => x.LastLoginIp);
+                WebHelper.RemoveSession(WebHelper.USER_LOGIN_SESSION);
+            }
+            string encryptionPwd = EncryptionHelper.GetMd5HashStr(pwd);
+            staff = Repository.QueryFirst<StaffEntity>(x => (x.Name == userName || x.Code == userName) && x.Pwd == encryptionPwd);
+            if (staff == null)
+            {
+                throw new Exception(string.Format("用户[{0}]登录失败,请检查用户名和密码。", userName));
             }
             else
             {
-                string encryptionPwd = EncryptionHelper.GetMd5HashStr(pwd);
-                staff = Repository.QueryFirst<StaffEntity>(x => x.CnName == userName && x.Pwd == encryptionPwd);
-                if (staff == null)
-                {
-                    throw new Exception(string.Format("用户[{0}]登录失败,请检查用户名和密码。"));
-                }
-                else
-                {
-                    staff.LastLoginIp = ip;
-                    Repository.Update<StaffEntity>(staff, x => x.LastLoginIp);
-                    WebHelper.WriteSession<StaffEntity>(WebHelper.USER_LOGIN_SESSION, staff);
-                }
+                staff.LastLoginIp = ip;
+                Repository.Update<StaffEntity>(staff, x => x.LastLoginIp);
+                WebHelper.WriteSession<StaffEntity>(WebHelper.USER_LOGIN_SESSION, staff);
             }
+
             return staff;
             //  StaffEntity 
         }

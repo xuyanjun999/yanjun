@@ -41,3 +41,9 @@
 .tip {
     background-image: url(../icons/common/tip.png) !important;
 }
+.key {
+    background-image: url(../icons/key.png) !important;
+}
+.key-go {
+    background-image: url(../icons/key_go.png) !important;
+}
