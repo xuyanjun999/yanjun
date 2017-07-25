@@ -77,6 +77,8 @@ function gettext(t) {
     return t;
 }
 
+
+
 //Grid 无数据时鼠标移动第一行第一列不断报错PageMap asked for range which it does not have
 Ext.selection.RowModel.override({
     isRowSelected: function (record, index) {
@@ -538,7 +540,7 @@ var getGridStoreConfig = function (grid) {
 //Ext.define('xf.Common.GridAdvSearch', {
 //    extend: 'Ext.panel.Panel',
 //    alias: 'widget.CommonGridAdvSearch',
-//    border: false,
+//    border: 0,
 //    fields: null,
 //    fieldStore: null,
 //    doQuery: null,
@@ -800,7 +802,7 @@ var getGridStoreConfig = function (grid) {
 //                padding: '0',
 //                align: 'stretch'
 //            },
-//            border: false,
+//            border: 0,
 //            items: [{
 //                xtype: 'fieldcontainer',
 //                layout: 'hbox',
@@ -854,7 +856,7 @@ var getGridStoreConfig = function (grid) {
 Ext.define('xf.Common.GridAdvSearch', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.CommonGridAdvSearch',
-    border: false,
+    border: 0,
     modelName: '',
     fields: null,
     fieldStore: null,
@@ -1122,7 +1124,7 @@ Ext.define('xf.Common.GridAdvSearch', {
                 padding: '0',
                 align: 'stretch'
             },
-            border: false,
+            border: 0,
             items: [{
                 xtype: 'fieldcontainer',
                 layout: 'hbox',
@@ -1243,7 +1245,7 @@ Ext.define('xf.DefaultView', {
         Ext.apply(this, {
             layout: 'card',
             deferredRender: false,
-            border: false,
+            border: 0,
             listeners: {
                 scope: this,
                 openspace: function (isWindow, record) {
@@ -1262,7 +1264,7 @@ Ext.define('xf.DefaultView', {
 Ext.define('xf.Form', {
     extend: 'Ext.form.Panel',
     alias: 'widget.SGForm',
-    border: false,
+    border: 0,
     bodyPadding: 5,
     layout: 'column',
     defaults: {
@@ -2008,6 +2010,8 @@ Ext.define('xf.GridPanel', {
             selType: selType,
             dockedItems: [{
                 xtype: 'pagingtoolbar',
+                border: 0,
+                padding:0,
                 itemId: 'pagingbommontoolbar',
                 store: store,   // GridPanel中使用的数据
                 dock: 'bottom',
@@ -2336,7 +2340,7 @@ Ext.define('xf.Common.ImageField', {
     },
     layout: 'fit',
     cls: 'imageview',
-    border: false,
+    border: 0,
     defaultValue: '',
     url: '',
     savedirkey: '',
@@ -2419,7 +2423,7 @@ Ext.define('xf.Common.ImageField', {
                 }, {
                     layout: 'hbox',
                     padding: 3,
-                    border: false,
+                    border: 0,
                     width: '100%',
                     items: [{
                         xtype: 'displayfield',
@@ -2480,7 +2484,8 @@ Ext.define('xf.Common.TreePanel', {
     region: 'center',
     lines: false,
     useArrows: true,
-    border: false,
+
+    border: 0,
     rootVisible: false,
     //根节点显示文本，如果文本为空，则根节点不显示
     rootText: '',
@@ -2667,6 +2672,9 @@ Ext.define('xf.Common.TreePanel', {
 //具有查找功能树控件
 Ext.define('xf.Common.TreeSearchPanel', {
     extend: 'Ext.panel.Panel',
+    padding: 0,
+    margin: 0,
+    border: 0,
     alias: 'widget.CommonTreeSearchPanel',
     layout: 'border',
     //是否激活时间搜索
@@ -2798,7 +2806,7 @@ Ext.define('xf.Common.TreeSearchPanel', {
             items: [{
                 xtype: 'container',
                 itemId: 'searchContainer',
-                margin: "0 0 4 0",
+                margin: "0 0 0 0",
                 layout: 'column',
                 region: 'north',
                 defaults: {
@@ -3328,7 +3336,7 @@ var getReportGrid = function (rpKey, customGridConfig, callBack, customModelConf
         //默认grid配置
         var gridConfig = {
             xtype: 'sggrid',
-            border: false,
+            border: 0,
             multiSel: true,
             modelName: modelFullName,
             quickSearchCols: quickSearchCols,
@@ -3413,7 +3421,7 @@ var getReportGrid = function (rpKey, customGridConfig, callBack, customModelConf
             region: 'center',
             layout: 'fit',
             split: true,
-            border: false,
+            border: 0,
             items: gridConfig
         }
 
@@ -3474,7 +3482,7 @@ Ext.define("xf.Common.AdvSearchView", {
     overflowY: 'auto',
 
     defaults: {
-        border: false,
+        border: 0,
         bodyPadding: 5
     },
     layout: {

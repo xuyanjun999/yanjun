@@ -47,3 +47,14 @@
 .key-go {
     background-image: url(../icons/key_go.png) !important;
 }
+.user{
+    background-image: url(../icons/user/user.png) !important;
+}
+
+.user-go{
+    background-image: url(../icons/user/user_go.png) !important;
+}
+
+.application-key {
+    background-image: url(../icons/application/application_key.png) !important;
+}

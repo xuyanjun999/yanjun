@@ -26,6 +26,11 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// 中文名
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 部门
+        /// </summary>
+        public string Dept { get; set; }
         /// <summary>
         /// 性别
         /// </summary>
@@ -34,7 +39,6 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// <summary>
         /// 电话
         /// </summary>
-        public string Tel { get; set; }
         /// <summary>
         /// 邮箱
         /// </summary>
@@ -42,7 +46,7 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// <summary>
         /// 手机
         /// </summary>
-        public string Mobile { get; set; }
+        public string Phone { get; set; }
         /// <summary>
         /// 地址
         /// </summary>

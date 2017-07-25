@@ -1,9 +1,9 @@
-﻿Ext.define("xf.view.sys.Menu", {
+﻿Ext.define("xf.view.org.Staff", {
     extend: 'Ext.panel.Panel',
-    padding:0,
+    padding: 0,
     layout: 'border',
     frame: false,
-    border:0,
+    border: 0,
     controller: 'menu',
     title: '菜单管理',
     items: [{

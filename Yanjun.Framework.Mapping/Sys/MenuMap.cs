@@ -9,7 +9,7 @@ namespace Yanjun.Framework.Mapping.Sys
 {
     public class MenuMap : EntityMapBase<MenuEntity>
     {
-        public MenuMap():base("sys_menu")
+        public MenuMap():base("SGEAP_SYS_Menu")
         {
             this.HasOptional(x => x.Parent).WithMany().HasForeignKey<long?>(x => x.ParentID);
         }

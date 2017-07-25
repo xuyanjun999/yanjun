@@ -79,5 +79,24 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
             }
             return Json(res, JsonRequestBehavior.AllowGet);
         }
+
+        [NotCheckUserAttribute]
+        public virtual JsonResult Logout()
+        {
+            EntityResponseDto res = new EntityResponseDto();
+            try
+            {
+                string ip = Request.UserHostAddress;
+                WebHelper.RemoveSession(WebHelper.USER_LOGIN_SESSION);
+                res.Success = true;
+            }
+            catch (Exception ex)
+            {
+                res.Success = false;
+                res.Message = ex.Message;
+                Log.Error(ex);
+            }
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
     }
 }

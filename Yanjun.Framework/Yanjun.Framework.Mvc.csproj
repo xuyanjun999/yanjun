@@ -197,10 +197,12 @@
     <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
     <Content Include="app\model\org\Company.js" />
+    <Content Include="app\model\org\Staff.js" />
     <Content Include="app\model\sys\DicConfig.js" />
     <Content Include="app\model\sys\Menu.js" />
     <Content Include="app\view\main\Main.js" />
     <Content Include="app\view\org\Company.js" />
+    <Content Include="app\view\org\Staff.js" />
     <Content Include="app\view\sys\DicConfig.js" />
     <Content Include="app\view\sys\Menu.js" />
     <Content Include="Content\bootstrap.css" />
@@ -1028,6 +1030,10 @@
     <Content Include="Extjs\resources\images\window\toast\icon16_info.png" />
     <Content Include="Extjs\resources\images\window\window-default-corners.gif" />
     <Content Include="Extjs\resources\images\window\window-default-sides.gif" />
+    <Content Include="Extjs\resources\sef-all.css" />
+    <Content Include="Extjs\resources\sef-all_1.css" />
+    <Content Include="Extjs\resources\sef-all_2.css" />
+    <Content Include="Extjs\resources\sef-all_3.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug_1.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug_2.css" />

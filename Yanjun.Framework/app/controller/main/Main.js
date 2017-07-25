@@ -27,5 +27,37 @@
             tab.add(com).show();
         }
     },
+    logout: function () {
+        alert_confirm(gettext('确定要退出系统吗?'), function (rtn) {
+            if (rtn === 'yes') {
+                Ext.Ajax.request({
+                    method: 'post',
+                    url: '/Staff/Logout',
+                    success: function (response, opts) {
+                        var obj = Ext.decode(response.responseText);
+                        if (obj.Success) {
+                            location.href = "/Home/Login";
+                        }
+                        else {
+                            Ext.Msg.show({
+                                title: '消息',
+                                msg: obj.Message,
+                                buttons: Ext.Msg.OK,
+                                icon: Ext.Msg.ERROR
+                            });
+                        }
+                    },
 
+                    failure: function (response, opts) {
+                        Ext.Msg.show({
+                            title: '消息',
+                            msg: '服务器返回异常,请检查服务器是否正常!',
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.Msg.ERROR
+                        });
+                    }
+                });
+            }
+        }, this);
+    }
 });
