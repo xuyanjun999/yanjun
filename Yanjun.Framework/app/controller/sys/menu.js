@@ -14,11 +14,12 @@
         if (operation.isRootLoad)
             searchArgs.Values.push(null);
         else
-            searchArgs.Values.push(operation.node.raw.ID);
+            searchArgs.Values.push(operation.node.data.ID);
 
         dataArgs.Query.Searchs.push(searchArgs);
 
         tree.commuArgs.ajaxMethod = '/Menu/Gets';
+
         tree.commuArgs.dataArgs = dataArgs;
     },
     treeItemContextMenu: function (tree, record, item, index, e) {
@@ -44,26 +45,26 @@
                     this.up("menu").hide();
                     content.getLayout().setActiveItem(1);
                     sgform.record = null;
-                    sgform.beforeshow();
+                    sgform.fireEvent("beforeshow", sgform);
                 }
             }, {
                 text: "添加子菜单",
                 iconCls: 'add',
                 handler: function () {
                     this.up("menu").hide();
-                    content.getLayout().setActiveItem(1);
                     sgform.record = null;
-                    sgform.beforeshow();
-                    sgform.getForm().findField("Parent.Name").setValue(record.raw.Name);
-                    sgform.getForm().findField("ParentID").setValue(record.raw.ID);
+                    sgform.fireEvent("beforeshow", sgform);
+                    content.getLayout().setActiveItem(1);
+                    sgform.getForm().findField("Parent.Name").setValue(record.data.Name);
+                    sgform.getForm().findField("ParentID").setValue(record.data.ID);
                 }
             }, {
                 text: "编辑",
                 iconCls: 'edit',
                 handler: function () {
-                    content.getLayout().setActiveItem(1);
                     sgform.record = record;
-                    sgform.beforeshow();
+                    content.getLayout().setActiveItem(1);
+                    sgform.fireEvent("beforeshow", sgform);
                 }
             }, {
                 text: "删除",
@@ -71,13 +72,12 @@
                 handler: function () {
                     this.up("menu").hide();
 
-                    content.getLayout().setActiveItem(1);
                     sgform.record = record;
-                    sgform.beforeshow();
-
+                    sgform.fireEvent("beforeshow", sgform);
+                    content.getLayout().setActiveItem(1);
                     console.log(tree);
 
-                    alert_confirm(gettext('确定删除[' + record.raw.Name + ']吗?'), function (rtn) {
+                    alert_confirm(gettext('确定删除[' + record.data.Name + ']吗?'), function (rtn) {
                         if (rtn === 'yes') {
                             var option = {};
                             option.callBack = function (data) {
@@ -100,15 +100,32 @@
 
     },
     treeItemclick: function (tree, record, item, index, e, eOpts) {
+        console.log(record);
+        if (!Ext.isEmpty(record.data)) {
 
-        if (!Ext.isEmpty(record.raw)) {
 
             var content = this.lookup("content");
-            content.getLayout().setActiveItem(1);
             var sgform = content.down("SGForm");
             sgform.record = record;
-            sgform.beforeshow();
+            var com = content.getLayout().getActiveItem();
+            if (com.xtype == "SGForm") {
+                sgform.fireEvent("beforeshow", sgform);
+            }
+            else {
+                content.getLayout().setActiveItem(1);
+            }
+
         }
+    },
+    getMenuDataArg: function () {
+        var dataArgs = new serverNS.dataArgs();
+        dataArgs.ActionDes = '';
+        return dataArgs;
+    },
+
+    menuBeforeload: function (me, store, action) {
+        me.commuArgs.dataArgs = this.getMenuDataArg();
+        me.commuArgs.ajaxMethod = Ext.String.format("/{0}/Gets", me.controllerUrl);
     },
     formSave: function (btn) {
         var form = btn.up('SGForm');

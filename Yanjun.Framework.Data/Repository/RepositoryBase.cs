@@ -89,7 +89,9 @@ namespace Yanjun.Framework.Data.Repository
 
             SetCommonUpdateProperty(new object[] { entity });
 
-            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity, "status", "updateby", "updateon").ToString();
+            string[] columns = BuildUpdateColumns<TEntity>(entity, "status");
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity, columns).ToString();
 
             return ExecuteNonQuery(sql);
 
@@ -103,7 +105,9 @@ namespace Yanjun.Framework.Data.Repository
 
             SetCommonUpdateProperty(entitys.ToArray());
 
-            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, "status", "updateby", "updateon").ToString();
+            string[] columns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(), "status");
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, columns).ToString();
 
             return ExecuteNonQuery(sql);
 
@@ -120,9 +124,29 @@ namespace Yanjun.Framework.Data.Repository
 
             SetCommonUpdateProperty(new object[] { entity });
 
-            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity, "status", "updateby", "updateon").ToString();
+            string[] columns = BuildUpdateColumns<TEntity>(entity, "status");
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entity, columns).ToString();
 
             return ExecuteNonQuery(sql);
+        }
+
+        private string[] BuildUpdateColumns<TEntity>(TEntity entity, params string[] columns) where TEntity : class
+        {
+            List<string> result = new List<string>();
+            if (columns != null && columns.Length > 0) result.AddRange(columns);
+
+            if (ReflectionUtil.HasPropertyInfo(entity, "updateon"))
+            {
+                result.Add("updateon");
+            }
+
+            if (ReflectionUtil.HasPropertyInfo(entity, "updateby"))
+            {
+                result.Add("updateby");
+            }
+
+            return result.ToArray();
         }
 
         public int Delete<TEntity>(long[] ids) where TEntity : class, new()
@@ -141,7 +165,9 @@ namespace Yanjun.Framework.Data.Repository
 
             SetCommonUpdateProperty(entitys.ToArray());
 
-            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, "status", "updateby", "updateon").ToString();
+            string[] columns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(), "status");
+
+            string sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, columns).ToString();
 
             return ExecuteNonQuery(sql);
         }
@@ -287,13 +313,7 @@ namespace Yanjun.Framework.Data.Repository
 
         public int Update<TEntity>(TEntity entity, params string[] columns) where TEntity : class
         {
-            if (columns != null && columns.Length > 0)
-            {
-                var nColumns = columns.ToList();
-                nColumns.Add("updateon");
-                nColumns.Add("updateby");
-                columns = nColumns.ToArray();
-            }
+            columns = BuildUpdateColumns<TEntity>(entity, columns);
 
             SetCommonUpdateProperty(new object[] { entity });
 
@@ -332,13 +352,7 @@ namespace Yanjun.Framework.Data.Repository
         {
             if (entitys == null || entitys.Count() <= 0) return 0;
 
-            if (columns != null && columns.Length > 0)
-            {
-                var nColumns = columns.ToList();
-                nColumns.Add("updateon");
-                nColumns.Add("updateby");
-                columns = nColumns.ToArray();
-            }
+            columns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(), columns);
 
             SetCommonUpdateProperty(entitys.ToArray());
 
@@ -358,10 +372,10 @@ namespace Yanjun.Framework.Data.Repository
             if (expressions != null && expressions.Length > 0)
             {
                 List<string> columns = ExpressionUtil.GetPropertyName<TEntity>(expressions);
-                columns.Add("updateon");
-                columns.Add("updateby");
 
-                sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, columns.ToArray()).ToString();
+                string[] needUpdateColumns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(),columns.ToArray());
+
+                sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, needUpdateColumns).ToString();
             }
             else
             {

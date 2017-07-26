@@ -1,275 +1,144 @@
-﻿
-Ext.define("xf.view.org.Company", {
+﻿Ext.define("xf.view.org.Company", {
     extend: 'Ext.panel.Panel',
-    layout: 'card',
-    requires: 'xf.model.org.Company',
-    title: '菜单管理',
-    controller: Ext.create("xf.controller.org.Company"),
-
-    items: [
-        {
+    padding: 0,
+    layout: 'border',
+    frame: false,
+    border: 0,
+    controller: 'company',
+    title: '公司管理',
+    items: [{
+        xtype: 'panel',
+        region: 'center',
+        itemId: 'content',
+        reference: 'content',
+        layout: 'card',
+        items: [{
             xtype: "sggrid",
-            columns: [
-                {
-                    text: '行号', xtype: 'rownumberer',
-                    width: 50,
-                    sortable: false
-                }, {
-                    text: 'ID',
-                    dataIndex: 'ID',
-                    hidden: true
-                }, {
-                    text: '英文名称',
-                    dataIndex: 'EnName',
-                    width: 100
-                }, {
-                    text: '中文名称',
-                    dataIndex: 'CnName',
-                    width: 100
-                }, {
-                    text: '简称',
-                    dataIndex: 'ShortName',
-                    width: 100
-                }, {
-                    text: '代号',
-                    dataIndex: 'Code',
-                    width: 100
-                }, {
-                    text: '描述',
-                    dataIndex: 'Des',
-                    width: 100
-                }, {
-                    text: '省会',
-                    dataIndex: 'Capital',
-                    width: 100
-                }, {
-                    text: '注册日期',
-                    dataIndex: 'RegisterDate',
-                    width: 200,
-                    renderer: Ext.util.Format.dateRenderer('m/d/Y H:i:s')
-                }, {
-                    text: '公司类型',
-                    dataIndex: 'CompType',
-                    width: 100
-                },
-                {
-                    text: '父公司',
-                    dataIndex: 'Parent.Name',
-                    flex: 1
-                }
-            ],
-            selModel: 'checkboxmodel',
-            model: 'xf.model.org.Company',
-            url: '/Company/GetByPage',
-            tbar: [{
-                text: '创建',
-                glyph: 'xf040@FontAwesome',
-                handler: 'onAddCompany'
-            },
-            {
-                text: '删除',
-                glyph: 'xf014@FontAwesome',
-                handler: ''
+            region: 'center',
+            columns: [{
+                text: '行号', xtype: 'rownumberer',
+                width: 50,
+                sortable: false
+            }, {
+                text: 'ID',
+                dataIndex: 'ID',
+                hidden: true
+            }, {
+                text: '编号',
+                dataIndex: 'Code',
+                width: 100
+            }, {
+                text: '名称',
+                dataIndex: 'Name',
+                width: 150
+            }, {
+                text: '地址',
+                dataIndex: 'Address',
+                width: 150
+            }, {
+                text: '电话',
+                dataIndex: 'Tel',
+                width: 100
+            }, {
+                text: '邮件',
+                dataIndex: 'Email',
+                width: 100
+            }, {
+                text: '规模',
+                dataIndex: 'Scale',
+                width: 100
+            }, {
+                text: '级别',
+                dataIndex: 'Level',
+                width: 100
+            }, {
+                text: '创建日期',
+                dataIndex: 'CreateOn',
+                width: 100,
+                xtype: 'datecolumn',
+                renderer: Ext.util.Format.dateRenderer('m/d/Y')
+            }, {
+                text: '描述',
+                dataIndex: 'Remark',
+                width: 150
             }],
             listeners: {
-                itemdblclick: 'onItemdblclick'
-            }
-
-        },
-        {
-            xtype: 'form',
-            layout: 'column',
-            defaults: {
-                labelAlign: 'top',
-                columnWidth: 0.5
+                beforeload: "companyBeforeload"
             },
-            items: [
-{
-    xtype: 'textfield',
-    fieldLabel: '英文名称',
-    name: 'EnName'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '中文名称',
-    name: 'CnName'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '简称',
-    height: 100,
-    name: 'ShortName'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '代码',
-    height: 100,
-    name: 'Code'
-},
-{
-    xtype: 'textarea',
-    fieldLabel: '描述',
-
-    name: 'Des'
-},
-{
-    xtype: 'numberfield', allowDecimals: true,
-    fieldLabel: '省会',
-    name: 'Capital'
-},
-{
-    xtype: 'datefield',
-    fieldLabel: '注册日期',
-    name: 'RegisterDate'
-},
-{
-    xtype: 'numberfield', allowDecimals: false,
-    fieldLabel: '公司类型',
-    name: 'CompType'
-},
-{
-    xtype: 'numberfield', allowDecimals: false,
-    fieldLabel: '',
-    name: 'FinanceYear'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'LogoPath'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'CurrencyTypeKey'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Homepage'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'CountryDicID'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'ProvinceDicID'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'CityDicID'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Address'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'ParentID'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'PostCode'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Phone'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Fax'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Bank'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Account'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Tax'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'LegalPer'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'ConsignPer'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'ContactPerson'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'ContactTelephone'
-},
-
-{
-    xtype: 'numberfield', allowDecimals: true,
-    fieldLabel: '',
-    name: 'DiscountRate'
-},
-{
-    xtype: 'numberfield', allowDecimals: false,
-    fieldLabel: '',
-    name: 'CompDomestic'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Branch'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'CompyAttribute'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Attribute1'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Attribute2'
-},
-{
-    xtype: 'textfield',
-    fieldLabel: '',
-    name: 'Attribute3'
-},
-{
-    xtype: 'numberfield', allowDecimals: false,
-    fieldLabel: '',
-    name: 'Attribute4'
-},
-{
-    xtype: 'datefield',
-    fieldLabel: '',
-    name: 'Attribute5'
-}]
-        }
-    ]
-
-
+            quickSearchCols: ['Name', 'Code'],
+            controllerUrl: 'Company',
+            modelName: 'xf.model.org.Company',
+            tbar: [{
+                text: '新建',
+                iconCls: 'add',
+                handler: "addCompany"
+            }, {
+                text: '编辑',
+                iconCls: 'edit',
+                handler: "editCompany"
+            }, {
+                text: '删除',
+                iconCls: 'remove',
+                handler: "deleteCompany"
+            }]
+        }, {
+            xtype: 'SGForm',
+            apiUrl: '/api/Company',
+            includePath: [],
+            items: [{
+                xtype: 'textfield',
+                fieldLabel: '编号',
+                allowBlank: false,
+                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                name: 'Code'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '名称',
+                allowBlank: false,
+                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                name: 'Name'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '地址',
+                name: 'Address'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '电话',
+                name: 'Tel'
+            }, {
+                xtype: 'datefield',
+                fieldLabel: '创建时间',
+                name: 'CreateOn',
+                format: "Y-m-d\\TH:i:s"
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '邮件',
+                name: 'Email'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '规模',
+                name: 'Scale'
+            }, {
+                xtype: 'numberfield', allowDecimals: false,
+                fieldLabel: '级别',
+                name: 'Level'
+            }, {
+                xtype: 'textarea',
+                columnWidth: 1,
+                fieldLabel: '描述',
+                name: 'Remark'
+            }],
+            tbar: [{
+                xtype: 'button',
+                text: '保存',
+                iconCls: 'save',
+                handler: "saveCompany"
+            }, '-', {
+                xtype: 'button',
+                text: '返回',
+                iconCls: 'back',
+                handler: "back"
+            }]
+        }]
+    }]
 });

@@ -31,6 +31,22 @@ namespace Yanjun.Framework.Code.Util
         /// <param name="obj"></param>
         /// <param name="propertyName"></param>
         /// <returns></returns>
+        public static bool HasPropertyInfo(object obj, string propertyName)
+        {
+            var propertyInfos = obj.GetType().GetProperties();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                if (propertyInfo.Name.ToLower() == propertyName.ToLower()) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
         public static object GetPropertyValue(object obj, string propertyName)
         {
             var propertyInfos = obj.GetType().GetProperties();
@@ -56,13 +72,15 @@ namespace Yanjun.Framework.Code.Util
             var propertyInfo = GetPropertyInfo(objs.FirstOrDefault(), propertyName);
             if (propertyInfo != null)
             {
-                foreach(var obj in objs)
+                foreach (var obj in objs)
                 {
                     propertyInfo.SetValue(obj, propertyValue);
                 }
-                
+
             }
         }
+
+
 
         #region 获取属性
         /// <summary>

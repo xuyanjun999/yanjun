@@ -99,8 +99,11 @@ namespace Yanjun.Framework.Mvc.App_Start
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
 
+
+
             // OPTIONAL: Register the Autofac filter provider.
             builder.RegisterWebApiFilterProvider(config);
+
         }
 
 

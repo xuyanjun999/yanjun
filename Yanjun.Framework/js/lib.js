@@ -305,7 +305,6 @@ Ext.define('xf.Common.Reader', {
     lastTotalCount: 0,
     read: function (object) {
         try {
-            console.log();
             var result = Ext.decode(object.responseText);
             if (result.error) {
                 console.log("Ext获得服务器数据格式错误:" + result.error);
@@ -317,9 +316,9 @@ Ext.define('xf.Common.Reader', {
             }
             var data = serverNS.packRespData(result);
 
-
+            var totalProperty = this.getTotalProperty();
             //分页时防止重新计算总数
-            var count = data[this.totalProperty];
+            var count = data[totalProperty];
             if (!Ext.isEmpty(count)) {
                 this.lastTotalCount = count;
             } else {
@@ -470,8 +469,8 @@ var getGridStoreConfig = function (grid) {
 
                 //通知proxy需要重新到服务器获取
                 store.getProxy().isReloadData = true;
-                if (this.beforeload) {
-                    this.beforeload(store, operation, eOpts);
+                if (this.hasListeners.beforeload) {
+                    this.fireEvent("beforeload", grid, store, operation, eOpts);
                 }
                 //如果未配置权限读取器，自动从model扫描读取器
                 if (Ext.isEmpty(grid.commuArgs.dataArgs.Right.RightReaderName) && this.commuArgs.dataArgs.Right.UseRight) {
@@ -1266,6 +1265,8 @@ Ext.define('xf.Form', {
     alias: 'widget.SGForm',
     border: 0,
     bodyPadding: 5,
+    split: true,
+    autoScroll: true,
     layout: 'column',
     defaults: {
         margin: "2 5 0 2",
@@ -1278,7 +1279,8 @@ Ext.define('xf.Form', {
 
     //form是否包含在SGView中
     isInSGView: true,
-
+    //保存后跳转到表格界面
+    backAfterSave: false,
     //行数据对象
     record: null,
     //通讯方式参数
@@ -1302,7 +1304,22 @@ Ext.define('xf.Form', {
     },
 
     //呈现之前出发的事件  参数 Ext.Component me, Object eOpts
-    beforeshow: function (me, eOpts) {
+
+
+    selfListeners: {
+        beforeshow: function (me) {
+            console.log("i before show");
+            me.getForm().reset();
+            var sgform = me;
+            if (me.record) {
+                var dataArgs = me.commuArgs.dataArgs;
+                dataArgs.ActionDes = '获取数据';
+                sgform.load();
+            }
+            else {
+                me.getForm().reset();
+            }
+        },
     },
     //数据加载
     //回调参数 option.callBack = function(data){}
@@ -1319,9 +1336,9 @@ Ext.define('xf.Form', {
         if (!this.isEdit())
             return;
         var formPanel = this;
-        this.commuArgs.dataArgs.Entitys = new Array(this.record.raw);
+        this.commuArgs.dataArgs.Entitys = new Array(this.record.data);
         var include = this.includePath.join(",");
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", this.apiUrl, this.record.raw.ID, include);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", this.apiUrl, this.record.data.ID, include);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1330,7 +1347,7 @@ Ext.define('xf.Form', {
                         console.log("formLoad:" + data.Entitys[0]);
                         formPanel.getForm().reset();
 
-                        formPanel.record.raw = data.Entitys[0];
+                        formPanel.record.data = data.Entitys[0];
                         formPanel.getForm().setValues(data.Entitys[0]);
                     }
                     if (option.callBack) {
@@ -1413,7 +1430,7 @@ Ext.define('xf.Form', {
             return;
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(this.record.raw);
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}", this.apiUrl, this.record.raw.ID);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}", this.apiUrl, this.record.data.ID);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1459,13 +1476,13 @@ Ext.define('xf.Form', {
         }
         var editData = form.getValues();
         //合并数据实例
-        editData = Ext.Object.merge(this.record.raw, editData);
+        editData = Ext.Object.merge(this.record.data, editData);
         this.commuArgs.ajaxMethod = Ext.String.format("{0}", this.apiUrl);
         this.commuArgs.dataArgs.Entitys = new Array(editData);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
-                    formPanel.record.raw = editData;
+                    formPanel.record.data = editData;
                     //formPanel.record.load(formPanel.record.id)
                     toast_success('保存成功!');
                     if (option.callBack) {
@@ -1534,17 +1551,14 @@ Ext.define('xf.Form', {
     initComponent: function () {
         //引用 只能在initComponent重新定义才能对象隔离，暂时这样用
         this.commuArgs = new serverNS.commuArgs();
-        Ext.apply(this, {
-            listeners: {
-                scope: this,
-                beforeshow: this.beforeshow,
-                afterrender: function (me, eOpts) {
-                    if (this.afterFirstShow) {
-                        this.afterFirstShow(me, eOpts);
-                    };
-                }
-            }
-        });
+
+        if (Ext.isEmpty(this.listeners)) {
+            Ext.apply(this, {
+                listeners: {}
+            });
+        }
+        Ext.applyIf(this.listeners, this.selfListeners);
+
         //end apply
         this.callParent(arguments);
     } //initComponent
@@ -1729,23 +1743,8 @@ Ext.define('xf.GridPanel', {
     }, //quick search
 
     //触发编辑动作
-    edit: function () {
-        var records = this.getSelectedRowsRecords();
-        if (!records || records.length == 0)
-            return;
+    controllerUrl:'',
 
-        if (this.isInSGView) {
-            this.up('SGView').changeView(true, records[0]);
-        }
-
-        if (this.editCallBack) {
-            var raws = [];
-            for (var i = 0; i < records.length; i++) {
-                raws.push(records[i].raw);
-            }
-            this.editCallBack(records, raws, this);
-        }
-    },
     //参数option.callBack(records) records为删除的数据实体对象
     del: function (option) {
 
@@ -1755,33 +1754,44 @@ Ext.define('xf.GridPanel', {
         if (!records || records.length == 0)
             return;
 
-        this.commuArgs.dataArgs.Entitys = [];
+        var ids = [];
         for (var i = 0; i < records.length; i++) {
-            this.commuArgs.dataArgs.Entitys.push(records[i].raw);
+            ids.push(records[i].data.ID);
         }
-
-        this.commuArgs.callBack = function (data) {
-            try {
-                if (data.Success) {
-                    if (option && option.callBack) {
-                        option.callBack(data);
-                    }
-                    grid.refresh();
-                    return;
-                }
-                throw data.Message;
-            } catch (e) {
-                var err = '异常' + e;
-                alert_error(err);
-                console.log(err);
-            } finally {
-                grid.setLoading(false);
-            }
-        };
 
         this.setLoading('Loading...');
 
-        serverNS.ajaxProSend(this.commuArgs);
+        var url = Ext.String.format("/{0}/Delete", this.controllerUrl);
+
+        Ext.Ajax.request({
+            method: 'post',
+            url: url,
+            params: {
+                ids: ids,
+            },
+            success: function (response, opts) {
+                try {
+                    var obj = Ext.decode(response.responseText);
+                    if (obj.Success) {
+                        toast_success("删除成功!")
+                        if (option) {
+                            option.callBack(obj);
+                        }
+                    }
+                    else {
+                        toast_error(obj.Message);
+                    }
+                } catch (e) {
+                    console.log(e);
+                } finally {
+                    grid.setLoading(false);
+                }
+
+            },
+        });
+
+
+
     },
 
     //导出grid数据
@@ -1933,6 +1943,55 @@ Ext.define('xf.GridPanel', {
         }
     },
 
+
+    selfListeners: {
+        render: function (me) {
+            me.store.on('totalcountchange', function (count) {
+                me.down('#status').update({
+                    count: me.store.getTotalCount()
+                });
+            }, me);
+        },
+        afterrender: function (me, eOpts) {
+            me.syncModelInfoToColumnInfo();
+            if (me.afterFirstShow) {
+                me.afterFirstShow(me, eOpts);
+            };
+        },
+        itemdblclick: function (view, record, item, index, e, eOpts) {
+            var grid = view.ownerGrid;
+            if (grid.dblClickToEdit) {
+                if (grid.isInSGView) {
+                    var view = grid.up('#content');
+                    var form = view.down("SGForm");
+                    grid.fireEvent("formedit", grid, form, record);
+                }
+
+               
+            }
+            if (grid.isShowRowDetailOnDblClick) {
+                grid.showDefGridRowDetail(record, grid);
+            }
+        },
+        edit: function (editor, e) {
+            this.roworcelledit(editor, e);
+        },
+        formedit: function (me, form, record) {
+            console.log("formedit:" + record);
+            if (Ext.isArray(record)) {
+                form.record = record[0];
+            }
+            else {
+                form.record = record;
+            }
+            form.getForm().reset();
+            me.up("#content").getLayout().setActiveItem(1);
+            //form.fireEvent("beforeshow", form)
+
+        },
+
+    },
+
     initComponent: function () {
         var sgGrid = this;
         //引用 只能在initComponent重新定义才能对象隔离，暂时这样用
@@ -2011,7 +2070,7 @@ Ext.define('xf.GridPanel', {
             dockedItems: [{
                 xtype: 'pagingtoolbar',
                 border: 0,
-                padding:0,
+                padding: 0,
                 itemId: 'pagingbommontoolbar',
                 store: store,   // GridPanel中使用的数据
                 dock: 'bottom',
@@ -2030,39 +2089,7 @@ Ext.define('xf.GridPanel', {
                     }
                 }
             },
-            listeners: {
-                scope: this,
-                render: function () {
-                    this.store.on('totalcountchange', function (count) {
-                        this.down('#status').update({
-                            count: this.store.getTotalCount()
-                        });
-                    }, this);
-                },
-                afterrender: function (me, eOpts) {
-                    me.syncModelInfoToColumnInfo();
-                    if (this.afterFirstShow) {
-                        this.afterFirstShow(me, eOpts);
-                    };
-                },
-                itemdblclick: function (grid, record, item, index, e, eOpts) {
-                    if (this.dblClickToEdit) {
-                        if (this.isInSGView) {
-                            var view = this.up('SGView');
-                            if (view) {
-                                view.changeView(true, record);
-                            }
-                        }
-                        this.edit();
-                    }
-                    if (this.isShowRowDetailOnDblClick) {
-                        this.showDefGridRowDetail(record, grid);
-                    }
-                },
-                edit: function (editor, e) {
-                    this.roworcelledit(editor, e);
-                }
-            },
+
             plugins: (this.isEditor ? (this.isRowEditor ? [Ext.create('Ext.grid.plugin.RowEditing', {
                 clicksToMoveEditor: 1,
                 clicksToEdit: 2,
@@ -2090,6 +2117,15 @@ Ext.define('xf.GridPanel', {
             })]) : [])
         });
         //end apply
+
+        if (Ext.isEmpty(this.listeners)) {
+            Ext.apply(this, {
+                listeners: {}
+            });
+        }
+
+        Ext.applyIf(this.listeners, this.selfListeners);
+
 
         this.callParent(arguments);
     }
@@ -2480,7 +2516,7 @@ Ext.define('xf.Common.TreePanel', {
     rootVisible: false,
     layout: 'fit',
     anchor: '100%',
-    singleExpand: true,
+    singleExpand: false,
     region: 'center',
     lines: false,
     useArrows: true,

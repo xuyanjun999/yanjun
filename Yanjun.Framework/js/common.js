@@ -68,6 +68,8 @@ var defaultWidgetArgs = {
     msgTarget: 'side'
 };
 
+
+
 if (!console) {
     var console = {
         log: function (txt) {

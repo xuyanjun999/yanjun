@@ -437,6 +437,7 @@ var serverNS = {
                 });
 
             }
+            return commonJsonReturn;
         } catch (e) {
             throw '包装服务器返回额外数据异常:' + e
         }

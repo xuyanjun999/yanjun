@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using Yanjun.Framework.Domain.Service;
 
@@ -13,6 +14,8 @@ namespace Yanjun.Framework.Mvc.Controllers
 
         public ActionResult Index()
         {
+            var c = GlobalConfiguration.Configuration;
+            int a = c.Formatters.JsonFormatter.GetHashCode();
             return View();
         }
 

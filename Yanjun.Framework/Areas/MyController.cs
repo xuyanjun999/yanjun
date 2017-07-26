@@ -10,10 +10,12 @@ using Yanjun.Framework.Code.Web;
 using Yanjun.Framework.Code.Web.Dto;
 using Yanjun.Framework.Data.Repository;
 using static Yanjun.Framework.Code.Web.Dto.QueryArg;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Yanjun.Framework.Mvc.Areas
 {
-    public class MyController<T>:Controller where T:class,new()
+    public class MyController<T> : Controller where T : class, new()
     {
         /// <summary>
         /// 日志对象
@@ -35,13 +37,13 @@ namespace Yanjun.Framework.Mvc.Areas
 
                 var page = args.Query.Page;
 
-                if(page.PageSize<=0)
+                if (page.PageSize <= 0)
                 {
                     page.PageSize = 500;
                 }
 
                 Sorter sort = new Sorter() { SortField = "ID", SortOrder = System.Data.SqlClient.SortOrder.Descending };
-                if(args.Query.Sorters!=null&&args.Query.Sorters.Count>0)
+                if (args.Query.Sorters != null && args.Query.Sorters.Count > 0)
                 {
                     sort = args.Query.Sorters.First();
                 }
@@ -56,7 +58,39 @@ namespace Yanjun.Framework.Mvc.Areas
                 res.Message = ex.Message;
                 Log.Error(ex);
             }
-            return Json(res, JsonRequestBehavior.AllowGet);
+            return MyJson(res);
+        }
+
+
+        public MyJsonResult MyJson(object data, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.AllowGet)
+        {
+            MyJsonResult result = new MyJsonResult() { Data = data, JsonRequestBehavior= jsonRequestBehavior };
+            return result;
+        }
+    }
+
+    public class MyJsonResult : System.Web.Mvc.JsonResult
+    {
+        public override void ExecuteResult(ControllerContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            var response = context.HttpContext.Response;
+
+            response.ContentType = !String.IsNullOrEmpty(ContentType)
+                ? ContentType
+                : "application/json";
+
+            if (ContentEncoding != null)
+                response.ContentEncoding = ContentEncoding;
+
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+            // If you need special handling, you can call another form of SerializeObject below
+            var serializedObject = JsonConvert.SerializeObject(Data, settings);
+            response.Write(serializedObject);
         }
     }
 }

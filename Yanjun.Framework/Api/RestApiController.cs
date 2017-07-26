@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,6 +30,7 @@ namespace Yanjun.Framework.Mvc.Api
                 res.Message = ex.Message;
                 Log.Error(ex);
             }
+
             return Json<RestResponseDto>(res);
         }
 
