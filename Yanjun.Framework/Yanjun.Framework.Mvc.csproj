@@ -167,6 +167,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\ApiControllerBase.cs" />
+    <Compile Include="Api\BaseData\ParamDefineController.cs" />
+    <Compile Include="Api\Data\DynamicBlockController.cs" />
+    <Compile Include="Api\Data\DynamicBlockParamController.cs" />
     <Compile Include="Api\Org\CompanyController.cs" />
     <Compile Include="Api\Org\StaffController.cs" />
     <Compile Include="Api\RestApiController.cs" />
@@ -177,6 +180,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\BaseData\BaseDataAreaRegistration.cs" />
+    <Compile Include="Areas\BaseData\Controllers\ParamDefineController.cs" />
+    <Compile Include="Areas\Data\Controllers\DynamicBlockController.cs" />
+    <Compile Include="Areas\Data\Controllers\DynamicBlockParamController.cs" />
+    <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\MyController.cs" />
     <Compile Include="Areas\Org\Controllers\CompanyController.cs" />
     <Compile Include="Areas\Org\Controllers\StaffController.cs" />
@@ -197,15 +205,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Application.js" />
+    <Content Include="app\controller\basedata\ParamDefine.js" />
+    <Content Include="app\controller\data\DynamicBlock.js" />
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
     <Content Include="app\controller\org\Staff.js" />
     <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
+    <Content Include="app\model\basedata\ParamDefine.js" />
+    <Content Include="app\model\data\DynamicBlock.js" />
+    <Content Include="app\model\data\DynamicBlockParam.js" />
     <Content Include="app\model\org\Company.js" />
     <Content Include="app\model\org\Staff.js" />
     <Content Include="app\model\sys\DicConfig.js" />
     <Content Include="app\model\sys\Menu.js" />
+    <Content Include="app\view\basedata\ParamDefine.js" />
+    <Content Include="app\view\data\DynamicBlock.js" />
+    <Content Include="app\view\data\DynamicBlockParam.js" />
     <Content Include="app\view\main\Main.js" />
     <Content Include="app\view\org\Company.js" />
     <Content Include="app\view\org\Staff.js" />
@@ -2341,12 +2357,11 @@
     <Content Include="icons\zoom\zoom.png" />
     <Content Include="icons\zoom\zoom_in.png" />
     <Content Include="icons\zoom\zoom_out.png" />
+    <Content Include="js\allEnum.js" />
     <Content Include="js\app.js" />
     <Content Include="js\common.js" />
     <Content Include="js\lib.js" />
     <Content Include="js\serverCommunication.js" />
-    <Content Include="js\site.js" />
-    <Content Include="js\site.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -2411,6 +2426,8 @@
     <Content Include="icons\zoom\Thumbs.db" />
     <Content Include="Areas\Org\Views\web.config" />
     <Content Include="Areas\TreeQuery\Views\web.config" />
+    <Content Include="Areas\BaseData\Views\web.config" />
+    <Content Include="Areas\Data\Views\web.config" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -2444,6 +2461,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\BaseData\Models\" />
+    <Folder Include="Areas\BaseData\Views\ParamDefine\" />
+    <Folder Include="Areas\BaseData\Views\Shared\" />
+    <Folder Include="Areas\Data\Models\" />
+    <Folder Include="Areas\Data\Views\DynamicBlockParam\" />
+    <Folder Include="Areas\Data\Views\DynamicBlock\" />
+    <Folder Include="Areas\Data\Views\Shared\" />
     <Folder Include="Areas\Org\Models\" />
     <Folder Include="Areas\Org\Views\Company\" />
     <Folder Include="Areas\Org\Views\Shared\" />
@@ -2458,6 +2482,8 @@
     <Folder Include="db\data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Company\" />
+    <Folder Include="Views\DynamicBlockParam\" />
+    <Folder Include="Views\DynamicBlock\" />
     <Folder Include="Views\Staff\" />
   </ItemGroup>
   <ItemGroup>

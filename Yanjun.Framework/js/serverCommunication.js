@@ -568,8 +568,8 @@ var serverNS = {
     getComboStaticValue: function (comboStaticData, value, record) {
         var record = this.getComboStaticStore(comboStaticData).findRecord('value', value);
         //  console.log(comboStaticData);
-        if (record != null && record.raw != null) {
-            return record.raw.name;
+        if (record != null && record.data != null) {
+            return record.data.name;
         }
         return "<系统未定义>";
     },

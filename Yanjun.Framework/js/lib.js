@@ -1350,8 +1350,9 @@ Ext.define('xf.Form', {
                         formPanel.record.data = data.Entitys[0];
                         formPanel.getForm().setValues(data.Entitys[0]);
                     }
-                    if (option.callBack) {
-                        option.callBack(data);
+                    if (formPanel.hasListeners.loadcallback)
+                    {
+                        formPanel.fireEvent("loadcallback", formPanel, data)
                     }
                     return;
                 }
@@ -2183,7 +2184,6 @@ Ext.define('xf.Common.GridLookupPanel', {
     //multiSel=false设置数据唯一标识		multiSel=true 设置数据唯一标识数组
     //text 设置默认文本
     setValue: function (value, text) {
-        debugger
         if (Ext.isEmpty(value))
             return;
         if (!this.multiSel) {
