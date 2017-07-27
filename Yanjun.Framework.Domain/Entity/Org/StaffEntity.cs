@@ -59,6 +59,9 @@ namespace Yanjun.Framework.Domain.Entity.Org
         public long CompanyID { get; set; }
 
 
+        public CompanyEntity Company { get; set; }
+
+
         [NotMapped]
         public override string Text
         {

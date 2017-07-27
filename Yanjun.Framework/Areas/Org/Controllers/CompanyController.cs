@@ -11,25 +11,5 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
     public class CompanyController : Areas.MyController<CompanyEntity>
     {
         // GET: Org/Company
-
-        public  JsonResult Delete(long[] ids)
-        {
-            EntityResponseDto res = new EntityResponseDto();
-            try
-            {
-                Repository.BeginTran();
-                Repository.Delete<CompanyEntity>(ids);
-                Repository.Commit();
-                res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                Repository.Rollback();
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
-            return Json(res, JsonRequestBehavior.AllowGet);
-        }
     }
 }

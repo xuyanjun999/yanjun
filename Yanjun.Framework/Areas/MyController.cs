@@ -49,11 +49,31 @@ namespace Yanjun.Framework.Mvc.Areas
                 }
                 string[] includes = args.Query.IncludeEntityPaths == null ? null : args.Query.IncludeEntityPaths.ToArray();
                 res.Count = Repository.GetQueryExp<T>(predicate, includes).Count();
-                res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = page.PageIndex, rows = page.PageSize, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" });
+                res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = page.PageIndex, rows = page.PageSize, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" }, includes);
                 res.Success = true;
             }
             catch (Exception ex)
             {
+                res.Success = false;
+                res.Message = ex.Message;
+                Log.Error(ex);
+            }
+            return MyJson(res);
+        }
+
+        public JsonResult Delete(long[] ids)
+        {
+            EntityResponseDto res = new EntityResponseDto();
+            try
+            {
+                Repository.BeginTran();
+                Repository.Delete<T>(ids);
+                Repository.Commit();
+                res.Success = true;
+            }
+            catch (Exception ex)
+            {
+                Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;
                 Log.Error(ex);

@@ -10,7 +10,7 @@
         xtype: 'CommonTreeSearchPanel',
         region: 'west',
         width: 200,
-        
+        reference: 'tree',
         enableDateSearch: false,
         enableTextSearch: false,
         commonTreeConfig: {
@@ -28,52 +28,6 @@
         reference: 'content',
         layout: 'card',
         items: [{
-            xtype: "sggrid",
-            region: 'center',
-            columns: [{
-                xtype: 'rownumberer',
-                text: '行号',
-                width: 50
-            }, {
-                text: '名称',
-                dataIndex: 'Name',
-                width: 100
-            }, {
-                text: '父级菜单',
-                dataIndex: 'Parent.Name',
-                width: 100
-            }, {
-                text: '图标',
-                dataIndex: 'IconResource',
-                width: 100
-            }, {
-                text: '是否显示',
-                dataIndex: 'Visible',
-                width: 100
-            }, {
-                text: '描述',
-                dataIndex: 'Des',
-                width: 100
-            }, {
-                text: '排序',
-                dataIndex: 'SequenceIndex',
-                width: 100
-            }, {
-                text: '代号',
-                dataIndex: 'Code',
-                width: 100
-            }, {
-                text: '路径',
-                dataIndex: 'ModuleUrl',
-                flex: 1
-            }],
-            controllerUrl: 'Menu',
-            listeners: {
-                beforeload: "menuBeforeload"
-            },
-            quickSearchCols: ['Name'],
-            modelName: 'xf.model.sys.Menu',
-        }, {
             xtype: 'SGForm',
             title: '明细',
             apiUrl: '/api/Menu',
@@ -133,14 +87,7 @@
                 xtype: 'button',
                 text: '保存',
                 iconCls: 'save',
-                handler: "formSave"
-            }, '-', {
-                xtype: 'button',
-                text: '返回',
-                iconCls: 'back',
-                handler: function () {
-                    this.up("#content").getLayout().setActiveItem(0);
-                }
+                handler: "saveMenu"
             }]
         }]
     }]

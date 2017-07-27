@@ -56,6 +56,7 @@
     <Compile Include="Entity\BaseAcsRecTreeNodeEntity.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\BaseTreeNodeEntity.cs" />
+    <Compile Include="Entity\CommonTreeNodeEntity.cs" />
     <Compile Include="Entity\IAccessRecordEntity.cs" />
     <Compile Include="Entity\IBaseEntity.cs" />
     <Compile Include="Entity\ITreeNodeEntity.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Service\IServiceBase.cs" />
     <Compile Include="Service\Org\IStaffService.cs" />
     <Compile Include="Service\Sys\IMenuService.cs" />
+    <Compile Include="Service\TreeQuery\IOrgTreeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

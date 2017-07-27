@@ -55,7 +55,6 @@
                 text: '创建日期',
                 dataIndex: 'CreateOn',
                 width: 100,
-                xtype: 'datecolumn',
                 renderer: Ext.util.Format.dateRenderer('m/d/Y')
             }, {
                 text: '描述',
@@ -108,6 +107,7 @@
             }, {
                 xtype: 'datefield',
                 fieldLabel: '创建时间',
+                readOnly: true,
                 name: 'CreateOn',
                 format: "Y-m-d\\TH:i:s"
             }, {

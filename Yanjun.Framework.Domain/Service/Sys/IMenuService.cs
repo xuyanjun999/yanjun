@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Yanjun.Framework.Domain.Service.Sys
 {
-    public interface IMenuService
+    public interface IMenuService: IServiceBase
     {
 
     }

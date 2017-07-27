@@ -11,7 +11,7 @@ namespace Yanjun.Framework.Mapping.Org
     {
         public StaffMap() : base("SGEAP_CORE_User")
         {
-            //this.HasOptional(x => x.Parent).WithMany().HasForeignKey<long?>(x => x.ParentID);
+            this.HasRequired(x => x.Company).WithMany().HasForeignKey<long>(x => x.CompanyID);
         }
     }
 }

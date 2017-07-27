@@ -244,3 +244,5 @@ var openPartFile = function (partno, sono) {
     }
     serverNS.ajaxProSend(commuArgs);
 }
+
+

@@ -1,11 +1,31 @@
-﻿Ext.define('xf.view.org.Staff', {
+﻿Ext.define('xf.model.org.Staff', {
     extend: 'Ext.data.Model',
     fields: [{
         name: 'ID',
         text: ''
     }, {
+        name: 'Status',
+        text: ''
+    }, {
+        name: 'CreateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'CreateBy',
+        text: ''
+    }, {
+        name: 'UpdateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'UpdateBy',
+        text: ''
+    }, {
         name: 'CompanyID',
         text: '公司ID'
+    }, {
+        name: 'Company.Name',
+        text: '公司名称'
     }, {
         name: 'Code',
         dtype: 'string',
@@ -26,24 +46,7 @@
         name: 'Email',
         dtype: 'string',
         text: '邮件'
-    }, {
-        name: 'Status',
-        text: ''
-    }, {
-        name: 'CreateOn',
-        dtype: 'date',
-        text: ''
-    }, {
-        name: 'CreateBy',
-        text: ''
-    }, {
-        name: 'UpdateOn',
-        dtype: 'date',
-        text: ''
-    }, {
-        name: 'UpdateBy',
-        text: ''
-    }, {
+    },  {
         name: 'Gender',
         text: '性别'
     }, {

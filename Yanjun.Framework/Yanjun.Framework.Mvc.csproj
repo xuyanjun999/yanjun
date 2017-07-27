@@ -168,6 +168,7 @@
   <ItemGroup>
     <Compile Include="Api\ApiControllerBase.cs" />
     <Compile Include="Api\Org\CompanyController.cs" />
+    <Compile Include="Api\Org\StaffController.cs" />
     <Compile Include="Api\RestApiController.cs" />
     <Compile Include="Api\Sys\DicConfigController.cs" />
     <Compile Include="Api\Sys\MenuController.cs" />
@@ -183,6 +184,8 @@
     <Compile Include="Areas\Sys\Controllers\DicConfigController.cs" />
     <Compile Include="Areas\Sys\Controllers\MenuController.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
+    <Compile Include="Areas\TreeQuery\Controllers\OrgTreeController.cs" />
+    <Compile Include="Areas\TreeQuery\TreeQueryAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Filter\Attribute\NotCheckUserAttribute.cs" />
     <Compile Include="Filter\LoginApiFilter.cs" />
@@ -196,6 +199,7 @@
     <Content Include="app\Application.js" />
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
+    <Content Include="app\controller\org\Staff.js" />
     <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
     <Content Include="app\model\org\Company.js" />
@@ -2406,6 +2410,7 @@
     <Content Include="icons\world\Thumbs.db" />
     <Content Include="icons\zoom\Thumbs.db" />
     <Content Include="Areas\Org\Views\web.config" />
+    <Content Include="Areas\TreeQuery\Views\web.config" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
@@ -2447,9 +2452,13 @@
     <Folder Include="Areas\Sys\Views\DicConfig\" />
     <Folder Include="Areas\Sys\Views\Menu\" />
     <Folder Include="Areas\Sys\Views\Shared\" />
+    <Folder Include="Areas\TreeQuery\Models\" />
+    <Folder Include="Areas\TreeQuery\Views\OrgTree\" />
+    <Folder Include="Areas\TreeQuery\Views\Shared\" />
     <Folder Include="db\data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Company\" />
+    <Folder Include="Views\Staff\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

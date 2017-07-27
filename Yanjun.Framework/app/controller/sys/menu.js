@@ -2,7 +2,7 @@
     extend: 'Ext.app.ViewController',
     alias: 'controller.menu',
     treeStoreBeforeLoad: function (tree, store, operation, eOpts) {
-
+        console.log("treeStoreBeforeLoad");
         var dataArgs = new serverNS.dataArgs();
 
         var searchArgs = new serverNS.searchArgs();
@@ -24,7 +24,6 @@
     },
     treeItemContextMenu: function (tree, record, item, index, e) {
 
-        e.preventDefault();
 
         e.stopEvent();
 
@@ -43,7 +42,6 @@
                 handler: function () {
                     //当点击时隐藏右键菜单 
                     this.up("menu").hide();
-                    content.getLayout().setActiveItem(1);
                     sgform.record = null;
                     sgform.fireEvent("beforeshow", sgform);
                 }
@@ -54,7 +52,6 @@
                     this.up("menu").hide();
                     sgform.record = null;
                     sgform.fireEvent("beforeshow", sgform);
-                    content.getLayout().setActiveItem(1);
                     sgform.getForm().findField("Parent.Name").setValue(record.data.Name);
                     sgform.getForm().findField("ParentID").setValue(record.data.ID);
                 }
@@ -63,7 +60,6 @@
                 iconCls: 'edit',
                 handler: function () {
                     sgform.record = record;
-                    content.getLayout().setActiveItem(1);
                     sgform.fireEvent("beforeshow", sgform);
                 }
             }, {
@@ -74,7 +70,6 @@
 
                     sgform.record = record;
                     sgform.fireEvent("beforeshow", sgform);
-                    content.getLayout().setActiveItem(1);
                     console.log(tree);
 
                     alert_confirm(gettext('确定删除[' + record.data.Name + ']吗?'), function (rtn) {
@@ -98,36 +93,24 @@
             ]
         }).showAt(e.getXY());//让右键菜单跟随鼠标位置
 
+        return true;
+
     },
+
     treeItemclick: function (tree, record, item, index, e, eOpts) {
-        console.log(record);
+        console.log("treeItemclick");
         if (!Ext.isEmpty(record.data)) {
 
 
             var content = this.lookup("content");
             var sgform = content.down("SGForm");
             sgform.record = record;
-            var com = content.getLayout().getActiveItem();
-            if (com.xtype == "SGForm") {
-                sgform.fireEvent("beforeshow", sgform);
-            }
-            else {
-                content.getLayout().setActiveItem(1);
-            }
+
+            sgform.fireEvent("beforeshow", sgform);
 
         }
     },
-    getMenuDataArg: function () {
-        var dataArgs = new serverNS.dataArgs();
-        dataArgs.ActionDes = '';
-        return dataArgs;
-    },
-
-    menuBeforeload: function (me, store, action) {
-        me.commuArgs.dataArgs = this.getMenuDataArg();
-        me.commuArgs.ajaxMethod = Ext.String.format("/{0}/Gets", me.controllerUrl);
-    },
-    formSave: function (btn) {
+    saveMenu: function (btn) {
         var form = btn.up('SGForm');
         var commuArgs = form.commuArgs;
         var dataArgs = commuArgs.dataArgs;

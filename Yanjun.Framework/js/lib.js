@@ -1392,7 +1392,7 @@ Ext.define('xf.Form', {
                     //把添加后实体赋值给this.record.raw
                     if (!Ext.isEmpty(data.Entitys)) {
                         formPanel.record = {};
-                        formPanel.record.raw = data.Entitys[0];
+                        formPanel.record.data = data.Entitys[0];
                     }
                     toast_success('保存成功!');
                     if (option.callBack) {
@@ -1429,7 +1429,7 @@ Ext.define('xf.Form', {
         if (!this.record)
             return;
         var formPanel = this;
-        this.commuArgs.dataArgs.Entitys = new Array(this.record.raw);
+        this.commuArgs.dataArgs.Entitys = new Array(this.record.data);
         this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}", this.apiUrl, this.record.data.ID);
         this.commuArgs.callBack = function (data) {
             try {
@@ -2183,6 +2183,7 @@ Ext.define('xf.Common.GridLookupPanel', {
     //multiSel=false设置数据唯一标识		multiSel=true 设置数据唯一标识数组
     //text 设置默认文本
     setValue: function (value, text) {
+        debugger
         if (Ext.isEmpty(value))
             return;
         if (!this.multiSel) {
@@ -2261,16 +2262,19 @@ Ext.define('xf.Common.GridLookupPanel', {
                 modelName: this.gridModelName,
                 columns: this.gridColumnConfig,
                 quickSearchCols: this.quickSearchCols,
-                beforeload: function (store, action) {
-                    commonGridLookupPanel.fireEvent('beforeload', this, store, action);
+                listeners: {
+                    beforeload: function (me,store, action) {
+                        console.log(commonGridLookupPanel);
+                        commonGridLookupPanel.fireEvent('beforeload', this, store, action);
+                    },
+                    afterrender: function (me, eOpts) {
+                        commonGridLookupPanel.fireEvent('afterFirstShow', me, eOpts);
+                    }
                 },
-                afterFirstShow: function (me, eOpts) {
-                    commonGridLookupPanel.fireEvent('afterFirstShow', me, eOpts);
-                }
             },
             buttons: [{
                 text: "取消",
-                iconCls: 'SJicon_all btn_cancel',
+                iconCls: 'cancel',
                 listeners: {
                     scope: this,
                     click: function () {
@@ -2280,14 +2284,14 @@ Ext.define('xf.Common.GridLookupPanel', {
                 }
             }, {
                 text: "确认",
-                iconCls: 'SJicon_all btn_submit',
+                iconCls: 'ok',
                 itemId: 'submitBtn',
                 selectGridData: function () {
                     //清空之前选择的
                     var raws = [];
                     var datasource = commonGridLookupPanel.popupWin.getGrid().getSelectedRowsRecords();
                     for (var i = 0; i < datasource.length; i++) {
-                        raws.push(datasource[i].raw);
+                        raws.push(datasource[i].data);
                     }
 
                     commonGridLookupPanel.setRawValues(raws);
@@ -2329,7 +2333,7 @@ Ext.define('xf.Common.GridLookupPanel', {
             }, {
                 xtype: 'button',
                 itemId: 'queryBtn',
-                iconCls: 'SJicon_all btn_runquery',
+                iconCls: 'search',
                 handler: function () {
                     this.up('CommonGridLookupPanel').openSelWin();
                 }
@@ -2338,20 +2342,13 @@ Ext.define('xf.Common.GridLookupPanel', {
             }, {
                 xtype: 'button',
                 itemId: 'clearBtn',
-                iconCls: 'SJicon_all btn_refresh',
+                iconCls: 'reload',
                 handler: function () {
                     this.up('CommonGridLookupPanel').reset();
                 }
             }]
         });
 
-        this.addEvents({//custom event
-            'beforeload': true,
-            'callBack': true,
-            'reset': true,
-            'beforeColse': true,
-            'afterFirstShow': true
-        });
         this.callParent(arguments);
 
         this.on('beforedestroy', function (p) {

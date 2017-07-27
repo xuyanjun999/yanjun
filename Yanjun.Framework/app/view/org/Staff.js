@@ -4,29 +4,23 @@
     layout: 'border',
     frame: false,
     border: 0,
-    controller: 'menu',
-    title: '菜单管理',
+    controller: 'staff',
+    title: '员工管理',
     items: [{
-        title: '发运日期',
         xtype: 'CommonTreeSearchPanel',
-        border: 0,
-        padding: 0,
-        reference: 'tree',
-        width: 250,
-        collapsible: true,
-        collapsed: false,
         region: 'west',
+        width: 200,
+        reference: 'tree',
         enableDateSearch: false,
         enableTextSearch: false,
         commonTreeConfig: {
             rootVisible: false,
             listeners: {
-                itemcontextmenu: 'treeItemContextMenu',
-                itemclick: 'treeItemclick',
+                beforeitemclick: 'treeItemclick',
                 storebeforeload: 'treeStoreBeforeLoad'
             },
         }
-    }, {
+    },{
         xtype: 'panel',
         region: 'center',
         itemId: 'content',
@@ -36,179 +30,170 @@
             xtype: "sggrid",
             region: 'center',
             columns: [{
-                xtype: 'rownumberer',
-                text: '行号',
-                width: 50
+                text: '行号', xtype: 'rownumberer',
+                width: 50,
+                sortable: false
+            }, {
+                text: 'ID',
+                dataIndex: 'ID',
+                hidden: true
+            }, {
+                text: '公司名称',
+                dataIndex: 'Company.Name',
+                width: 150
+            }, {
+                text: '用户编号',
+                dataIndex: 'Code',
+                width: 100
             }, {
                 text: '名称',
                 dataIndex: 'Name',
                 width: 100
             }, {
-                text: '父级菜单',
-                dataIndex: 'Parent.Name',
+                text: '部门',
+                dataIndex: 'Dept',
                 width: 100
             }, {
-                text: '图标',
-                dataIndex: 'IconResource',
+                text: '电话',
+                dataIndex: 'Phone',
                 width: 100
             }, {
-                text: '是否显示',
-                dataIndex: 'Visible',
+                text: '邮件',
+                dataIndex: 'Email',
                 width: 100
             }, {
-                text: '描述',
-                dataIndex: 'Des',
+                text: '性别',
+                dataIndex: 'Gender',
+                width: 100,
+                renderer: function (value, metaData) {
+                    return value === true ? "男" : "女";
+                }
+            }, {
+                text: '地址',
+                dataIndex: 'Address',
                 width: 100
             }, {
-                text: '排序',
-                dataIndex: 'SequenceIndex',
+                text: '最后登录IP',
+                dataIndex: 'LastLoginIp',
                 width: 100
-            }, {
-                text: '代号',
-                dataIndex: 'Code',
-                width: 100
-            }, {
-                text: '路径',
-                dataIndex: 'ModuleUrl',
-                flex: 1
             }],
-            getDataArg: function () {
-                var dataArgs = new serverNS.dataArgs();
-                dataArgs.ActionDes = '';
-                dataArgs.Query.IncludeEntityPaths.push('Parent');
-                //var searchArgs = new serverNS.searchArgs();
-                //searchArgs.FieldName = 'Status';
-                //searchArgs.Values.push(0);
-                //searchArgs.Operator = serverNS.searchOperator.Equal;
-                //dataArgs.Query.Searchs.push(searchArgs);
-
-                return dataArgs;
+            listeners: {
+                beforeload: "staffBeforeload"
             },
-            beforeload: function (store, action) {
-                this.commuArgs.dataArgs = this.getDataArg();
-                this.commuArgs.ajaxMethod = "/Menu/Gets";
-            },
-            quickSearchCols: ['Name'],
-            modelName: 'xf.model.sys.Menu',
+            quickSearchCols: ['Name', 'Code'],
+            controllerUrl: 'Staff',
+            modelName: 'xf.model.org.Staff',
             tbar: [{
                 text: '新建',
-                hidden: true,
                 iconCls: 'add',
-                handler: function () {
-                }
+                handler: "addStaff"
             }, {
                 text: '编辑',
                 iconCls: 'edit',
-                hidden: true,
-                handler: function () {
-                    console.log(this.up('panel'));
-                    this.up('#content').getLayout().setActiveItem(1);
-                }
+                handler: "editStaff"
             }, {
                 text: '删除',
-                hidden: true,
                 iconCls: 'remove',
-                handler: function () {
-                }
-            }, {
-                text: '打印',
-                hidden: true,
-                iconCls: 'print',
-                handler: function () {
-                }
+                handler: "deleteStaff"
             }]
         }, {
             xtype: 'SGForm',
-            layout: 'column',
-            defaults: {
-                margin: '2 5 0 2',
-                xtype: 'textfield',
-                labelAlign: 'top',
-                columnWidth: .5,
-                labelSeparator: '',
-                msgTarget: 'side'
-            },
-            split: true,
-            autoScroll: true,
-            title: '明细',
-            border: false,
-            apiUrl: '/api/Menu',
-            includePath: ["Parent"],
-            beforeshow: function () {
-                this.getForm().reset();
-                var sgform = this;
-                if (this.record) {
-                    var dataArgs = this.commuArgs.dataArgs;
-                    dataArgs.ActionDes = '获取数据';
-                    sgform.load();
-                }
-                else {
-                    this.getForm().reset();
-                }
-            },
+            apiUrl: '/api/Staff',
+            includePath: ['Company'],
             items: [{
-                xtype: 'textfield',
+                fieldLabel: '公司名称',
+                name: 'CompanyID',
+                readOnly: true,
                 allowBlank: false,
                 afterLabelTextTpl: REQUIRED_LABEL_TPL,
-                fieldLabel: '菜单名称',
-                name: 'Name'
+                quickSearchCols: ['Code', 'Name'],
+                xtype: 'CommonGridLookupPanel',
+                gridModelName: 'xf.model.org.Company',
+                gridColumnConfig: [{
+                    text: '行号', xtype: 'rownumberer',
+                    width: 50,
+                    sortable: false
+                }, {
+                    text: 'ID',
+                    dataIndex: 'ID',
+                    hidden: true
+                }, {
+                    text: '编号',
+                    dataIndex: 'Code',
+                    width: 100
+                }, {
+                    text: '名称',
+                    dataIndex: 'Name',
+                    width: 150
+                }, {
+                    text: '地址',
+                    dataIndex: 'Address',
+                    width: 150
+                }, {
+                    text: '电话',
+                    dataIndex: 'Tel',
+                    width: 100
+                }, {
+                    text: '邮件',
+                    dataIndex: 'Email',
+                    width: 100
+                }],
+                displayField: 'Name',
+                valueField: 'ID',
+                getTextBySetValue: function (value) {
+                    var form = this.up('SGForm');
+                    if (Ext.isEmpty(form.record))
+                        return;
+                    return form.record.data["Company.Name"];
+                },
+                listeners: {
+                    beforeload: "companyBeforeload"
+                }
             }, {
                 xtype: 'textfield',
-                fieldLabel: '图标',
-                name: 'IconResource'
-            }, {
-                xtype: 'CommonBindCombo',
-                allowBlank: false,
-                afterLabelTextTpl: REQUIRED_LABEL_TPL,
-                store: serverNS.getComboStaticStore(comboStaticData.yesNo),
-                fieldLabel: '是否显示',
-                name: 'IsVisible'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '描述',
-                name: 'Des'
-            }, {
-                xtype: 'numberfield',
-                allowBlank: false,
-                afterLabelTextTpl: REQUIRED_LABEL_TPL,
-                allowDecimals: false,
-                fieldLabel: '序号',
-                name: 'SequenceIndex'
-            }, {
-                xtype: 'textfield', allowBlank: false, afterLabelTextTpl: REQUIRED_LABEL_TPL,
-                fieldLabel: '代号',
+                fieldLabel: '用户编号',
                 name: 'Code'
             }, {
                 xtype: 'textfield',
-                fieldLabel: '路径',
-                name: 'Url'
+                fieldLabel: '名称',
+                name: 'Name'
             }, {
                 xtype: 'textfield',
-                readOnly: true,
-                fieldLabel: '父级菜单',
-                name: 'Parent.Name'
+                fieldLabel: '部门',
+                name: 'Dept'
             }, {
-                xtype: 'hiddenfield',
-                readOnly: true,
-                name: 'ParentID'
+                xtype: 'textfield',
+                fieldLabel: '电话',
+                name: 'Phone'
             }, {
-                xtype: 'textarea',
-                columnWidth: 1,
-                fieldLabel: '备注',
-                name: 'Remark'
-            },],
+                xtype: 'textfield',
+                fieldLabel: '邮件',
+                name: 'Email'
+            }, {
+                xtype: 'CommonBindCombo',
+                store: serverNS.getComboStaticStore(comboStaticData.sex),
+                fieldLabel: '性别',
+                name: 'Gender'
+            },  {
+                xtype: 'textfield',
+                fieldLabel: '地址',
+                name: 'Address'
+            }, {
+                xtype: 'textfield',
+                fieldLabel: '最后登录IP',
+                name: 'LastLoginIp',
+                readOnly: true
+            }],
             tbar: [{
                 xtype: 'button',
                 text: '保存',
                 iconCls: 'save',
-                handler: "formSave"
+                handler: "saveStaff"
             }, '-', {
                 xtype: 'button',
                 text: '返回',
                 iconCls: 'back',
-                handler: function () {
-                    this.up("#content").getLayout().setActiveItem(0);
-                }
+                handler: "back"
             }]
         }]
     }]
