@@ -22,6 +22,9 @@
         dtype: 'string',
         text: '参数编码'
     }, {
+        name: 'DrawingType',
+        text: '绘图类型'
+    }, {
         name: 'DefaultValue',
         dtype: 'string',
         text: '默认值'

@@ -202,26 +202,16 @@ namespace Yanjun.Framework.Data.Repository
         public TEntity[] QueryPage<TEntity>(Expression<Func<TEntity, bool>> predicate, Pagination pagination, params string[] include) where TEntity : class, new()
         {
             bool isAsc = pagination.sord.ToLower() == "asc" ? true : false;
-            string[] _order = pagination.sidx.Split(',');
+            string orderField = pagination.sidx;
             MethodCallExpression resultExp = null;
             var tempData = this.GetQueryExp<TEntity>(predicate, include);
-            foreach (string item in _order)
-            {
-                string _orderPart = item;
-                _orderPart = Regex.Replace(_orderPart, @"\s+", " ");
-                string[] _orderArry = _orderPart.Split(' ');
-                string _orderField = _orderArry[0];
-                bool sort = isAsc;
-                if (_orderArry.Length == 2)
-                {
-                    isAsc = _orderArry[1].ToUpper() == "ASC" ? true : false;
-                }
-                var parameter = Expression.Parameter(typeof(TEntity), "t");
-                var property = typeof(TEntity).GetProperty(_orderField);
-                var propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                var orderByExp = Expression.Lambda(propertyAccess, parameter);
-                resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(TEntity), property.PropertyType }, tempData.Expression, Expression.Quote(orderByExp));
-            }
+
+            var parameter = Expression.Parameter(typeof(TEntity), "t");
+            var propertyAccess = ExpressionUtil.GetEntityAttrExp(parameter, orderField, false);
+            
+            var orderByExp = Expression.Lambda(propertyAccess, parameter);
+            resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(TEntity), propertyAccess.Type }, tempData.Expression, Expression.Quote(orderByExp));
+
             tempData = tempData.Provider.CreateQuery<TEntity>(resultExp);
             // pagination.records = tempData.Count();
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
@@ -373,7 +363,7 @@ namespace Yanjun.Framework.Data.Repository
             {
                 List<string> columns = ExpressionUtil.GetPropertyName<TEntity>(expressions);
 
-                string[] needUpdateColumns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(),columns.ToArray());
+                string[] needUpdateColumns = BuildUpdateColumns<TEntity>(entitys.FirstOrDefault(), columns.ToArray());
 
                 sql = SQLBuilder.BuildUpdateSql<TEntity>(MyContext.GetTableName(typeof(TEntity)), entitys, needUpdateColumns).ToString();
             }

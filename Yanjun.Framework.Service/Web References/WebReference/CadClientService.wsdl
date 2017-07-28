@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="UploadBlockFromDwgFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="blockDwgFileUrl" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UploadBlockFromDwgFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UploadBlockFromDwgFileResult" type="tns:CadDrawingReturnObj" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="CadDrawingReturnObj">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Success" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReturnString" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreateCadDrawingTask">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cadDrawingArgsJson" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="taskCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreateCadDrawingTaskResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CreateCadDrawingTaskResult" type="tns:CadDrawingReturnObj" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="UploadBlockFromDwgFileSoapIn">
+    <wsdl:part name="parameters" element="tns:UploadBlockFromDwgFile" />
+  </wsdl:message>
+  <wsdl:message name="UploadBlockFromDwgFileSoapOut">
+    <wsdl:part name="parameters" element="tns:UploadBlockFromDwgFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreateCadDrawingTaskSoapIn">
+    <wsdl:part name="parameters" element="tns:CreateCadDrawingTask" />
+  </wsdl:message>
+  <wsdl:message name="CreateCadDrawingTaskSoapOut">
+    <wsdl:part name="parameters" element="tns:CreateCadDrawingTaskResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CadClientServiceSoap">
+    <wsdl:operation name="UploadBlockFromDwgFile">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">上传新的块文件并读取到本地数据库</wsdl:documentation>
+      <wsdl:input message="tns:UploadBlockFromDwgFileSoapIn" />
+      <wsdl:output message="tns:UploadBlockFromDwgFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateCadDrawingTask">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">创建绘制CAD图纸任务</wsdl:documentation>
+      <wsdl:input message="tns:CreateCadDrawingTaskSoapIn" />
+      <wsdl:output message="tns:CreateCadDrawingTaskSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CadClientServiceSoap" type="tns:CadClientServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UploadBlockFromDwgFile">
+      <soap:operation soapAction="http://tempuri.org/UploadBlockFromDwgFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateCadDrawingTask">
+      <soap:operation soapAction="http://tempuri.org/CreateCadDrawingTask" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CadClientServiceSoap12" type="tns:CadClientServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="UploadBlockFromDwgFile">
+      <soap12:operation soapAction="http://tempuri.org/UploadBlockFromDwgFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateCadDrawingTask">
+      <soap12:operation soapAction="http://tempuri.org/CreateCadDrawingTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CadClientService">
+    <wsdl:port name="CadClientServiceSoap" binding="tns:CadClientServiceSoap">
+      <soap:address location="http://192.168.1.133:10087/CadClientService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CadClientServiceSoap12" binding="tns:CadClientServiceSoap12">
+      <soap12:address location="http://192.168.1.133:10087/CadClientService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -20,10 +20,10 @@ namespace Yanjun.Framework.Mvc
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/app/model").IncludeDirectory(
-                       "~/app/model","*.js",true));
+                       "~/app/model/","*.js",true));
 
             bundles.Add(new ScriptBundle("~/app/controller").IncludeDirectory(
-                      "~/app/controller", "*.js", true));
+                      "~/app/controller/", "*.js", true));
 
 
 

@@ -117,16 +117,16 @@
         var option = {};
         var me = this;
         var tree = this.lookup("tree");
-        option.callBack = function (data) {
+        btn.callBack = function (data) {
             tree.down("CommonTreePanel").reloadChildNodes();
         }
         if (form.record) {
             dataArgs.ActionDes = '保存数据';
-            form.save(option);
+            form.selfSave(btn);
         }
         else {
             dataArgs.ActionDes = '新增数据';
-            form.addNew(option);
+            form.selfSave(btn);
         }
     }
 });

@@ -73,7 +73,7 @@ var defaultWidgetArgs = {
 if (!console) {
     var console = {
         log: function (txt) {
-        	if(!isDebug) return;
+            if (!isDebug) return;
             document.writeln("当前浏览器版本不支持console.log()函数.");
             document.writeln(txt);
         }
@@ -97,25 +97,25 @@ Array.prototype.remove = function (obj) {
 }
 
 
-function deepCopy(obj) { 
+function deepCopy(obj) {
     if (Object.prototype.toString.call(obj) === '[object Array]') {
         var out = [], i = 0, len = obj.length;
-        for ( ; i < len; i++ ) {
+        for (; i < len; i++) {
             out[i] = deepCopy(obj[i]);
         }
         return out;
     }
     if (typeof obj === 'object') {
-    	if(obj == null){
-    		return null;
+        if (obj == null) {
+            return null;
         }
         if (obj instanceof Date) {
             var copy = new Date();
             copy.setTime(obj.getTime());
             return copy;
-        } 
+        }
         var out = {}, i;
-        for ( i in obj ) {
+        for (i in obj) {
             out[i] = deepCopy(obj[i]);
         }
         return out;
@@ -243,6 +243,30 @@ var openPartFile = function (partno, sono) {
         }
     }
     serverNS.ajaxProSend(commuArgs);
+}
+
+var SG_BUTTONS = {
+    ADD: {
+        text: '新建',
+        iconCls: 'add'
+    },
+    EDIT: {
+        text: '编辑',
+        iconCls: 'edit'
+    },
+    DELETE: {
+        text: '删除',
+        iconCls: 'remove'
+    },
+    SAVE: {
+        text: '保存',
+        iconCls: 'save'
+    },
+    BACK: {
+        text: '返回',
+        callBack: null,
+        iconCls: 'back'
+    },
 }
 
 

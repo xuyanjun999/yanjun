@@ -67,19 +67,7 @@
             quickSearchCols: ['Name', 'Code'],
             controllerUrl: 'Company',
             modelName: 'xf.model.org.Company',
-            tbar: [{
-                text: '新建',
-                iconCls: 'add',
-                handler: "addCompany"
-            }, {
-                text: '编辑',
-                iconCls: 'edit',
-                handler: "editCompany"
-            }, {
-                text: '删除',
-                iconCls: 'remove',
-                handler: "deleteCompany"
-            }]
+            selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
             apiUrl: '/api/Company',
@@ -128,17 +116,7 @@
                 fieldLabel: '描述',
                 name: 'Remark'
             }],
-            tbar: [{
-                xtype: 'button',
-                text: '保存',
-                iconCls: 'save',
-                handler: "saveCompany"
-            }, '-', {
-                xtype: 'button',
-                text: '返回',
-                iconCls: 'back',
-                handler: "back"
-            }]
+            selfButtons: [SG_BUTTONS.SAVE, SG_BUTTONS.EDIT, SG_BUTTONS.BACK]
         }]
     }]
 });

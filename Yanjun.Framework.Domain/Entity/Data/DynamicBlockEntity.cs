@@ -89,6 +89,8 @@ namespace Yanjun.Framework.Domain.Entity.Data
         ///</summary>
         [Description("审核日期")]
         public DateTime? AuditDate { get; set; }
+
+        public IEnumerable<DynamicBlockParamEntity> DynamicBlockParams { get; set; }
     }
 
     /// <summary>

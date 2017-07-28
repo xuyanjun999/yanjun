@@ -172,6 +172,7 @@
     <Compile Include="Api\Data\DynamicBlockParamController.cs" />
     <Compile Include="Api\Org\CompanyController.cs" />
     <Compile Include="Api\Org\StaffController.cs" />
+    <Compile Include="Api\ProjectInfo\ProjectController.cs" />
     <Compile Include="Api\RestApiController.cs" />
     <Compile Include="Api\Sys\DicConfigController.cs" />
     <Compile Include="Api\Sys\MenuController.cs" />
@@ -189,6 +190,8 @@
     <Compile Include="Areas\Org\Controllers\CompanyController.cs" />
     <Compile Include="Areas\Org\Controllers\StaffController.cs" />
     <Compile Include="Areas\Org\OrgAreaRegistration.cs" />
+    <Compile Include="Areas\ProjectInfo\Controllers\ProjectController.cs" />
+    <Compile Include="Areas\ProjectInfo\ProjectAreaRegistration.cs" />
     <Compile Include="Areas\Sys\Controllers\DicConfigController.cs" />
     <Compile Include="Areas\Sys\Controllers\MenuController.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
@@ -202,6 +205,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebService\CadBlockDBUtil.cs" />
+    <Compile Include="WebService\CadBusiness.cs" />
+    <Compile Include="WebService\CadHostService.asmx.cs">
+      <DependentUpon>CadHostService.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Application.js" />
@@ -210,6 +219,7 @@
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
     <Content Include="app\controller\org\Staff.js" />
+    <Content Include="app\controller\project\Project.js" />
     <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
     <Content Include="app\model\basedata\ParamDefine.js" />
@@ -217,6 +227,7 @@
     <Content Include="app\model\data\DynamicBlockParam.js" />
     <Content Include="app\model\org\Company.js" />
     <Content Include="app\model\org\Staff.js" />
+    <Content Include="app\model\project\Project.js" />
     <Content Include="app\model\sys\DicConfig.js" />
     <Content Include="app\model\sys\Menu.js" />
     <Content Include="app\view\basedata\ParamDefine.js" />
@@ -225,6 +236,7 @@
     <Content Include="app\view\main\Main.js" />
     <Content Include="app\view\org\Company.js" />
     <Content Include="app\view\org\Staff.js" />
+    <Content Include="app\view\project\Project.js" />
     <Content Include="app\view\sys\DicConfig.js" />
     <Content Include="app\view\sys\Menu.js" />
     <Content Include="Content\bootstrap.css" />
@@ -1052,10 +1064,6 @@
     <Content Include="Extjs\resources\images\window\toast\icon16_info.png" />
     <Content Include="Extjs\resources\images\window\window-default-corners.gif" />
     <Content Include="Extjs\resources\images\window\window-default-sides.gif" />
-    <Content Include="Extjs\resources\sef-all.css" />
-    <Content Include="Extjs\resources\sef-all_1.css" />
-    <Content Include="Extjs\resources\sef-all_2.css" />
-    <Content Include="Extjs\resources\sef-all_3.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug_1.css" />
     <Content Include="Extjs\resources\theme-classic-all-debug_2.css" />
@@ -2428,10 +2436,13 @@
     <Content Include="Areas\TreeQuery\Views\web.config" />
     <Content Include="Areas\BaseData\Views\web.config" />
     <Content Include="Areas\Data\Views\web.config" />
+    <Content Include="Areas\ProjectInfo\Views\web.config" />
+    <Content Include="WebService\CadHostService.asmx" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>
     </None>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2472,6 +2483,9 @@
     <Folder Include="Areas\Org\Views\Company\" />
     <Folder Include="Areas\Org\Views\Shared\" />
     <Folder Include="Areas\Org\Views\Staff\" />
+    <Folder Include="Areas\ProjectInfo\Models\" />
+    <Folder Include="Areas\ProjectInfo\Views\Project\" />
+    <Folder Include="Areas\ProjectInfo\Views\Shared\" />
     <Folder Include="Areas\Sys\Models\" />
     <Folder Include="Areas\Sys\Views\DicConfig\" />
     <Folder Include="Areas\Sys\Views\Menu\" />
@@ -2484,6 +2498,7 @@
     <Folder Include="Views\Company\" />
     <Folder Include="Views\DynamicBlockParam\" />
     <Folder Include="Views\DynamicBlock\" />
+    <Folder Include="Views\Project\" />
     <Folder Include="Views\Staff\" />
   </ItemGroup>
   <ItemGroup>

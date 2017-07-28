@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,12 @@ namespace Yanjun.Framework.Domain.Entity.Data
         /// </summary>
         public DynamicBlockEntity DynamicBlock { get; set; }
 
+
+        /// <summary>
+        /// 绘图类型
+        /// </summary>
+        public int DrawingType { get; set; }
+
         /// <summary>
         ///参数ID
         ///</summary>
@@ -38,5 +45,11 @@ namespace Yanjun.Framework.Domain.Entity.Data
         ///</summary>
         [Description("默认值")]
         public string DefaultValue { get; set; }
+
+        [NotMapped]
+        public string DataType { get; set; }
+
+        [NotMapped]
+        public string ParamCode { get; set; }
     }
 }

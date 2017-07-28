@@ -1281,6 +1281,8 @@ Ext.define('xf.Form', {
     isInSGView: true,
     //保存后跳转到表格界面
     backAfterSave: false,
+    //保存侯刷新sggrid
+    refreshGridAfterSave: true,
     //行数据对象
     record: null,
     //通讯方式参数
@@ -1305,6 +1307,21 @@ Ext.define('xf.Form', {
 
     //呈现之前出发的事件  参数 Ext.Component me, Object eOpts
 
+    loadCallBack: function (me) {
+        me.showOrHideGrid(me);
+    },
+
+    showOrHideGrid: function (me) {
+        var sggrids = Ext.ComponentQuery.query("sggrid", me);
+        Ext.each(sggrids, function (item) {
+            if (me.record) {
+                item.show();
+                item.refresh();
+            } else {
+                item.hide();
+            }
+        });
+    },
 
     selfListeners: {
         beforeshow: function (me) {
@@ -1314,45 +1331,37 @@ Ext.define('xf.Form', {
             if (me.record) {
                 var dataArgs = me.commuArgs.dataArgs;
                 dataArgs.ActionDes = '获取数据';
-                sgform.load();
+                sgform.load(me);
             }
             else {
                 me.getForm().reset();
+                me.showOrHideGrid(me);
             }
         },
     },
     //数据加载
     //回调参数 option.callBack = function(data){}
     //option.autoSetValues=teue 回调时是否自动赋值
-    load: function (option) {
-        if (Ext.isEmpty(option)) {
-            option = {};
-        }
-        //默认自动回调赋值开启
-        if (Ext.isEmpty(option.autoSetValues)) {
-            option.autoSetValues = true;
-        }
+    load: function (me) {
+
         //不是编辑状态 或 不能自动加载时不接下去执行
-        if (!this.isEdit())
+        if (!me.isEdit())
             return;
-        var formPanel = this;
-        this.commuArgs.dataArgs.Entitys = new Array(this.record.data);
-        var include = this.includePath.join(",");
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", this.apiUrl, this.record.data.ID, include);
-        this.commuArgs.callBack = function (data) {
+        var formPanel = me;
+        me.commuArgs.dataArgs.Entitys = new Array(me.record.data);
+        var include = me.includePath.join(",");
+        me.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", me.apiUrl, me.record.data.ID, include);
+        me.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
 
-                    if (!Ext.isEmpty(data.Entitys) && option.autoSetValues) {
-                        console.log("formLoad:" + data.Entitys[0]);
+                    if (!Ext.isEmpty(data.Entitys)) {
                         formPanel.getForm().reset();
-
                         formPanel.record.data = data.Entitys[0];
                         formPanel.getForm().setValues(data.Entitys[0]);
                     }
-                    if (formPanel.hasListeners.loadcallback)
-                    {
-                        formPanel.fireEvent("loadcallback", formPanel, data)
+                    if (me.loadCallBack) {
+                        me.loadCallBack(me);
                     }
                     return;
                 }
@@ -1461,33 +1470,69 @@ Ext.define('xf.Form', {
         serverNS.ajaxProSend(this.commuArgs, "delete");
     },
 
+    selfButtons: [],
+
+    makeSelfButton: function () {
+        var me = this;
+        Ext.each(me.selfButtons, function (btn, index) {
+            if (btn.text == SG_BUTTONS.SAVE.text) {
+                btn.handler = me.selfSave;
+            }
+            if (btn.text == SG_BUTTONS.BACK.text) {
+                btn.handler = me.selfBack;
+            }
+            me.tbar.push(btn);
+        });
+    },
+
     //通用保存
     //回调参数 option.callBack = function(data){}
-    save: function (option) {
-        if (Ext.isEmpty(option)) {
-            option = {};
-        }
-        var formPanel = this;
-        var form = this.getForm();
-        if (this.needValidate) {
+    selfSave: function (btn, e) {
+        var sgform = btn.up("SGForm");;
+        var form = sgform.getForm();
+        if (sgform.needValidate) {
             if (!form.isValid()) {
                 alert_error(gettext('Form validation failure'));
                 return;
             }
         }
         var editData = form.getValues();
-        //合并数据实例
-        editData = Ext.Object.merge(this.record.data, editData);
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}", this.apiUrl);
-        this.commuArgs.dataArgs.Entitys = new Array(editData);
-        this.commuArgs.callBack = function (data) {
+
+        if (sgform.record) {
+            editData = Ext.Object.merge(sgform.record.data, editData);
+        }
+        sgform.commuArgs.ajaxMethod = Ext.String.format("{0}", sgform.apiUrl);
+        sgform.commuArgs.dataArgs.Entitys = new Array(editData);
+        sgform.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
-                    formPanel.record.data = editData;
-                    //formPanel.record.load(formPanel.record.id)
+                    if (!Ext.isEmpty(data.Entitys)) {
+                        sgform.record = {};
+                        sgform.record.data = data.Entitys[0];
+                    } else {
+                        sgform.record.data = editData;
+                    }
                     toast_success('保存成功!');
-                    if (option.callBack) {
-                        option.callBack(data);
+
+                    if (btn.callBack) {
+                        btn.callBack(data);
+                    }
+                    if (sgform.backAfterSave) {
+                        var content = sgform.up("#content");
+                        if (content) {
+                            content.getLayout().setActiveItem(0);
+                        }
+                    }
+                    if (sgform.refreshGridAfterSave) {
+                        var content = sgform.up("#content");
+                        if (content) {
+                            var sggrid = content.down("sggrid");
+                            if (sggrid) {
+                                sggrid.resetData();
+                            }
+                        }
+
+
                     }
 
                     return;
@@ -1497,16 +1542,28 @@ Ext.define('xf.Form', {
                 var err = '异常' + e;
                 alert_error(err);
                 console.log(err);
-                formPanel.setLoading(false);
+                sgform.setLoading(false);
             } finally {
-                if (formPanel.autoCloseLoading) {
-                    formPanel.setLoading(false);
+                if (sgform.autoCloseLoading) {
+                    sgform.setLoading(false);
                 }
             }
         };
 
-        this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs, "put", true);
+        sgform.setLoading('Loading...');
+        if (sgform.record) {
+            serverNS.ajaxProSend(sgform.commuArgs, "put", true);
+        }
+        else {
+            serverNS.ajaxProSend(sgform.commuArgs, "post", true);
+        }
+
+    },
+
+
+    selfBack: function (btn, e) {
+        var content = btn.up("SGForm").up("#content");
+        content.getLayout().setActiveItem(0);
     },
 
     //重置form数据
@@ -1553,6 +1610,15 @@ Ext.define('xf.Form', {
         //引用 只能在initComponent重新定义才能对象隔离，暂时这样用
         this.commuArgs = new serverNS.commuArgs();
 
+
+        if (!this.tbar) {
+            this.tbar = [];
+        }
+
+        if (this.selfButtons && this.selfButtons.length > 0) {
+            this.makeSelfButton();
+        }
+
         if (Ext.isEmpty(this.listeners)) {
             Ext.apply(this, {
                 listeners: {}
@@ -1572,8 +1638,11 @@ Ext.define('xf.GridPanel', {
     //alternateClassName: 'Ext.data.RestProxy',
     alias: 'widget.sggrid',
 
-    //form是否包含在SGView中
+    //grid是否包含在SGView中
     isInSGView: true,
+
+    //grid是否包含在SGForm中
+    isInSGForm: false,
     //是否多选
     multiSel: false,
     pageSize: 100,
@@ -1744,53 +1813,114 @@ Ext.define('xf.GridPanel', {
     }, //quick search
 
     //触发编辑动作
-    controllerUrl:'',
+    controllerUrl: '',
+
+    showEditWin: function (me, record) {
+    },
+
+    selfButtons: [],
+
+    makeSelfButton: function () {
+        var me = this;
+        Ext.each(me.selfButtons, function (btn, index) {
+            if (btn.text == SG_BUTTONS.ADD.text) {
+                btn.handler = me.selfAdd;
+            }
+            if (btn.text == SG_BUTTONS.EDIT.text) {
+                btn.handler = me.selfEdit;
+            }
+            if (btn.text == SG_BUTTONS.DELETE.text) {
+                btn.handler = me.selfDel;
+            }
+            me.tbar.push(btn);
+        });
+    },
+
+    selfAdd: function (btn, e) {
+        var sggrid = btn.up("sggrid");
+        //如果包含在SGForm中  则此方法应该是弹出window  否则就是跳转到SGForm界面
+        if (sggrid.isInSGForm) {
+            sggrid.showEditWin(sggrid);
+        } else {
+            var content = sggrid.up("#content");
+            var sgform = content.down("SGForm");
+            sgform.record = null;
+            content.getLayout().setActiveItem(1);
+        }
+    },
+
+    selfEdit: function (btn, e, record) {
+        var sggrid = btn.up("sggrid");
+        if (!record) {
+            record = sggrid.getSelectedRowsRecords()[0];
+        }
+        if (!record) {
+            toast_info("请选中要编辑的数据!");
+            return;
+        }
+        console.log(record);
+        if (sggrid.isInSGForm) {
+            sggrid.showEditWin(sggrid, record);
+        } else {
+            var content = sggrid.up("#content");
+            var sgform = content.down("SGForm");
+            sgform.record = record;
+            content.getLayout().setActiveItem(1);
+        }
+    },
 
     //参数option.callBack(records) records为删除的数据实体对象
-    del: function (option) {
+    selfDel: function (btn, e, option) {
 
-        var grid = this;
+        var sggrid = btn.up("sggrid");
 
-        var records = this.getSelectedRowsRecords();
-        if (!records || records.length == 0)
+        var records = sggrid.getSelectedRowsRecords();
+
+        if (Ext.isEmpty(records)) {
+            toast_info("请选中要删除的数据!");
             return;
-
-        var ids = [];
-        for (var i = 0; i < records.length; i++) {
-            ids.push(records[i].data.ID);
         }
+        else {
+            alert_confirm(gettext('确定要删除选中的[' + records.length + ']行数据吗?'), function (rtn) {
+                if (rtn === 'yes') {
 
-        this.setLoading('Loading...');
-
-        var url = Ext.String.format("/{0}/Delete", this.controllerUrl);
-
-        Ext.Ajax.request({
-            method: 'post',
-            url: url,
-            params: {
-                ids: ids,
-            },
-            success: function (response, opts) {
-                try {
-                    var obj = Ext.decode(response.responseText);
-                    if (obj.Success) {
-                        toast_success("删除成功!")
-                        if (option) {
-                            option.callBack(obj);
-                        }
+                    var ids = [];
+                    for (var i = 0; i < records.length; i++) {
+                        ids.push(records[i].data.ID);
                     }
-                    else {
-                        toast_error(obj.Message);
-                    }
-                } catch (e) {
-                    console.log(e);
-                } finally {
-                    grid.setLoading(false);
+
+                    sggrid.setLoading('Loading...');
+
+                    var url = Ext.String.format("/{0}/Delete", sggrid.controllerUrl);
+
+                    Ext.Ajax.request({
+                        method: 'post',
+                        url: url,
+                        params: {
+                            ids: ids,
+                        },
+                        success: function (response, opts) {
+                            try {
+                                var obj = Ext.decode(response.responseText);
+                                if (obj.Success) {
+                                    toast_success("删除成功!")
+                                    sggrid.resetData();
+                                }
+                                else {
+                                    toast_error(obj.Message);
+                                }
+                            } catch (e) {
+                                console.log(e);
+                            } finally {
+                                sggrid.setLoading(false);
+                            }
+
+                        },
+                    });
+
                 }
-
-            },
-        });
-
+            }, this);
+        }
 
 
     },
@@ -1962,13 +2092,9 @@ Ext.define('xf.GridPanel', {
         itemdblclick: function (view, record, item, index, e, eOpts) {
             var grid = view.ownerGrid;
             if (grid.dblClickToEdit) {
-                if (grid.isInSGView) {
-                    var view = grid.up('#content');
-                    var form = view.down("SGForm");
-                    grid.fireEvent("formedit", grid, form, record);
-                }
 
-               
+                grid.selfEdit(view, null, record);
+
             }
             if (grid.isShowRowDetailOnDblClick) {
                 grid.showDefGridRowDetail(record, grid);
@@ -1976,22 +2102,9 @@ Ext.define('xf.GridPanel', {
         },
         edit: function (editor, e) {
             this.roworcelledit(editor, e);
-        },
-        formedit: function (me, form, record) {
-            console.log("formedit:" + record);
-            if (Ext.isArray(record)) {
-                form.record = record[0];
-            }
-            else {
-                form.record = record;
-            }
-            form.getForm().reset();
-            me.up("#content").getLayout().setActiveItem(1);
-            //form.fireEvent("beforeshow", form)
-
-        },
-
+        }
     },
+
 
     initComponent: function () {
         var sgGrid = this;
@@ -2013,6 +2126,11 @@ Ext.define('xf.GridPanel', {
         if (!this.tbar) {
             this.tbar = [];
         }
+
+        if (this.selfButtons && this.selfButtons.length > 0) {
+            this.makeSelfButton();
+        }
+
         this.tbar.push('->');
         if (this.enableSearch) {
 
@@ -2263,7 +2381,7 @@ Ext.define('xf.Common.GridLookupPanel', {
                 columns: this.gridColumnConfig,
                 quickSearchCols: this.quickSearchCols,
                 listeners: {
-                    beforeload: function (me,store, action) {
+                    beforeload: function (me, store, action) {
                         console.log(commonGridLookupPanel);
                         commonGridLookupPanel.fireEvent('beforeload', this, store, action);
                     },

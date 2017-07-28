@@ -54,6 +54,8 @@
     <Compile Include="EntityMapBase.cs" />
     <Compile Include="Org\CompanyMap.cs" />
     <Compile Include="Org\StaffMap.cs" />
+    <Compile Include="Project\DrawingTaskMap.cs" />
+    <Compile Include="Project\ProjectMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sys\DicConfigMap.cs" />
     <Compile Include="Sys\MenuMap.cs" />

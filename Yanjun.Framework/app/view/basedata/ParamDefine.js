@@ -76,19 +76,7 @@
             quickSearchCols: ['Name', 'Code'],
             controllerUrl: 'ParamDefine',
             modelName: 'xf.model.basedata.ParamDefine',
-            tbar: [{
-                text: '新建',
-                iconCls: 'add',
-                handler: "addParamDefine"
-            }, {
-                text: '编辑',
-                iconCls: 'edit',
-                handler: "editParamDefine"
-            }, {
-                text: '删除',
-                iconCls: 'remove',
-                handler: "deleteParamDefine"
-            }]
+            selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
             apiUrl: '/api/ParamDefine',
@@ -137,17 +125,7 @@
                 fieldLabel: '所属类型',
                 name: 'OwnerType'
             }],
-            tbar: [{
-                xtype: 'button',
-                text: '保存',
-                iconCls: 'save',
-                handler: "saveParamDefine"
-            }, '-', {
-                xtype: 'button',
-                text: '返回',
-                iconCls: 'back',
-                handler: "back"
-            }]
+            selfButtons: [SG_BUTTONS.SAVE, SG_BUTTONS.BACK]
         }]
     }]
 });

@@ -13,6 +13,7 @@ using Yanjun.Framework.Data.DBContext;
 using Autofac.Integration.WebApi;
 using System.Web.Http;
 using Yanjun.Framework.Service.Sys;
+using Yanjun.Framework.Data.Repository;
 
 namespace Yanjun.Framework.Mvc.App_Start
 {
@@ -34,7 +35,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
             RegisterMvc(builder);
 
-            RegisterApi(builder,config);
+            RegisterApi(builder, config);
 
             var container = builder.Build();
 
@@ -54,11 +55,13 @@ namespace Yanjun.Framework.Mvc.App_Start
         static void RegisterDb(ContainerBuilder builder)
         {
             builder.RegisterType<MyDbContext>().AsSelf().InstancePerRequest();
+            builder.Register<IRepositoryBase>(x => new RepositoryBase()).PropertiesAutowired().InstancePerRequest();
         }
 
         static void RegisterData(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MyDbContext))).AsImplementedInterfaces().AsSelf().PropertiesAutowired();
+
         }
 
         static void RegisterService(ContainerBuilder builder)
@@ -87,7 +90,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
             // OPTIONAL: Enable property injection into action filters.
             builder.RegisterFilterProvider();
-             
+
             // OPTIONAL: Enable action method parameter injection (RARE).
             //builder.InjectActionInvoker();
 
@@ -95,7 +98,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         }
 
-        static void RegisterApi(ContainerBuilder builder,HttpConfiguration config)
+        static void RegisterApi(ContainerBuilder builder, HttpConfiguration config)
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly()).PropertiesAutowired();
 

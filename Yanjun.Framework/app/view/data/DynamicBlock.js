@@ -89,26 +89,11 @@
             quickSearchCols: ['Name', 'Code'],
             controllerUrl: 'DynamicBlock',
             modelName: 'xf.model.data.DynamicBlock',
-            tbar: [{
-                text: '新建',
-                iconCls: 'add',
-                handler: "addDynamicBlock"
-            }, {
-                text: '编辑',
-                iconCls: 'edit',
-                handler: "editDynamicBlock"
-            }, {
-                text: '删除',
-                iconCls: 'remove',
-                handler: "deleteDynamicBlock"
-            }]
+            selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
             apiUrl: '/api/DynamicBlock',
             includePath: [],
-            listeners: {
-                loadcallback:'dynamicBlockFormLoadCallback'
-            },
             items: [{
                 xtype: 'textfield',
                 fieldLabel: '代码',
@@ -174,6 +159,7 @@
                 title: '井道块参数',
                 columnWidth: 1,
                 height: 300,
+                isInSGForm: true,
                 margin: '20 0 0 0',
                 columns: [{
                     text: '行号', xtype: 'rownumberer',
@@ -192,6 +178,10 @@
                     dataIndex: 'ParamDefine.Code',
                     width: 150
                 }, {
+                    text: '绘图类型',
+                    dataIndex: 'DrawingType',
+                    width: 150
+                }, {
                     text: '默认值',
                     dataIndex: 'DefaultValue',
                     width: 150
@@ -202,31 +192,147 @@
                 quickSearchCols: ['ParamDefine.Name', 'ParamDefine.Code'],
                 controllerUrl: 'DynamicBlockParam',
                 modelName: 'xf.model.data.DynamicBlockParam',
-                tbar: [{
-                    text: '新建',
-                    iconCls: 'add',
-                    handler: "addDynamicBlockParam"
-                }, {
-                    text: '编辑',
-                    iconCls: 'edit',
-                    handler: "editDynamicBlockParam"
-                }, {
-                    text: '删除',
-                    iconCls: 'remove',
-                    handler: "deleteDynamicBlockParam"
-                }]
+                selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE],
+                showEditWin: function (sggrid, record) {
+                    var mainForm = sggrid.up("SGForm");
+                    var win = Ext.create("Ext.window.Window", {
+                        height: 400,
+                        width: 600,
+                        layout: 'fit',
+                        items: [{
+                            xtype: "SGForm",
+                            includePath: ["ParamDefine"],
+                            apiUrl: '/api/DynamicBlockParam',
+                            refreshGridAfterSave: false,
+                            record: record,
+                            items: [{
+                                xtype: 'hiddenfield',
+                                fieldLabel: '',
+                                name: 'DynamicBlockID'
+                            }, {
+                                fieldLabel: '参数名称',
+                                name: 'ParamDefineID',
+                                readOnly: true,
+                                allowBlank: false,
+                                afterLabelTextTpl: REQUIRED_LABEL_TPL,
+                                quickSearchCols: ['Code', 'Name'],
+                                xtype: 'CommonGridLookupPanel',
+                                gridModelName: 'xf.model.basedata.ParamDefine',
+                                gridColumnConfig: [{
+                                    text: '行号',
+                                    xtype: 'rownumberer',
+                                    width: 50,
+                                    sortable: false
+                                }, {
+                                    text: 'ID',
+                                    dataIndex: 'ID',
+                                    hidden: true
+                                }, {
+                                    text: '代码',
+                                    dataIndex: 'Code',
+                                    width: 100
+                                }, {
+                                    text: '名称',
+                                    dataIndex: 'Name',
+                                    width: 100
+                                }, {
+                                    text: '描述',
+                                    dataIndex: 'Desc',
+                                    width: 100
+                                }, {
+                                    text: '单位',
+                                    dataIndex: 'Unit',
+                                    width: 100
+                                }, {
+                                    text: '类别',
+                                    dataIndex: 'Category',
+                                    width: 100
+                                }, {
+                                    text: '默认值',
+                                    dataIndex: 'DefaultValue',
+                                    width: 100
+                                }, {
+                                    text: '数据类型',
+                                    dataIndex: 'DataType',
+                                    width: 100,
+                                    renderer: function (v) {
+                                        return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineDataType, v);
+                                    }
+
+                                }, {
+                                    text: '使用类型',
+                                    dataIndex: 'UseType',
+                                    width: 100,
+                                    renderer: function (v) {
+                                        return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineUseType, v);
+                                    }
+                                }, {
+                                    text: '所属类型',
+                                    dataIndex: 'OwnerType',
+                                    width: 100,
+                                    renderer: function (v) {
+                                        return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineOwnerType, v);
+                                    }
+                                }],
+                                displayField: 'Name',
+                                valueField: 'ID',
+                                getTextBySetValue: function (value) {
+                                    var form = this.up('SGForm');
+                                    if (Ext.isEmpty(form.record))
+                                        return;
+                                    return form.record.data["ParamDefine.Name"];
+                                },
+                                listeners: {
+                                    beforeload: function (me, store, action) {
+
+                                        var dataArgs = new serverNS.dataArgs();
+                                        dataArgs.ActionDes = '';
+                                        me.commuArgs.dataArgs = dataArgs;
+                                        me.commuArgs.ajaxMethod = Ext.String.format("/ParamDefine/Gets", me.controllerUrl);
+                                    },
+                                    callback: function (me, selectRaws) {
+                                        if (selectRaws.length > 0) {
+                                            var code = selectRaws[0]["Code"];
+                                            if (!Ext.isEmpty(code)) {
+                                                me.up('SGForm').getForm().findField("ParamDefine.Code").setValue(code);
+                                            }
+
+                                        }
+
+                                    }
+                                }
+                            }, {
+                                xtype: 'textfield',
+                                fieldLabel: '参数编码',
+                                name: 'ParamDefine.Code'
+                            }, {
+                                xtype: 'numberfield',
+                                allowDecimals: false,
+                                fieldLabel: '绘图类型',
+                                name: 'DrawingType'
+                            }, {
+                                xtype: 'textfield',
+                                fieldLabel: '默认值',
+                                name: 'DefaultValue'
+                            },],
+                            selfButtons: [{
+                                text: '保存',
+                                iconCls: 'save',
+                                callBack: function (data) {
+                                    sggrid.resetData();
+                                }
+                            }]
+                        }]
+                    });
+                    win.show();
+                    var sgform = win.down("SGForm");
+                    sgform.fireEvent("beforeshow", sgform);
+                    if (!record) {
+                        sgform.getForm().findField("DynamicBlockID").setValue(mainForm.record.data.ID);
+                    }
+                }
             }],
-            tbar: [{
-                xtype: 'button',
-                text: '保存',
-                iconCls: 'save',
-                handler: "saveDynamicBlock"
-            }, '-', {
-                xtype: 'button',
-                text: '返回',
-                iconCls: 'back',
-                handler: "back"
-            }]
+            selfButtons: [SG_BUTTONS.SAVE, SG_BUTTONS.BACK]
         }]
     }]
 });

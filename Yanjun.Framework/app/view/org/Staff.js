@@ -83,19 +83,7 @@
             quickSearchCols: ['Name', 'Code'],
             controllerUrl: 'Staff',
             modelName: 'xf.model.org.Staff',
-            tbar: [{
-                text: '新建',
-                iconCls: 'add',
-                handler: "addStaff"
-            }, {
-                text: '编辑',
-                iconCls: 'edit',
-                handler: "editStaff"
-            }, {
-                text: '删除',
-                iconCls: 'remove',
-                handler: "deleteStaff"
-            }]
+            selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
             apiUrl: '/api/Staff',
@@ -184,17 +172,7 @@
                 name: 'LastLoginIp',
                 readOnly: true
             }],
-            tbar: [{
-                xtype: 'button',
-                text: '保存',
-                iconCls: 'save',
-                handler: "saveStaff"
-            }, '-', {
-                xtype: 'button',
-                text: '返回',
-                iconCls: 'back',
-                handler: "back"
-            }]
+            selfButtons: [SG_BUTTONS.SAVE, SG_BUTTONS.BACK]
         }]
     }]
 });

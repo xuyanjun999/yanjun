@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="DrawingArg\CadDrawingArg.cs" />
     <Compile Include="Entity\BaseAcsRecEntity.cs" />
     <Compile Include="Entity\BaseAcsRecTreeNodeEntity.cs" />
     <Compile Include="Entity\BaseData\ParamDefineEntity.cs" />
@@ -66,12 +67,15 @@
     <Compile Include="Entity\Org\CompanyEntity.cs" />
     <Compile Include="Entity\Org\DepartmentEntity.cs" />
     <Compile Include="Entity\Org\StaffEntity.cs" />
+    <Compile Include="Entity\Project\DrawingTaskEntity.cs" />
+    <Compile Include="Entity\Project\ProjectEntity.cs" />
     <Compile Include="Entity\Sys\DicConfigEntity.cs" />
     <Compile Include="Entity\Sys\MenuEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ILog.cs" />
     <Compile Include="Service\IServiceBase.cs" />
     <Compile Include="Service\Org\IStaffService.cs" />
+    <Compile Include="Service\ProjectInfo\IProjectService.cs" />
     <Compile Include="Service\Sys\IMenuService.cs" />
     <Compile Include="Service\TreeQuery\IOrgTreeService.cs" />
   </ItemGroup>
