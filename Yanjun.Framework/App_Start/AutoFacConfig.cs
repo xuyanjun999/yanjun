@@ -54,13 +54,14 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         static void RegisterDb(ContainerBuilder builder)
         {
-            builder.RegisterType<MyDbContext>().AsSelf().InstancePerRequest();
-            builder.Register<IRepositoryBase>(x => new RepositoryBase()).PropertiesAutowired().InstancePerRequest();
+            //builder.Register(x => new MyDbContext()).InstancePerRequest();
+            builder.Register(x => new RepositoryBase()).AsImplementedInterfaces().PropertiesAutowired().InstancePerRequest();
+
         }
 
         static void RegisterData(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(MyDbContext))).AsImplementedInterfaces().AsSelf().PropertiesAutowired();
+            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(RepositoryBase))).Except<RepositoryBase>().AsImplementedInterfaces().AsSelf().PropertiesAutowired();
 
         }
 

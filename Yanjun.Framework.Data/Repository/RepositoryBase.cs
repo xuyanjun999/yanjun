@@ -13,6 +13,7 @@ using Yanjun.Framework.Data.SQL;
 using System.Data.Entity;
 using System.Text.RegularExpressions;
 using Yanjun.Framework.Code.Web.Dto;
+using System.IO;
 
 namespace Yanjun.Framework.Data.Repository
 {
@@ -32,23 +33,23 @@ namespace Yanjun.Framework.Data.Repository
         /// <summary>
         /// 当前原生Db连接
         /// </summary>
-        DbConnection _conn = null;
+        public DbConnection Conn { get; set; }
 
         /// <summary>
         /// 当前原生Db连接的事务
         /// </summary>
-        DbTransaction _tran = null;
+        public DbTransaction Tran { get; set; }
 
         /// <summary>
         /// 开始事务
         /// </summary>
         public void BeginTran()
         {
-            _conn = MyContext.Database.Connection;
-            if (_conn.State == System.Data.ConnectionState.Closed)
-                _conn.Open();
-            _tran = _conn.BeginTransaction();
-            MyContext.Database.UseTransaction(_tran);
+            Conn = MyContext.Database.Connection;
+            if (Conn.State == System.Data.ConnectionState.Closed)
+                Conn.Open();
+            Tran = Conn.BeginTransaction();
+            MyContext.Database.UseTransaction(Tran);
         }
 
         /// <summary>
@@ -58,10 +59,10 @@ namespace Yanjun.Framework.Data.Repository
 
         public void BeginTran(IsolationLevel isolationLevel)
         {
-            _conn = MyContext.Database.Connection;
-            if (_conn.State == System.Data.ConnectionState.Closed)
-                _conn.Open();
-            _tran = _conn.BeginTransaction(isolationLevel);
+            Conn = MyContext.Database.Connection;
+            if (Conn.State == System.Data.ConnectionState.Closed)
+                Conn.Open();
+            Tran = Conn.BeginTransaction(isolationLevel);
         }
 
         /// <summary>
@@ -69,8 +70,8 @@ namespace Yanjun.Framework.Data.Repository
         /// </summary>
         public void Commit()
         {
-            if (_tran != null)
-                _tran.Commit();
+            if (Tran != null)
+                Tran.Commit();
         }
 
         /// <summary>
@@ -78,8 +79,8 @@ namespace Yanjun.Framework.Data.Repository
         /// </summary>
         public void Rollback()
         {
-            if (_tran != null)
-                _tran.Rollback();
+            if (Tran != null)
+                Tran.Rollback();
         }
 
 
@@ -208,7 +209,7 @@ namespace Yanjun.Framework.Data.Repository
 
             var parameter = Expression.Parameter(typeof(TEntity), "t");
             var propertyAccess = ExpressionUtil.GetEntityAttrExp(parameter, orderField, false);
-            
+
             var orderByExp = Expression.Lambda(propertyAccess, parameter);
             resultExp = Expression.Call(typeof(Queryable), isAsc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(TEntity), propertyAccess.Type }, tempData.Expression, Expression.Quote(orderByExp));
 
@@ -414,23 +415,23 @@ namespace Yanjun.Framework.Data.Repository
 
         public int ExecuteNonQuery(string sql, CommandType commandType = CommandType.Text, int timeout = 30)
         {
-            var comm = _conn.CreateCommand();
+            var comm = Conn.CreateCommand();
             comm.CommandText = sql;
             comm.CommandType = commandType;
             comm.CommandTimeout = timeout;
-            if (_tran != null)
-                comm.Transaction = _tran;
+            if (Tran != null)
+                comm.Transaction = Tran;
             return comm.ExecuteNonQuery();
         }
 
         public object ExecuteScalar(string sql, CommandType commandType = CommandType.Text, int timeout = 30)
         {
-            var comm = _conn.CreateCommand();
+            var comm = Conn.CreateCommand();
             comm.CommandText = sql;
             comm.CommandType = commandType;
             comm.CommandTimeout = timeout;
-            if (_tran != null)
-                comm.Transaction = _tran;
+            if (Tran != null)
+                comm.Transaction = Tran;
             return comm.ExecuteScalar();
         }
 

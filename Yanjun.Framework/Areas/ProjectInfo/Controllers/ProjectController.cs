@@ -22,7 +22,9 @@ namespace Yanjun.Framework.Mvc.Areas.Project.Controllers
             EntityResponseDto res = new EntityResponseDto();
             try
             {
+               
                 ProjectService.Repository.BeginTran();
+                MenuService.Repository.QueryFirst<ProjectEntity>(x => x.ID == 10);
                 ProjectService.CreateTask(projectId);
                 ProjectService.Repository.Commit();
                 res.Success = true;
