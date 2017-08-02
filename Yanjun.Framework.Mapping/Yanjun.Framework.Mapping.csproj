@@ -51,6 +51,8 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Data\DynamicBlockMap.cs" />
     <Compile Include="Data\DynamicBlockParamMap.cs" />
+    <Compile Include="Data\ModelConfigMap.cs" />
+    <Compile Include="Data\ModelMap.cs" />
     <Compile Include="EntityMapBase.cs" />
     <Compile Include="Org\CompanyMap.cs" />
     <Compile Include="Org\StaffMap.cs" />

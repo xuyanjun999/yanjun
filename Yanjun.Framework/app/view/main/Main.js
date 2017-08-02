@@ -13,7 +13,7 @@
             border: 0,
             xtype: 'toolbar',
             items: [{
-                html: '一个奇怪的人'
+                html: ''
             }, '->', {
                 xtype: 'button',
                 text: '系统功能',

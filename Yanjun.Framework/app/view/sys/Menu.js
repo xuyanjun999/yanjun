@@ -30,7 +30,7 @@
         items: [{
             xtype: 'SGForm',
             title: '明细',
-            apiUrl: '/api/Menu',
+            apiUrl: '/Menu',
             includePath: ["Parent"],
             items: [{
                 xtype: 'textfield',

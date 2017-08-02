@@ -14,6 +14,8 @@ using Autofac.Integration.WebApi;
 using System.Web.Http;
 using Yanjun.Framework.Service.Sys;
 using Yanjun.Framework.Data.Repository;
+using SGEAP.CadDrawingHostService;
+using System.IO;
 
 namespace Yanjun.Framework.Mvc.App_Start
 {
@@ -38,6 +40,7 @@ namespace Yanjun.Framework.Mvc.App_Start
             RegisterApi(builder, config);
 
             var container = builder.Build();
+         
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
@@ -47,14 +50,18 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         static void RegisterLog(ContainerBuilder builder)
         {
-            XmlConfigurator.Configure();
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "log4net.config");
+
+            XmlConfigurator.Configure(new FileInfo(filePath));
 
             builder.Register<ILog>(x => LogManager.GetLogger(typeof(HomeController)));
+
+            builder.Register(x => new CadBusiness()).PropertiesAutowired();
         }
 
         static void RegisterDb(ContainerBuilder builder)
         {
-            //builder.Register(x => new MyDbContext()).InstancePerRequest();
+            builder.Register(x => new MyDbContext()).PropertiesAutowired().InstancePerRequest();
             builder.Register(x => new RepositoryBase()).AsImplementedInterfaces().PropertiesAutowired().InstancePerRequest();
 
         }

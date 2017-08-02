@@ -86,7 +86,7 @@
             selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/Staff',
+            apiUrl: '/Staff',
             includePath: ['Company'],
             items: [{
                 fieldLabel: '公司名称',

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yanjun.Framework.Data.DBContext;
+using Yanjun.Framework.Data.Repository;
+using Yanjun.Framework.Data.SQL;
 using Yanjun.Framework.Domain.Entity.BaseData;
 using Yanjun.Framework.Domain.Entity.Data;
 using Yanjun.Framework.Domain.Entity.Project;
@@ -78,14 +80,34 @@ namespace SGEAP.CadDrawingEntity
 
         public static void UpdateDrawingTask(DrawingTaskEntity task)
         {
-            using (var db = new MyDbContext())
+
+
+            using (RepositoryBase repository = new RepositoryBase())
             {
-                var dbTask = db.Set<DrawingTaskEntity>().FirstOrDefault(c => c.ID == task.ID);
-                dbTask.Output = task.Output;
-                dbTask.TaskStatus = task.TaskStatus;
-                dbTask.StartTime = task.StartTime;
-                dbTask.EndTime = task.EndTime;
-                db.SaveChanges();
+                try
+                {
+                    repository.MyContext = new MyDbContext();
+                    repository.SQLBuilder = new MSSQLBuilder();
+                    repository.BeginTran();
+
+                    var dbTask = repository.QueryFirst<DrawingTaskEntity>(c => c.ID == task.ID);
+                    dbTask.Output = task.Output;
+                    dbTask.TaskStatus = task.TaskStatus;
+                    //  dbTask.StartTime = task.StartTime;
+                    dbTask.EndTime = task.EndTime;
+                    repository.Update<DrawingTaskEntity>(dbTask);
+                    repository.Commit();
+                }
+                catch (Exception ex)
+                {
+                    repository.Rollback();
+                    throw ex;
+                }
+                finally
+                {
+
+                }
+
             }
         }
 

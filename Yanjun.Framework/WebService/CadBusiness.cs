@@ -9,11 +9,13 @@ using Yanjun.Framework.Mvc.WebService;
 using Yanjun.Framework.Domain.Entity.Data;
 using SGEAP.CadDrawingEntity;
 using Yanjun.Framework.Domain.DrawingArg;
+using log4net;
 
 namespace SGEAP.CadDrawingHostService
 {
     public class CadBusiness
     {
+        public ILog Log { get; set; }
         /// <summary>
         /// CAD服务程序根目录
         /// </summary>
@@ -21,7 +23,7 @@ namespace SGEAP.CadDrawingHostService
         {
             get
             {
-                return "~/TaskResultOutput";
+                return "TaskResultOutput";
             }
         }
 
@@ -39,7 +41,7 @@ namespace SGEAP.CadDrawingHostService
             var retObj = new CadDrawingReturnObj();
 
             var dynamicBlocks = JsonConvert.DeserializeObject<List<DynamicBlockEntity>>(blockJson);
-            if(dynamicBlocks != null && dynamicBlocks.Count > 0)
+            if (dynamicBlocks != null && dynamicBlocks.Count > 0)
             {
                 CadBlockDBUtil.UpdateDynamicBlock(dynamicBlocks.ToArray());
             }
@@ -49,8 +51,8 @@ namespace SGEAP.CadDrawingHostService
 
         public string GetTaskResultPhyPath()
         {
-            var taskResult = HttpContext.Current.Server.MapPath(TaskResultOutput);
-            if(!Directory.Exists(taskResult))
+            var taskResult = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TaskResultOutput);
+            if (!Directory.Exists(taskResult))
             {
                 Directory.CreateDirectory(taskResult);
             }
@@ -71,11 +73,12 @@ namespace SGEAP.CadDrawingHostService
 
         public CadDrawingReturnObj UpdateDrawingTaskResult(long taskId, byte[] bytes)
         {
+
             var retObj = new CadDrawingReturnObj();
             try
             {
                 var task = CadBlockDBUtil.GetDrawingTask(taskId);
-                if(task == null)
+                if (task == null)
                 {
                     retObj.Success = false;
                     retObj.Message = "未找到处理任务ID:" + taskId;
@@ -87,7 +90,7 @@ namespace SGEAP.CadDrawingHostService
                     var phyPath = GetTaskResultPhyPath();
                     var relPath = GetTaskResulRelath();
 
-                    var fileName = DateTime.Now.Ticks + ".dwg";
+                    var fileName = DateTime.Now.Ticks + ".zip";
                     var fileFullName = Path.Combine(phyPath, fileName);
                     File.WriteAllBytes(fileFullName, bytes);
 
@@ -104,12 +107,25 @@ namespace SGEAP.CadDrawingHostService
                     CadBlockDBUtil.UpdateDrawingTask(task);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                File.AppendAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "test.txt"), GetMessage(ex));
                 retObj.Success = false;
                 retObj.Message = ex.Message;
             }
             return retObj;
+        }
+
+        public string GetMessage(Exception ex)
+        {
+            if (ex.InnerException == null)
+            {
+                return ex.Message;
+            }
+            else
+            {
+                return GetMessage(ex.InnerException);
+            }
         }
     }
 }

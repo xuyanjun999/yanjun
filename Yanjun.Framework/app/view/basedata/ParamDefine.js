@@ -79,7 +79,7 @@
             selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/ParamDefine',
+            apiUrl: '/ParamDefine',
             includePath: [],
             items: [{
                 xtype: 'textfield',

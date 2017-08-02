@@ -1,0 +1,47 @@
+﻿Ext.define('xf.model.data.ModelConfig', {
+    extend: 'Ext.data.Model',
+    fields: [{
+        name: 'ID',
+        text: ''
+    }, {
+        name: 'ModelID',
+        text: '井道模型ID'
+    }, {
+        name: 'Seq',
+        text: '序号'
+    }, {
+        name: 'Name',
+        dtype: 'string',
+        text: '块名称'
+    }, {
+        name: 'BlockConfig',
+        dtype: 'string',
+        text: '块规则'
+    }, {
+        name: 'InsertPointX',
+        dtype: 'string',
+        text: '插入点X坐标'
+    }, {
+        name: 'InsertPointY',
+        dtype: 'string',
+        text: '插入点Y坐标'
+    }, {
+        name: 'Status',
+        text: ''
+    }, {
+        name: 'CreateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'CreateBy',
+        text: ''
+    }, {
+        name: 'UpdateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'UpdateBy',
+        text: ''
+    }],
+    idProperty: 'ID'
+});

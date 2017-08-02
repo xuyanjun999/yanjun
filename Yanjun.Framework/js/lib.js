@@ -1350,7 +1350,7 @@ Ext.define('xf.Form', {
         var formPanel = me;
         me.commuArgs.dataArgs.Entitys = new Array(me.record.data);
         var include = me.includePath.join(",");
-        me.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}?include={2}", me.apiUrl, me.record.data.ID, include);
+        me.commuArgs.ajaxMethod = Ext.String.format("{0}/Get/{1}?include={2}", me.apiUrl, me.record.data.ID, include);
         me.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1395,7 +1395,7 @@ Ext.define('xf.Form', {
         var editData = form.getValues();
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(editData);
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}", this.apiUrl);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/Add", this.apiUrl);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1440,7 +1440,7 @@ Ext.define('xf.Form', {
             return;
         var formPanel = this;
         this.commuArgs.dataArgs.Entitys = new Array(this.record.data);
-        this.commuArgs.ajaxMethod = Ext.String.format("{0}/{1}", this.apiUrl, this.record.data.ID);
+        this.commuArgs.ajaxMethod = Ext.String.format("{0}/Delete/{1}", this.apiUrl, this.record.data.ID);
         this.commuArgs.callBack = function (data) {
             try {
                 if (data.Success) {
@@ -1467,7 +1467,7 @@ Ext.define('xf.Form', {
         }
 
         this.setLoading('Loading...');
-        serverNS.ajaxProSend(this.commuArgs, "delete");
+        serverNS.ajaxProSend(this.commuArgs);
     },
 
     selfButtons: [],
@@ -1501,7 +1501,13 @@ Ext.define('xf.Form', {
         if (sgform.record) {
             editData = Ext.Object.merge(sgform.record.data, editData);
         }
-        sgform.commuArgs.ajaxMethod = Ext.String.format("{0}", sgform.apiUrl);
+        if (sgform.record) {
+            sgform.commuArgs.ajaxMethod = Ext.String.format("{0}/Update", sgform.apiUrl);
+        }
+        else {
+            sgform.commuArgs.ajaxMethod = Ext.String.format("{0}/Add", sgform.apiUrl);
+        }
+
         sgform.commuArgs.dataArgs.Entitys = new Array(editData);
         sgform.commuArgs.callBack = function (data) {
             try {
@@ -1550,14 +1556,7 @@ Ext.define('xf.Form', {
             }
         };
 
-        sgform.setLoading('Loading...');
-        if (sgform.record) {
-            serverNS.ajaxProSend(sgform.commuArgs, "put", true);
-        }
-        else {
-            serverNS.ajaxProSend(sgform.commuArgs, "post", true);
-        }
-
+        serverNS.ajaxProSend(sgform.commuArgs, "post", true);
     },
 
 

@@ -185,6 +185,8 @@
     <Compile Include="Areas\BaseData\Controllers\ParamDefineController.cs" />
     <Compile Include="Areas\Data\Controllers\DynamicBlockController.cs" />
     <Compile Include="Areas\Data\Controllers\DynamicBlockParamController.cs" />
+    <Compile Include="Areas\Data\Controllers\ModelConfigController.cs" />
+    <Compile Include="Areas\Data\Controllers\ModelController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\MyController.cs" />
     <Compile Include="Areas\Org\Controllers\CompanyController.cs" />
@@ -216,6 +218,7 @@
     <Content Include="app\Application.js" />
     <Content Include="app\controller\basedata\ParamDefine.js" />
     <Content Include="app\controller\data\DynamicBlock.js" />
+    <Content Include="app\controller\data\Model.js" />
     <Content Include="app\controller\main\Main.js" />
     <Content Include="app\controller\org\Company.js" />
     <Content Include="app\controller\org\Staff.js" />
@@ -225,6 +228,8 @@
     <Content Include="app\model\basedata\ParamDefine.js" />
     <Content Include="app\model\data\DynamicBlock.js" />
     <Content Include="app\model\data\DynamicBlockParam.js" />
+    <Content Include="app\model\data\Model.js" />
+    <Content Include="app\model\data\ModelConfig.js" />
     <Content Include="app\model\org\Company.js" />
     <Content Include="app\model\org\Staff.js" />
     <Content Include="app\model\project\Project.js" />
@@ -233,6 +238,7 @@
     <Content Include="app\view\basedata\ParamDefine.js" />
     <Content Include="app\view\data\DynamicBlock.js" />
     <Content Include="app\view\data\DynamicBlockParam.js" />
+    <Content Include="app\view\data\Model.js" />
     <Content Include="app\view\main\Main.js" />
     <Content Include="app\view\org\Company.js" />
     <Content Include="app\view\org\Staff.js" />
@@ -2478,6 +2484,8 @@
     <Folder Include="Areas\Data\Models\" />
     <Folder Include="Areas\Data\Views\DynamicBlockParam\" />
     <Folder Include="Areas\Data\Views\DynamicBlock\" />
+    <Folder Include="Areas\Data\Views\ModelConfig\" />
+    <Folder Include="Areas\Data\Views\Model\" />
     <Folder Include="Areas\Data\Views\Shared\" />
     <Folder Include="Areas\Org\Models\" />
     <Folder Include="Areas\Org\Views\Company\" />

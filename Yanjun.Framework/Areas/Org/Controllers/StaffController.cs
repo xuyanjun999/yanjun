@@ -72,10 +72,11 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(ex);
                 StaffService.Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;
-                Log.Error(ex);
+                
             }
             return Json(res, JsonRequestBehavior.AllowGet);
         }

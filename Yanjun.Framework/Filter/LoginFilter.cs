@@ -21,7 +21,7 @@ namespace Yanjun.Framework.Mvc.Filter
                 if (staff == null)
                 {
                     ViewResult loginView = new ViewResult();
-                    loginView.ViewName = "/Views//Home/Login.cshtml";
+                    loginView.ViewName = "/Views/Home/Login.cshtml";
                     filterContext.Result = loginView;
                 }
             }

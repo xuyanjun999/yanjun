@@ -61,6 +61,8 @@
     <Compile Include="Entity\CommonTreeNodeEntity.cs" />
     <Compile Include="Entity\Data\DynamicBlockEntity.cs" />
     <Compile Include="Entity\Data\DynamicBlockParamEntity.cs" />
+    <Compile Include="Entity\Data\ModelConfigEntity.cs" />
+    <Compile Include="Entity\Data\ModelEntity.cs" />
     <Compile Include="Entity\IAccessRecordEntity.cs" />
     <Compile Include="Entity\IBaseEntity.cs" />
     <Compile Include="Entity\ITreeNodeEntity.cs" />
