@@ -30,10 +30,7 @@
         name: 'LastUpdate',
         dtype: 'date',
         text: '最后更新日期'
-    }, {
-        name: 'RightLevel',
-        text: '权限级别'
-    }, {
+    },  {
         name: 'AuditUser',
         dtype: 'string',
         text: '审核人员'

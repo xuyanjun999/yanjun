@@ -35,7 +35,7 @@ namespace Yanjun.Framework.Domain.Entity.BaseData
         ///类别
         ///</summary>
         [Description("类别")]
-        public string Category { get; set; }
+        public string ParamClass { get; set; }
         /// <summary>
         ///默认值
         ///</summary>
@@ -54,24 +54,10 @@ namespace Yanjun.Framework.Domain.Entity.BaseData
 
         [JsonIgnore]
         [NotMapped]
-        public ParamDefineUseTypeEnum ParamDefineUseTypeEnum
+        public ParamDefineUseTypeEnum UseTypeEnum
         {
             get { return (ParamDefineUseTypeEnum)UseType; }
             set { UseType = (int)value; }
-        }
-
-        /// <summary>
-        ///所属类型
-        ///</summary>
-        [Description("所属类型")]
-        public int OwnerType { get; set; }
-
-        [JsonIgnore]
-        [NotMapped]
-        public ParamDefineOwnerTypeEnum ParamDefineOwnerTypeEnum
-        {
-            get { return (ParamDefineOwnerTypeEnum)OwnerType; }
-            set { OwnerType = (int)value; }
         }
     }
 
@@ -91,23 +77,5 @@ namespace Yanjun.Framework.Domain.Entity.BaseData
         /// </summary>
         [Description("系统参数")]
         SystemParam = 10
-    }
-
-    /// <summary>
-    /// 参数定义所属类型枚举
-    /// </summary>
-    public enum ParamDefineOwnerTypeEnum
-    {
-        // <summary>
-        /// 所有
-        /// </summary>
-        [Description("所有")]
-        All = 0,
-
-        /// <summary>
-        /// 系统参数
-        /// </summary>
-        [Description("公司")]
-        Company = 10
     }
 }

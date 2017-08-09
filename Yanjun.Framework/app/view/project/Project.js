@@ -70,7 +70,7 @@
                 width: 100,
                 hidden: true
             }, {
-                text: '井道模型ID',
+                text: '梯型ID',
                 dataIndex: 'ModelID',
                 width: 100,
                 hidden: true
@@ -151,7 +151,7 @@
                     hidden: true
                 }, {
                     xtype: 'textfield',
-                    fieldLabel: '井道模型ID',
+                    fieldLabel: '梯型ID',
                     name: 'ModelID',
                     hidden: true
                 }, {

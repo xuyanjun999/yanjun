@@ -1,0 +1,25 @@
+{
+    "Success":true,
+    "Result":{
+        "Children":[{
+            "Text":"N5",
+            "Leaf":false,
+            "DataID":55,
+            "_Children":[
+                {
+                    "Text":"N11",
+                    "Leaf":true,
+                    "DataID":11
+                },
+                {
+                    "Text":"N12",
+                    "Leaf":true,
+                    "DataID":22
+                }
+            ]
+        },{
+            "Text":"N2",
+            "Leaf":true
+        }]
+    }
+}

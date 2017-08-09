@@ -1,0 +1,13 @@
+{
+    "Success": true,
+    "ResultList": [{
+        "ID": 801,
+        "ltdname": "ltd801",
+        "lcode": "lc-801"
+    }, {
+        "ID": 802,
+        "ltdname": "ltd802",
+        "lcode": "lc-802"
+    }]
+
+}

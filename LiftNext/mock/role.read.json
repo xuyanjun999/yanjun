@@ -1,0 +1,20 @@
+{
+    "Success": true,
+    "ResultList": [{
+        "ID": 1001,
+        "UserID": 100,
+        "rolename": "role1001",
+        "rolecode": "r-1001"
+    }, {
+        "ID": 1002,
+        "UserID": 100,
+        "rolename": "role1002",
+        "rolecode": "r-1002"
+    }, {
+        "ID": 1003,
+        "UserID": 200,
+        "rolename": "role1003",
+        "rolecode": "r-1003"
+    }]
+
+}

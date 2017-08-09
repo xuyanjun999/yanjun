@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yanjun.Framework.Domain.Entity.Org;
 
 namespace Yanjun.Framework.Domain.Entity.Data
 {
@@ -45,11 +48,6 @@ namespace Yanjun.Framework.Domain.Entity.Data
         [Description("最后更新日期")]
         public DateTime LastUpdate { get; set; }
         /// <summary>
-        ///权限级别
-        ///</summary>
-        [Description("权限级别")]
-        public int RightLevel { get; set; }
-        /// <summary>
         ///审核人员
         ///</summary>
         [Description("审核人员")]
@@ -59,5 +57,25 @@ namespace Yanjun.Framework.Domain.Entity.Data
         ///</summary>
         [Description("审核日期")]
         public DateTime? AuditDate { get; set; }
+        /// <summary>
+        ///所属类型
+        ///</summary>
+        [Description("所属类型")]
+        public int OwnerType { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public OwnerTypeEnum OwnerTypeEnum
+        {
+            get { return (OwnerTypeEnum)OwnerType; }
+            set { OwnerType = (int)value; }
+        }
+
+        /// <summary>
+        /// 公司
+        /// </summary>
+        public long CompanyID { get; set; }
+
+        public CompanyEntity Company { get; set; }
     }
 }

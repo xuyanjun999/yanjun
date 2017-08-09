@@ -1,0 +1,8 @@
+{
+    "Success": true,
+    "Message": "Not Auth",
+    "Result": {
+        "Url":"/download/test.csv"
+    }
+
+}

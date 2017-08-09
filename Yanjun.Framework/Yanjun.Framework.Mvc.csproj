@@ -182,11 +182,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\BaseData\BaseDataAreaRegistration.cs" />
+    <Compile Include="Areas\BaseData\Controllers\ParamCompareController.cs" />
     <Compile Include="Areas\BaseData\Controllers\ParamDefineController.cs" />
+    <Compile Include="Areas\CADController.cs" />
+    <Compile Include="Areas\Data\Controllers\BlockController.cs" />
+    <Compile Include="Areas\Data\Controllers\BlockParamController.cs" />
     <Compile Include="Areas\Data\Controllers\DynamicBlockController.cs" />
     <Compile Include="Areas\Data\Controllers\DynamicBlockParamController.cs" />
+    <Compile Include="Areas\Data\Controllers\ModelBlockController.cs" />
     <Compile Include="Areas\Data\Controllers\ModelConfigController.cs" />
     <Compile Include="Areas\Data\Controllers\ModelController.cs" />
+    <Compile Include="Areas\Data\Controllers\ModelGroupController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />
     <Compile Include="Areas\MyController.cs" />
     <Compile Include="Areas\Org\Controllers\CompanyController.cs" />
@@ -209,14 +215,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebService\CadBlockDBUtil.cs" />
     <Compile Include="WebService\CadBusiness.cs" />
-    <Compile Include="WebService\CadHostService.asmx.cs">
-      <DependentUpon>CadHostService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="WebService\CadReturnObj.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\Application.js" />
     <Content Include="app\controller\basedata\ParamDefine.js" />
+    <Content Include="app\controller\data\Block.js" />
     <Content Include="app\controller\data\DynamicBlock.js" />
     <Content Include="app\controller\data\Model.js" />
     <Content Include="app\controller\main\Main.js" />
@@ -226,16 +230,23 @@
     <Content Include="app\controller\sys\DicConfig.js" />
     <Content Include="app\controller\sys\Menu.js" />
     <Content Include="app\model\basedata\ParamDefine.js" />
+    <Content Include="app\model\data\Block.js" />
+    <Content Include="app\model\data\BlockParam.js" />
     <Content Include="app\model\data\DynamicBlock.js" />
     <Content Include="app\model\data\DynamicBlockParam.js" />
     <Content Include="app\model\data\Model.js" />
+    <Content Include="app\model\data\ModelBlock.js" />
     <Content Include="app\model\data\ModelConfig.js" />
+    <Content Include="app\model\data\ModelGroup.js" />
     <Content Include="app\model\org\Company.js" />
     <Content Include="app\model\org\Staff.js" />
     <Content Include="app\model\project\Project.js" />
     <Content Include="app\model\sys\DicConfig.js" />
     <Content Include="app\model\sys\Menu.js" />
+    <Content Include="app\view\basedata\ParamCompare.js" />
     <Content Include="app\view\basedata\ParamDefine.js" />
+    <Content Include="app\view\data\Block.js" />
+    <Content Include="app\view\data\BlockParam.js" />
     <Content Include="app\view\data\DynamicBlock.js" />
     <Content Include="app\view\data\DynamicBlockParam.js" />
     <Content Include="app\view\data\Model.js" />
@@ -2443,7 +2454,6 @@
     <Content Include="Areas\BaseData\Views\web.config" />
     <Content Include="Areas\Data\Views\web.config" />
     <Content Include="Areas\ProjectInfo\Views\web.config" />
-    <Content Include="WebService\CadHostService.asmx" />
     <None Include="Dockerfile" />
     <None Include=".dockerignore">
       <DependentUpon>Dockerfile</DependentUpon>

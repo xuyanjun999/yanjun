@@ -14,7 +14,6 @@ using Autofac.Integration.WebApi;
 using System.Web.Http;
 using Yanjun.Framework.Service.Sys;
 using Yanjun.Framework.Data.Repository;
-using SGEAP.CadDrawingHostService;
 using System.IO;
 
 namespace Yanjun.Framework.Mvc.App_Start
@@ -55,8 +54,6 @@ namespace Yanjun.Framework.Mvc.App_Start
             XmlConfigurator.Configure(new FileInfo(filePath));
 
             builder.Register<ILog>(x => LogManager.GetLogger(typeof(HomeController)));
-
-            builder.Register(x => new CadBusiness()).PropertiesAutowired();
         }
 
         static void RegisterDb(ContainerBuilder builder)

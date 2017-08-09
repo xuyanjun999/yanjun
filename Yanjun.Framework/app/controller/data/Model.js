@@ -13,16 +13,16 @@
         me.commuArgs.ajaxMethod = Ext.String.format("/{0}/Gets", me.controllerUrl);
     },
 
-    getModelConfigDataArg: function () {
+    getModelGroupDataArg: function () {
         var dataArgs = new serverNS.dataArgs();
         dataArgs.Query.IncludeEntityPaths.push("Model");
         dataArgs.ActionDes = '';
         return dataArgs;
     },
 
-    modelConfigBeforeload: function (me, store, action) {
+    modelGroupBeforeload: function (me, store, action) {
 
-        me.commuArgs.dataArgs = this.getModelConfigDataArg();
+        me.commuArgs.dataArgs = this.getModelGroupDataArg();
         var sgform = me.up("SGForm");
         if (sgform.record) {
 
@@ -35,6 +35,4 @@
         }
 
     }
-
-
 });

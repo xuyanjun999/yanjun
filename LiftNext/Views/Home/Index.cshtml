@@ -1,0 +1,60 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link href="~/Extjs/resources/sef-all.css" rel="stylesheet" />
+
+</head>
+<body>
+    @*<script src="~/Extjs/ext-all-debug.js"></script>*@
+
+    <script src="~/lang.js"></script>
+    <script src="~/runningCfg.js"></script>
+    <script src="~/static_data.js"></script>
+
+    <script type="text/javascript" src="~/Extjs/ext-all.js"></script>
+
+
+
+    @*<script src="~/app/model/sys/Menu.js"></script>*@
+    @*<script src="~/sef/interfaces/IAppPage.js"></script>
+    <script src="~/sef/interfaces/IDialogContent.js"></script>
+    <script src="~/sef/components/page/PageCtrl.js"></script>
+    <script src="~/sef/view/viewport/ViewportCtrl.js"></script>*@
+
+   
+   
+
+    <script type="text/javascript">
+        console.log("111");
+        Ext.Loader.setConfig({
+            enable: true,
+            paths: {
+                "sef": "/",
+                "sef.core": "/sef",
+                "sef.app": '/apps',
+              
+            }
+        });
+        Ext.onReady(function () {
+            console.log("333");
+            //Ext.require('sef.cctv');
+           // Ext.toast("欢迎使用EAP", "欢迎", "t");
+            console.log("222");
+
+            Ext.application("sef.core.Application");
+        });
+
+    </script>
+    @Scripts.Render("~/sef")
+    @Scripts.Render("~/apps")
+</body>
+</html>

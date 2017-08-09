@@ -1,0 +1,17 @@
+{
+    "Success": true,
+    "Message": "Not Auth",
+    
+    "ResultList":[{
+        "ID":100,
+        "Code":"U001",
+        "Name":"Jeff",
+        "Email":"jeff@seungee.com",
+        "IsValid":true,
+        "Customer":{
+            "ID":801,
+            "Name":"SEUNGEE"
+        }
+    }]
+
+}

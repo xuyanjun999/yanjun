@@ -23,29 +23,21 @@
                 text: 'ID',
                 dataIndex: 'ID',
                 hidden: true
-            }, {
+                }, {
+                    text: '类别',
+                    dataIndex: 'ParamClass',
+                    width: 200
+                }, {
                 text: '代码',
                 dataIndex: 'Code',
-                width: 100
+                width: 150
             }, {
                 text: '名称',
                 dataIndex: 'Name',
-                width: 100
-            }, {
-                text: '描述',
-                dataIndex: 'Desc',
-                width: 100
+                width: 200
             }, {
                 text: '单位',
                 dataIndex: 'Unit',
-                width: 100
-            }, {
-                text: '类别',
-                dataIndex: 'Category',
-                width: 100
-            }, {
-                text: '默认值',
-                dataIndex: 'DefaultValue',
                 width: 100
             }, {
                 text: '数据类型',
@@ -54,7 +46,6 @@
                 renderer: function (v) {
                     return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineDataType, v);
                 }
-
             }, {
                 text: '使用类型',
                 dataIndex: 'UseType',
@@ -63,12 +54,9 @@
                     return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineUseType, v);
                 }
             }, {
-                text: '所属类型',
-                dataIndex: 'OwnerType',
-                width: 100,
-                renderer: function (v) {
-                    return serverNS.getComboStaticValue(BaseDataStaticData.ParamDefineOwnerType, v);
-                }
+                text: '描述',
+                dataIndex: 'Desc',
+                flex:1
             }],
             listeners: {
                 beforeload: "paramDefineBeforeload"
@@ -93,22 +81,14 @@
                 allowBlank: false,
                 afterLabelTextTpl: REQUIRED_LABEL_TPL,
                 name: 'Name'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '描述',
-                name: 'Desc'
-            }, {
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '类别',
+                    name: 'ParamClass'
+                },{
                 xtype: 'textfield',
                 fieldLabel: '单位',
                 name: 'Unit'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '类别',
-                name: 'Category'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '默认值',
-                name: 'DefaultValue'
             }, {
                 xtype: 'CommonBindCombo',
                 store: serverNS.getComboStaticStore(BaseDataStaticData.ParamDefineDataType),
@@ -120,10 +100,10 @@
                 fieldLabel: '使用类型',
                 name: 'UseType'
             }, {
-                xtype: 'CommonBindCombo',
-                store: serverNS.getComboStaticStore(BaseDataStaticData.ParamDefineOwnerType),
-                fieldLabel: '所属类型',
-                name: 'OwnerType'
+                xtype: 'textarea',
+                fieldLabel: '描述',
+                name: 'Desc',
+                columnWidth: 1
             }],
             selfButtons: [SG_BUTTONS.SAVE, SG_BUTTONS.BACK]
         }]
