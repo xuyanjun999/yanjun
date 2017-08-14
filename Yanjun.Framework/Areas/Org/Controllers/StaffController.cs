@@ -40,6 +40,7 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
                 res.Success = false;
                 res.Message = ex.Message;
                 Log.Error(ex);
+
             }
             return Json(res, JsonRequestBehavior.AllowGet);
         }
@@ -72,6 +73,7 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
             }
             catch (Exception ex)
             {
+                throw;
                 StaffService.Repository.Rollback();
                 res.Success = false;
                 res.Message = ex.Message;

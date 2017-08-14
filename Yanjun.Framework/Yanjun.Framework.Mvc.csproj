@@ -166,16 +166,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\ApiControllerBase.cs" />
-    <Compile Include="Api\BaseData\ParamDefineController.cs" />
-    <Compile Include="Api\Data\DynamicBlockController.cs" />
-    <Compile Include="Api\Data\DynamicBlockParamController.cs" />
-    <Compile Include="Api\Org\CompanyController.cs" />
-    <Compile Include="Api\Org\StaffController.cs" />
-    <Compile Include="Api\ProjectInfo\ProjectController.cs" />
-    <Compile Include="Api\RestApiController.cs" />
-    <Compile Include="Api\Sys\DicConfigController.cs" />
-    <Compile Include="Api\Sys\MenuController.cs" />
     <Compile Include="App_Start\AutoFacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -198,6 +188,8 @@
     <Compile Include="Areas\TreeQuery\Controllers\OrgTreeController.cs" />
     <Compile Include="Areas\TreeQuery\TreeQueryAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Filter\Attribute\AfterActionAttribute.cs" />
+    <Compile Include="Filter\Attribute\MyExceptionHandleAttribute.cs" />
     <Compile Include="Filter\Attribute\NotCheckUserAttribute.cs" />
     <Compile Include="Filter\LoginApiFilter.cs" />
     <Compile Include="Filter\LoginFilter.cs" />
