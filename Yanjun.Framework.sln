@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Service", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yanjun.Framework.Mapping", "Yanjun.Framework.Mapping\Yanjun.Framework.Mapping.csproj", "{94D53000-DD4A-4296-B6B9-AA9C7A0441F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiftNext", "LiftNext\LiftNext.csproj", "{EBD19C27-D56F-4034-8E0E-8254964A25C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{94D53000-DD4A-4296-B6B9-AA9C7A0441F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94D53000-DD4A-4296-B6B9-AA9C7A0441F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94D53000-DD4A-4296-B6B9-AA9C7A0441F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD19C27-D56F-4034-8E0E-8254964A25C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD19C27-D56F-4034-8E0E-8254964A25C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD19C27-D56F-4034-8E0E-8254964A25C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD19C27-D56F-4034-8E0E-8254964A25C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

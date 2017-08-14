@@ -53,7 +53,7 @@ namespace Yanjun.Framework.Domain.Entity.Org
         ///描述
         ///</summary>
         [Description("描述")]
-        public string Remark { get; set; }
+        public string Desc { get; set; }
     }
 
 

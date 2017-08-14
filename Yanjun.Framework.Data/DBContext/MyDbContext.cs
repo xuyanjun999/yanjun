@@ -1,9 +1,11 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,11 +15,15 @@ namespace Yanjun.Framework.Data.DBContext
 {
     public class MyDbContext : DbContext
     {
+
+        public ILog Log { get; set; }
+
         public MyDbContext() : base("default") { }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            string assembleFileName = Assembly.GetExecutingAssembly().CodeBase.Replace("Yanjun.Framework.Data.DLL", "Yanjun.Framework.Mapping.DLL").Replace("file:///", "");
+            string currentPath = Assembly.GetExecutingAssembly().CodeBase;
+            string assembleFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin","Yanjun.Framework.Mapping.dll");
             Assembly asm = Assembly.LoadFile(assembleFileName);
             modelBuilder.Configurations.AddFromAssembly(asm);
             base.OnModelCreating(modelBuilder);

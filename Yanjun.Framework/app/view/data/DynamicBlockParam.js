@@ -103,7 +103,7 @@
             }]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/DynamicBlock',
+            apiUrl: '/DynamicBlock',
             includePath: [],
             items: [{
                 xtype: 'textfield',

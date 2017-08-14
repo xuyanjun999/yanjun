@@ -92,7 +92,7 @@
             selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/DynamicBlock',
+            apiUrl: '/DynamicBlock',
             includePath: [],
             items: [{
                 xtype: 'textfield',
@@ -202,7 +202,7 @@
                         items: [{
                             xtype: "SGForm",
                             includePath: ["ParamDefine"],
-                            apiUrl: '/api/DynamicBlockParam',
+                            apiUrl: '/DynamicBlockParam',
                             refreshGridAfterSave: false,
                             record: record,
                             items: [{

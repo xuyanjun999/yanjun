@@ -62,17 +62,6 @@
                 dataIndex: 'Email',
                 width: 100
             }, {
-                text: '性别',
-                dataIndex: 'Gender',
-                width: 100,
-                renderer: function (value, metaData) {
-                    return value === true ? "男" : "女";
-                }
-            }, {
-                text: '地址',
-                dataIndex: 'Address',
-                width: 100
-            }, {
                 text: '最后登录IP',
                 dataIndex: 'LastLoginIp',
                 width: 100
@@ -86,7 +75,7 @@
             selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/Staff',
+            apiUrl: '/Staff',
             includePath: ['Company'],
             items: [{
                 fieldLabel: '公司名称',

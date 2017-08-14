@@ -1,0 +1,39 @@
+{
+    "Success": true,
+    "Message": "Not Auth",
+    "Result": {
+        "Version": "21.0.1",
+        "Title": "EAP2",
+        "UIMode": 1
+    },
+    "ResultList":[{
+        "ID":100,
+        "name":"Jeff",
+        "email":"jeff@seungee.com",
+        "isvalid":true,
+        "salary":2999.56,
+        "status":2,
+        "remark":"这是第一条记录",
+        "birthday":"1980-02-03T23:44:33",
+        "loginTime":"2017-03-04T23:44:33",
+        "Staff":{
+            
+            "ID":101,
+            "fullname":"staff101"
+        }
+    },{
+        "ID":200,
+         "name":"Jeff2",
+        "email":"jeff2@seungee.com",
+        "isvalid":false,
+        "salary":3999.56,
+        "status":3,
+        "birthday":"1981-02-03T23:44:33",
+        "loginTime":"2017-04-04T23:54:33",
+        "Staff":{
+            "ID":103,
+            "fullname":"staff103"
+        }
+    }]
+
+}

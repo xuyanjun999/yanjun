@@ -55,6 +55,8 @@ namespace Yanjun.Framework.Code.Web
         {
             if (string.IsNullOrEmpty(key))
                 return null;
+            if (HttpContext.Current.Session == null)
+                return null;
             return HttpContext.Current.Session[key];
         }
 

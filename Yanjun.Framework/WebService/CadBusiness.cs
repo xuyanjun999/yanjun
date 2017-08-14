@@ -5,15 +5,17 @@ using System.Net;
 using System.Web;
 using System.IO;
 using Newtonsoft.Json;
-using Yanjun.Framework.Mvc.WebService;
 using Yanjun.Framework.Domain.Entity.Data;
 using SGEAP.CadDrawingEntity;
 using Yanjun.Framework.Domain.DrawingArg;
+using log4net;
+using Yanjun.Framework.Domain.Entity.Org;
 
-namespace SGEAP.CadDrawingHostService
+namespace SGEAP.CadDrawingEntity
 {
     public class CadBusiness
     {
+        public ILog Log { get; set; }
         /// <summary>
         /// CAD服务程序根目录
         /// </summary>
@@ -21,7 +23,7 @@ namespace SGEAP.CadDrawingHostService
         {
             get
             {
-                return "~/TaskResultOutput";
+                return "TaskResultOutput";
             }
         }
 
@@ -34,14 +36,14 @@ namespace SGEAP.CadDrawingHostService
         /// </summary>
         /// <param name="blockDwgFileUrl"></param>
         /// <returns></returns>
-        public CadDrawingReturnObj UpdateDynamicBlock(string blockJson)
+        public CadReturnObj UpdateReadBlockResult(string blockJson, string user)
         {
-            var retObj = new CadDrawingReturnObj();
+            var retObj = new CadReturnObj();
 
-            var dynamicBlocks = JsonConvert.DeserializeObject<List<DynamicBlockEntity>>(blockJson);
-            if(dynamicBlocks != null && dynamicBlocks.Count > 0)
+            var blocks = JsonConvert.DeserializeObject<List<BlockEntity>>(blockJson);
+            if (blocks != null && blocks.Count > 0)
             {
-                CadBlockDBUtil.UpdateDynamicBlock(dynamicBlocks.ToArray());
+                CadBlockDBUtil.UpdateReadBlockResult(blocks.ToArray(), user);
             }
             retObj.Success = true;
             return retObj;
@@ -49,8 +51,8 @@ namespace SGEAP.CadDrawingHostService
 
         public string GetTaskResultPhyPath()
         {
-            var taskResult = HttpContext.Current.Server.MapPath(TaskResultOutput);
-            if(!Directory.Exists(taskResult))
+            var taskResult = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, TaskResultOutput);
+            if (!Directory.Exists(taskResult))
             {
                 Directory.CreateDirectory(taskResult);
             }
@@ -69,34 +71,37 @@ namespace SGEAP.CadDrawingHostService
             return resPath;
         }
 
-        public CadDrawingReturnObj UpdateDrawingTaskResult(long taskId, byte[] bytes)
+        public CadReturnObj UpdateDrawingTaskResult(string jsonData, HttpFileCollectionBase files)
         {
-            var retObj = new CadDrawingReturnObj();
+            var retObj = new CadReturnObj();
             try
             {
-                var task = CadBlockDBUtil.GetDrawingTask(taskId);
-                if(task == null)
+                var taskArgs = Newtonsoft.Json.JsonConvert.DeserializeObject<CadDrawingArgs>(jsonData);
+
+                var task = CadBlockDBUtil.GetDrawingTask(taskArgs.ID);
+                if (task == null)
                 {
                     retObj.Success = false;
-                    retObj.Message = "未找到处理任务ID:" + taskId;
+                    retObj.Message = "无效的处理任务[ID=" + taskArgs.ID + "]";
                     return retObj;
                 }
-                if (bytes != null)
+                var phyPath = GetTaskResultPhyPath();
+                var relPath = GetTaskResulRelath();
+
+                //如果存在文件则自动存储
+                foreach (string file in files)
                 {
+                    var postFile = files[file] as HttpPostedFileBase;
+                  
+                    var fileName = Path.Combine(phyPath, postFile.FileName);
+                    postFile.SaveAs(fileName);
 
-                    var phyPath = GetTaskResultPhyPath();
-                    var relPath = GetTaskResulRelath();
-
-                    var fileName = DateTime.Now.Ticks + ".dwg";
-                    var fileFullName = Path.Combine(phyPath, fileName);
-                    File.WriteAllBytes(fileFullName, bytes);
-
-                    task.Output = relPath + fileName;
+                    task.Output = relPath + postFile.FileName;
                     task.EndTime = DateTime.Now;
                     task.TaskStatus = (int)TaskStatus.Complete;
                     CadBlockDBUtil.UpdateDrawingTask(task);
                 }
-                else
+                if (files.Count == 0)
                 {
                     task.Output = null;
                     task.EndTime = DateTime.Now;
@@ -104,12 +109,24 @@ namespace SGEAP.CadDrawingHostService
                     CadBlockDBUtil.UpdateDrawingTask(task);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 retObj.Success = false;
                 retObj.Message = ex.Message;
             }
             return retObj;
+        }
+
+        public string GetMessage(Exception ex)
+        {
+            if (ex.InnerException == null)
+            {
+                return ex.Message;
+            }
+            else
+            {
+                return GetMessage(ex.InnerException);
+            }
         }
     }
 }

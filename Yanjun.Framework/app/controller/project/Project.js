@@ -6,7 +6,8 @@
         var dataArgs = new serverNS.dataArgs();
         dataArgs.Query.IncludeEntityPaths.push("Company");
         dataArgs.Query.IncludeEntityPaths.push("DrawingTask");
-        dataArgs.Query.IncludeEntityPaths.push("User"); 
+        dataArgs.Query.IncludeEntityPaths.push("User");
+        dataArgs.Query.IncludeEntityPaths.push("DrawingTask");
         dataArgs.ActionDes = '';
         return dataArgs;
     },
@@ -40,7 +41,7 @@
                 try {
                     var obj = Ext.decode(response.responseText);
                     if (obj.Success) {
-                        toast_success("生成成功!")
+                        toast_success("任务已加入队列,请稍候...")
                     }
                     else {
                         toast_error(obj.Message);
@@ -53,5 +54,15 @@
 
             },
         });
+    },
+
+    downloadDrawingUrl: function (btn) {
+        var sgform = btn.up("SGForm");
+        if (!Ext.isEmpty(sgform.record.data['DrawingTask.Output'])) {
+            window.open(".." + sgform.record.data['DrawingTask.Output']);
+            //console.log(sgform.record.data['DrawingTask.Output']);
+        } else {
+            alert_info('图纸尚未生成,请稍后...');
+        }
     }
 });

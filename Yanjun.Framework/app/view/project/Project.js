@@ -24,6 +24,14 @@
                 dataIndex: 'ID',
                 hidden: true
             }, {
+                text: '图纸状态',
+                dataIndex: 'DrawingTask.TaskStatus',
+                width: 100,
+                renderer: function (v) {
+                    if (Ext.isEmpty(v)) return "";
+                    return serverNS.getComboStaticValue(ProjectInfoStaticData.DrawingTaskStatus, v);
+                }
+            }, {
                 text: '公司名称',
                 dataIndex: 'Company.Name',
                 width: 100
@@ -59,11 +67,13 @@
             }, {
                 text: '项目状态',
                 dataIndex: 'ProjectStatus',
-                width: 100
+                width: 100,
+                hidden: true
             }, {
-                text: '井道模型ID',
+                text: '梯型ID',
                 dataIndex: 'ModelID',
-                width: 100
+                width: 100,
+                hidden: true
             }, {
                 text: '版本号',
                 dataIndex: 'ProjectVerNo',
@@ -72,14 +82,6 @@
                 text: '来源项目',
                 dataIndex: 'ParentID',
                 width: 100
-            }, {
-                text: '绘图任务状态',
-                dataIndex: 'DrawingTask.TaskStatus',
-                width: 100,
-                renderer: function (v) {
-                    if (Ext.isEmpty(v)) return "";
-                    return serverNS.getComboStaticValue(ProjectInfoStaticData.DrawingTaskStatus, v);
-                }
             }, {
                 text: '描述',
                 dataIndex: 'Remark',
@@ -94,72 +96,195 @@
             selfButtons: [SG_BUTTONS.ADD, SG_BUTTONS.EDIT, SG_BUTTONS.DELETE]
         }, {
             xtype: 'SGForm',
-            apiUrl: '/api/Project',
-            includePath: ["Company","User"],
+            apiUrl: '/Project',
+            includePath: ["Company", "User","DrawingTask"],
             items: [{
-                xtype: 'textfield',
-                fieldLabel: '公司',
-                readOnly: true,
-                name: 'Company.Name'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '用户',
-                readOnly: true,
-                name: 'User.Name'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '项目代码',
-                name: 'ProjectNo'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '项目名称',
-                name: 'ProjectName'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '合同号',
-                name: 'ContractNo'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '客户名称',
-                name: 'CustomerName'
-            }, {
-                xtype: 'datefield',
-                fieldLabel: '创建日期',
-                readOnly: true,
-                format: "Y-m-d\\TH:i:s",
-                name: 'CreateDate'
-            }, {
-                xtype: 'numberfield',
-                allowDecimals: false,
-                fieldLabel: '项目状态',
-                name: 'ProjectStatus'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '井道模型ID',
-                name: 'ModelID'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '版本号',
-                name: 'ProjectVerNo'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '来源项目',
-                name: 'ParentID'
-            }, {
-                xtype: 'textfield',
-                fieldLabel: '绘图任务ID',
-                name: 'DrawingTaskID'
-            }, {
-                xtype: 'textarea',
+                xtype: 'panel',
+                title: '项目信息',
                 columnWidth: 1,
-                fieldLabel: '描述',
-                name: 'Remark'
+                layout: 'column',
+                defaults: {
+                    border: 0,
+                    padding: 5,
+                    margin: 0,
+                    xtype: 'textfield',
+                    columnWidth: 0.3
+                },
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: '公司',
+                    readOnly: true,
+                    name: 'Company.Name'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '用户',
+                    readOnly: true,
+                    name: 'User.Name'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '项目代码',
+                    name: 'ProjectNo'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '项目名称',
+                    name: 'ProjectName'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '合同号',
+                    name: 'ContractNo'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '客户名称',
+                    name: 'CustomerName'
+                }, {
+                    xtype: 'datefield',
+                    fieldLabel: '创建日期',
+                    readOnly: true,
+                    format: "Y-m-d\\TH:i:s",
+                    name: 'CreateDate',
+                    hidden: true
+                }, {
+                    xtype: 'numberfield',
+                    allowDecimals: false,
+                    fieldLabel: '项目状态',
+                    name: 'ProjectStatus',
+                    hidden: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '梯型ID',
+                    name: 'ModelID',
+                    hidden: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '版本号',
+                    name: 'ProjectVerNo',
+                    hidden: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '来源项目',
+                    name: 'ParentID',
+                    hidden: true
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '绘图任务ID',
+                    name: 'DrawingTaskID',
+                    hidden: true
+                }, {
+                    xtype: 'textarea',
+                    columnWidth: 1,
+                    fieldLabel: '描述',
+                    name: 'Remark',
+                    hidden: true
+                },]
+            }, {
+                xtype: 'panel',
+                title: '公共参数',
+                columnWidth: 1,
+                layout: 'column',
+                defaults: {
+                    border: 0,
+                    padding: 5,
+                    margin: 0,
+                    xtype: 'textfield',
+                    columnWidth: 0.3
+                },
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: '电梯型号',
+                    name: 'ELEN'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '机房类型',
+                    name: 'MRT'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '速度',
+                    name: 'V'
+                }]
+            }, {
+                xtype: 'panel',
+                title: '主要参数',
+                columnWidth: 1,
+                layout: 'column',
+                defaults: {
+                    border: 0,
+                    padding: 5,
+                    margin: 0,
+                    xtype: 'textfield',
+                    columnWidth: 0.3
+                },
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: '载重',
+                    name: 'DL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '对重位置',
+                    name: 'CWTL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '开门方式',
+                    name: 'OPT'
+                }]
+            }, {
+                xtype: 'panel',
+                title: '井道平面',
+                columnWidth: 1,
+                layout: 'column',
+                defaults: {
+                    border: 0,
+                    padding: 5,
+                    margin: 0,
+                    xtype: 'textfield',
+                    columnWidth: 0.3
+                },
+                items: [{
+                    xtype: 'textfield',
+                    fieldLabel: '轿厢内宽',
+                    name: 'DL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '轿厢内深',
+                    name: 'CWTL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '前距',
+                    name: 'OPT'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '井道宽度',
+                    name: 'DL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '井道深度',
+                    name: 'CWTL'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '井道左内壁到轿厢距离',
+                    name: 'OPT'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '开门宽',
+                    name: 'OP'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '开门高',
+                    name: 'OPH'
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: '偏心方向',
+                    name: 'OPT'
+                }]
             }],
             selfButtons: [SG_BUTTONS.SAVE, {
                 text: '生成图纸',
                 iconCls: 'edit',
-                handler:'createDrawingTask'
-            }, SG_BUTTONS.BACK]
+                handler: 'createDrawingTask'
+            }, {
+                    text: '下载图纸',
+                    iconCls: 'download',
+                    handler: 'downloadDrawingUrl'
+                },  SG_BUTTONS.BACK]
         }]
     }]
 });

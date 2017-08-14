@@ -1,0 +1,17 @@
+{
+    "Success": true,
+    "ResultList": [{
+        "ID": 101,
+        "fullname": "staff101",
+        "code": "s10001"
+    }, {
+        "ID": 102,
+        "fullname": "staff102",
+        "code": "s10002"
+    }, {
+        "ID": 103,
+        "fullname": "staff103",
+        "code": "s10003"
+    }]
+
+}

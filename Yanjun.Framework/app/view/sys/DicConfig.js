@@ -107,7 +107,7 @@
             autoScroll: true,
             title: '明细',
             border: false,
-            apiUrl: '/api/DicConfig',
+            apiUrl: '/DicConfig',
             includePath: ["Parent"],
             beforeshow: function () {
                 this.getForm().reset();

@@ -1,0 +1,16 @@
+{
+    "Success":true,
+    "Result":{
+        "Children":[{
+            "Text":"门洞(3)",
+            "Leaf":true,
+            "DataID":55
+        },{
+            "Text":"COP(5)",
+            "Leaf":true
+        },{
+            "Text":"表格(3)",
+            "Leaf":true
+        }]
+    }
+}

@@ -12,6 +12,7 @@ namespace Yanjun.Framework.Domain.Entity.Org
     /// </summary>
     public class StaffEntity : BaseAcsRecTreeNodeEntity
     {
+        public int UserStatus { get; set; }
 
         /// <summary>
         /// 员工工号
@@ -31,10 +32,6 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// 部门
         /// </summary>
         public string Dept { get; set; }
-        /// <summary>
-        /// 性别
-        /// </summary>
-        public bool Gender { get; set; }
 
         /// <summary>
         /// 电话
@@ -48,12 +45,9 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// </summary>
         public string Phone { get; set; }
         /// <summary>
-        /// 地址
-        /// </summary>
-        public string Address { get; set; }
-        /// <summary>
 
         public string LastLoginIp { get; set; }
+        public DateTime? PwdExpiryTime { get; set; }
 
 
         public long CompanyID { get; set; }

@@ -64,9 +64,9 @@ namespace Yanjun.Framework.Domain.Entity.Project
         [Description("项目状态")]
         public int ProjectStatus { get; set; }
         /// <summary>
-        ///井道模型ID
+        ///梯型ID
         ///</summary>
-        [Description("井道模型ID")]
+        [Description("梯型ID")]
         public long? ModelID { get; set; }
         /// <summary>
         ///版本号
@@ -91,7 +91,7 @@ namespace Yanjun.Framework.Domain.Entity.Project
         ///描述
         ///</summary>
         [Description("描述")]
-        public string Remark { get; set; }
+        public string Desc { get; set; }
     }
 }
 

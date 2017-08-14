@@ -41,7 +41,7 @@
         text: '项目状态'
     }, {
         name: 'ModelID',
-        text: '井道模型ID'
+        text: '梯型ID'
     }, {
         name: 'ProjectVerNo',
         dtype: 'string',

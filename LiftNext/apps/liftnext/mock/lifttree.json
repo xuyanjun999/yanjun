@@ -1,0 +1,16 @@
+{
+    "Success":true,
+    "Result":{
+        "Children":[{
+            "Text":"小机房(3)",
+            "Leaf":false,
+            "DataID":55
+        },{
+            "Text":"货梯(5)",
+            "Leaf":true
+        },{
+            "Text":"无机房(3)",
+            "Leaf":true
+        }]
+    }
+}

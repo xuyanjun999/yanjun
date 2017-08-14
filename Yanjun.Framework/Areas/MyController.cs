@@ -12,10 +12,11 @@ using Yanjun.Framework.Data.Repository;
 using static Yanjun.Framework.Code.Web.Dto.QueryArg;
 using System.Text;
 using Newtonsoft.Json;
+using Yanjun.Framework.Domain.Entity;
 
 namespace Yanjun.Framework.Mvc.Areas
 {
-    public class MyController<T> : Controller where T : class, new()
+    public class MyController<T> : Controller where T : BaseEntity, new()
     {
         /// <summary>
         /// 日志对象
@@ -26,6 +27,71 @@ namespace Yanjun.Framework.Mvc.Areas
         /// 存储操作对象
         /// </summary>
         public IRepositoryBase Repository { get; set; }
+
+        [HttpGet]
+        public virtual JsonResult Get(long id, string include)
+        {
+            RestResponseDto res = new RestResponseDto();
+            try
+            {
+                var includes = string.IsNullOrEmpty(include) ? null : include.Split(new char[] { ',' });
+                T entity = Repository.QueryFirst<T>(x => x.ID == id, includes);
+                res.Entitys = new object[] { entity };
+                res.Success = true;
+            }
+            catch (Exception ex)
+            {
+                res.Success = false;
+                res.Message = ex.Message;
+                Log.Error(ex);
+            }
+
+            return MyJson(res);
+        }
+
+        [HttpPost]
+        public virtual JsonResult Add(T entity)
+        {
+            RestResponseDto res = new RestResponseDto();
+            try
+            {
+                Repository.BeginTran();
+                Repository.Insert(entity);
+                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+                Repository.Commit();
+                res.Success = true;
+            }
+            catch (Exception ex)
+            {
+                Repository.Rollback();
+                res.Success = false;
+                res.Message = ex.Message;
+                Log.Error(ex);
+            }
+            return MyJson(res);
+        }
+
+        [HttpPost]
+        public virtual JsonResult Update(T entity)
+        {
+            RestResponseDto res = new RestResponseDto();
+            try
+            {
+                Repository.BeginTran();
+                Repository.Update<T>(entity);
+                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+                Repository.Commit();
+                res.Success = true;
+            }
+            catch (Exception ex)
+            {
+                Repository.Rollback();
+                res.Success = false;
+                res.Message = ex.Message;
+                Log.Error(ex);
+            }
+            return MyJson(res);
+        }
 
         public virtual JsonResult Gets(CommonAjaxArgs args)
         {

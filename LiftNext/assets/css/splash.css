@@ -1,0 +1,123 @@
+body {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 14px;
+    line-height: 17px;
+    font-weight: 300;
+    font-family: "Helvetica Neue For Number", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #f6f6f6;
+}
+
+.container {
+    height: 200px;
+    width: 200px;
+    /*border: solid 1px black;*/
+    position: absolute;
+    margin: -100px 0 0 -100px;
+    left: 50%;
+    top: 50%;
+}
+
+.box {
+    overflow: hidden;
+    height: 200px;
+    width: 144px;
+    /*border: solid 1px gold;*/
+    position: absolute;
+    /*Centering Method 2*/
+    margin: -84px 0 0 -72px;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    background: transparent url(/assets/images/splash.png) no-repeat;
+}
+
+.box .text {
+    font-size: 40px;
+    line-height: 200px;
+    text-align: center;
+}
+
+.csshub-loader {
+    padding-top: 180px;
+}
+
+.csshub-loader span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    left: 50%;
+    margin-left: -8px;
+    animation: 3s infinite linear;
+    -webkit-animation: 3s infinite linear;
+}
+
+.csshub-loader span:nth-child(1) {
+    background: #636363;
+    animation: csshub-kiri 1.2s infinite linear;
+    -webkit-animation: csshub-kiri 1.2s infinite linear;
+}
+
+.csshub-loader span:nth-child(2) {
+    background: #0088ff;
+    z-index: 100;
+}
+
+.csshub-loader span:nth-child(3) {
+    background: #ff2b3f;
+    animation: csshub-kanan 1.2s infinite linear;
+    -webkit-animation: csshub-kanan 1.2s infinite linear;
+}
+
+@-webkit-keyframes csshub-kanan {
+    0% {
+        -webkit-transform: translateX(20px);
+    }
+    50% {
+        -webkit-transform: translateX(-20px);
+    }
+    100% {
+        -webkit-transform: translateX(20px);
+        z-index: 200;
+    }
+}
+
+@keyframes csshub-kanan {
+    0% {
+        transform: translateX(20px);
+    }
+    50% {
+        transform: translateX(-20px);
+    }
+    100% {
+        transform: translateX(20px);
+        z-index: 200;
+    }
+}
+
+@-webkit-keyframes csshub-kiri {
+    0% {
+        -webkit-transform: translateX(-20px);
+        z-index: 200;
+    }
+    50% {
+        -webkit-transform: translateX(20px);
+    }
+    100% {
+        -webkit-transform: translateX(-20px);
+    }
+}
+
+@keyframes csshub-kiri {
+    0% {
+        transform: translateX(-20px);
+        z-index: 200;
+    }
+    50% {
+        transform: translateX(20px);
+    }
+    100% {
+        transform: translateX(-20px);
+    }
+}

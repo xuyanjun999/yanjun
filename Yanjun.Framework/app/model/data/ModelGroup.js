@@ -1,0 +1,51 @@
+﻿Ext.define('xf.model.data.ModelGroup', {
+    extend: 'Ext.data.Model',
+    fields: [{
+        name: 'ID',
+        text: ''
+    }, {
+        name: 'ModelID',
+        text: '梯型ID'
+    }, {
+        name: 'Seq',
+        text: '序号'
+    }, {
+        name: 'BlockGroup',
+        dtype: 'string',
+        text: '块分组'
+    }, {
+        name: 'CheckConfig',
+        dtype: 'string',
+        text: '检测规则'
+    }, {
+        name: 'InsertPointX',
+        dtype: 'string',
+        text: '插入点X坐标'
+    }, {
+        name: 'InsertPointY',
+        dtype: 'string',
+        text: '插入点Y坐标'
+    }, {
+        name: 'Desc',
+        dtype: 'string',
+        text: '描述'
+    },{
+        name: 'Status',
+        text: ''
+    }, {
+        name: 'CreateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'CreateBy',
+        text: ''
+    }, {
+        name: 'UpdateOn',
+        dtype: 'date',
+        text: ''
+    }, {
+        name: 'UpdateBy',
+        text: ''
+    }],
+    idProperty: 'ID'
+});

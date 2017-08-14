@@ -1,0 +1,27 @@
+.block-view{
+    padding:20px;
+    
+}
+
+.block-view:before,
+.block-view:after {
+        content: "";
+        display: table;
+    }
+.block-view:after {
+        clear: both;
+    }
+
+.block-wrap{
+    float:left;
+    
+    
+}
+.block-wrap .block-innerbox{
+    padding:10px;
+    text-align: center;
+}
+.block-wrap .thumb img{
+    width:100px;
+    height:100px;
+}

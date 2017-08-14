@@ -20,7 +20,7 @@
         dtype: 'string',
         text: '单位'
     }, {
-        name: 'Category',
+            name: 'ParamClass',
         dtype: 'string',
         text: '类别'
     }, {
@@ -34,10 +34,7 @@
     }, {
         name: 'UseType',
         text: '使用类型'
-    }, {
-        name: 'OwnerType',
-        text: '所属类型'
-    }, {
+    },  {
         name: 'Status',
         text: ''
     }, {

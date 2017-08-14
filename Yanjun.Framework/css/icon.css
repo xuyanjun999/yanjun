@@ -58,3 +58,7 @@
 .application-key {
     background-image: url(../icons/application/application_key.png) !important;
 }
+.download {
+    background-image: url(../icons/common/download.gif) !important;
+}
+

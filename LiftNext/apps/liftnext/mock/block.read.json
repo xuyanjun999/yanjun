@@ -1,0 +1,52 @@
+{
+    "Success": true,
+    "ResultList": [{
+        "ID": 1001,
+        "Code": "B-1001",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "门洞",
+        "Category":"类型",
+        "Type":1
+    },
+    {
+        "ID": 1002,
+        "Code": "B-1002",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "COP",
+        "Category":"类型",
+        "Type":1
+    },
+    {
+        "ID": 1003,
+        "Code": "B-1002",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "COP",
+        "Category":"类型",
+        "Type":1
+    },
+    {
+        "ID": 1004,
+        "Code": "B-1002",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "COP",
+        "Category":"类型",
+        "Type":1
+    },
+    {
+        "ID": 1005,
+        "Code": "B-1002",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "COP",
+        "Category":"类型",
+        "Type":1
+    },
+    {
+        "ID": 1006,
+        "Code": "B-1002",
+        "Thumb":"/assets/images/splash.png",
+        "Name": "COP",
+        "Category":"类型",
+        "Type":1
+    }]
+
+}
