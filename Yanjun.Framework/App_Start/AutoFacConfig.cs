@@ -24,7 +24,7 @@ namespace Yanjun.Framework.Mvc.App_Start
         {
             var builder = new ContainerBuilder();
 
-            var config = GlobalConfiguration.Configuration;
+           // var config = GlobalConfiguration.Configuration;
 
             RegisterLog(builder);
 
@@ -58,7 +58,7 @@ namespace Yanjun.Framework.Mvc.App_Start
 
         static void RegisterDb(ContainerBuilder builder)
         {
-            builder.Register(x => new MyDbContext()).PropertiesAutowired().InstancePerRequest();
+           // builder.Register(x => new MyDbContext()).PropertiesAutowired().InstancePerRequest();
             builder.Register(x => new RepositoryBase()).AsImplementedInterfaces().PropertiesAutowired().InstancePerRequest();
 
         }

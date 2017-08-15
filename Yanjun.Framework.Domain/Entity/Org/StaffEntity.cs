@@ -12,7 +12,6 @@ namespace Yanjun.Framework.Domain.Entity.Org
     /// </summary>
     public class StaffEntity : BaseAcsRecTreeNodeEntity
     {
-        public int UserStatus { get; set; }
 
         /// <summary>
         /// 员工工号
@@ -40,14 +39,11 @@ namespace Yanjun.Framework.Domain.Entity.Org
         /// 邮箱
         /// </summary>
         public string Email { get; set; }
-        /// <summary>
-        /// 手机
-        /// </summary>
-        public string Phone { get; set; }
+
         /// <summary>
 
         public string LastLoginIp { get; set; }
-        public DateTime? PwdExpiryTime { get; set; }
+
 
 
         public long CompanyID { get; set; }

@@ -9,7 +9,7 @@ namespace Yanjun.Framework.Mapping.Org
 {
     public class StaffMap : EntityMapBase<StaffEntity>
     {
-        public StaffMap() : base("SGEAP_CORE_User")
+        public StaffMap() : base("SGEAP_CORE_Staff")
         {
             this.HasRequired(x => x.Company).WithMany().HasForeignKey<long>(x => x.CompanyID);
         }

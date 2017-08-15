@@ -13,6 +13,7 @@ using static Yanjun.Framework.Code.Web.Dto.QueryArg;
 using System.Text;
 using Newtonsoft.Json;
 using Yanjun.Framework.Domain.Entity;
+using Yanjun.Framework.Mvc.Filter.Attribute;
 
 namespace Yanjun.Framework.Mvc.Areas
 {
@@ -29,128 +30,100 @@ namespace Yanjun.Framework.Mvc.Areas
         public IRepositoryBase Repository { get; set; }
 
         [HttpGet]
+        [NoTransaction]
         public virtual JsonResult Get(long id, string include)
         {
             RestResponseDto res = new RestResponseDto();
-            try
-            {
-                var includes = string.IsNullOrEmpty(include) ? null : include.Split(new char[] { ',' });
-                T entity = Repository.QueryFirst<T>(x => x.ID == id, includes);
-                res.Entitys = new object[] { entity };
-                res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
-
+            var includes = string.IsNullOrEmpty(include) ? null : include.Split(new char[] { ',' });
+            T entity = Repository.QueryFirst<T>(x => x.ID == id, includes);
+            res.Entitys = new object[] { entity };
+            res.Success = true;
             return MyJson(res);
         }
 
         [HttpPost]
-        public virtual JsonResult Add(T entity)
+        public virtual JsonResult Create(T entity)
         {
             RestResponseDto res = new RestResponseDto();
-            try
-            {
-                Repository.BeginTran();
-                Repository.Insert(entity);
-                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
-                Repository.Commit();
-                res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                Repository.Rollback();
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
+
+            Repository.Insert(entity);
+            res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+            res.Success = true;
             return MyJson(res);
         }
 
         [HttpPost]
-        public virtual JsonResult Update(T entity)
+        public virtual JsonResult Update(T entity, string[] modified)
         {
             RestResponseDto res = new RestResponseDto();
-            try
-            {
-                Repository.BeginTran();
-                Repository.Update<T>(entity);
-                res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
-                Repository.Commit();
-                res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                Repository.Rollback();
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
+            Repository.Update<T>(entity, modified);
+            res.Entitys = new object[] { Repository.QueryFirst<T>(x => x.ID == entity.ID) };
+            res.Success = true;
             return MyJson(res);
         }
 
+        [NoTransaction]
+        public virtual JsonResult Read(CommonAjaxArgs args)
+        {
+            EntityResponseDto res = new EntityResponseDto();
+
+            var predicate = ExpressionUtil.GetSearchExpression(typeof(T), args.Filter) as Expression<Func<T, bool>>;
+
+            args.Limit = args.Limit <= 0 ? 50 : args.Limit;
+
+            args.Page = args.Page == 0 ? 1 : args.Page;
+
+            Sorter sort = new Sorter() { SortField = "ID", SortOrder = System.Data.SqlClient.SortOrder.Descending };
+            if (args.Query.Sorters != null && args.Query.Sorters.Count > 0)
+            {
+                sort = args.Query.Sorters.First();
+            }
+            string[] includes = args.Include;
+            res.Count = Repository.GetQueryExp<T>(predicate, includes).Count();
+            res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = args.Page, rows = args.Limit, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" }, includes);
+            res.Success = true;
+            return MyJson(res);
+        }
+
+        [NoTransaction]
         public virtual JsonResult Gets(CommonAjaxArgs args)
         {
             EntityResponseDto res = new EntityResponseDto();
-            try
+            var predicate = ExpressionUtil.GetSearchExpression(typeof(T), args.Query.Searchs) as Expression<Func<T, bool>>;
+
+            var page = args.Query.Page;
+
+            if (page.PageSize <= 0)
             {
-
-                var predicate = ExpressionUtil.GetSearchExpression(typeof(T), args.Query.Searchs) as Expression<Func<T, bool>>;
-
-                var page = args.Query.Page;
-
-                if (page.PageSize <= 0)
-                {
-                    page.PageSize = 500;
-                }
-
-                Sorter sort = new Sorter() { SortField = "ID", SortOrder = System.Data.SqlClient.SortOrder.Descending };
-                if (args.Query.Sorters != null && args.Query.Sorters.Count > 0)
-                {
-                    sort = args.Query.Sorters.First();
-                }
-                string[] includes = args.Query.IncludeEntityPaths == null ? null : args.Query.IncludeEntityPaths.ToArray();
-                res.Count = Repository.GetQueryExp<T>(predicate, includes).Count();
-                res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = page.PageIndex, rows = page.PageSize, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" }, includes);
-                res.Success = true;
+                page.PageSize = 500;
             }
-            catch (Exception ex)
+
+            Sorter sort = new Sorter() { SortField = "ID", SortOrder = System.Data.SqlClient.SortOrder.Descending };
+            if (args.Query.Sorters != null && args.Query.Sorters.Count > 0)
             {
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
+                sort = args.Query.Sorters.First();
             }
+            string[] includes = args.Query.IncludeEntityPaths == null ? null : args.Query.IncludeEntityPaths.ToArray();
+            res.Count = Repository.GetQueryExp<T>(predicate, includes).Count();
+            res.Entitys = Repository.QueryPage<T>(predicate, new Pagination() { page = page.PageIndex, rows = page.PageSize, sidx = sort.SortField, sord = sort.SortOrder == System.Data.SqlClient.SortOrder.Ascending ? "asc" : "desc" }, includes);
+            res.Success = true;
+
             return MyJson(res);
         }
 
-        public JsonResult Delete(long[] ids)
+        public virtual JsonResult Delete(long[] ids)
         {
             EntityResponseDto res = new EntityResponseDto();
-            try
-            {
-                Repository.BeginTran();
-                Repository.Delete<T>(ids);
-                Repository.Commit();
-                res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                Repository.Rollback();
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
+
+            Repository.Delete<T>(ids);
+            res.Success = true;
             return MyJson(res);
         }
 
 
         public MyJsonResult MyJson(object data, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.AllowGet)
         {
-            MyJsonResult result = new MyJsonResult() { Data = data, JsonRequestBehavior= jsonRequestBehavior };
+            MyJsonResult result = new MyJsonResult() { Data = data, JsonRequestBehavior = jsonRequestBehavior };
             return result;
         }
     }

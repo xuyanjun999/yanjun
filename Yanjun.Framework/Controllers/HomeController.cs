@@ -14,8 +14,6 @@ namespace Yanjun.Framework.Mvc.Controllers
 
         public ActionResult Index()
         {
-            var c = GlobalConfiguration.Configuration;
-            int a = c.Formatters.JsonFormatter.GetHashCode();
             return View();
         }
 

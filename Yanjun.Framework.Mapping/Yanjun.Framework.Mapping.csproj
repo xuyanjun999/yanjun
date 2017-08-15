@@ -47,19 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseData\ParamCompareMap.cs" />
-    <Compile Include="BaseData\ParamDefineMap.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="Data\BlockMap.cs" />
-    <Compile Include="Data\BlockParamMap.cs" />
-    <Compile Include="Data\ModelBlockMap.cs" />
-    <Compile Include="Data\ModelGroupMap.cs" />
-    <Compile Include="Data\ModelMap.cs" />
     <Compile Include="EntityMapBase.cs" />
     <Compile Include="Org\CompanyMap.cs" />
     <Compile Include="Org\StaffMap.cs" />
-    <Compile Include="Project\DrawingTaskMap.cs" />
-    <Compile Include="Project\ProjectMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sys\DicConfigMap.cs" />
     <Compile Include="Sys\MenuMap.cs" />

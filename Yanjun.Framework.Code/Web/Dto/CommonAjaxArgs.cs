@@ -14,7 +14,7 @@ namespace Yanjun.Framework.Code.Web.Dto
         /// </summary>
         public CommonAjaxArgs()
         {
-            //this.Query = new QueryArg();
+            this.Query = new QueryArg();
             //this.ExtraEntityQuerys = new ExtraEntityQueryArg[] { };
             //this.Delete = new DeleteArg();
             //this.Add = new AddArg();
@@ -24,6 +24,19 @@ namespace Yanjun.Framework.Code.Web.Dto
             //this.NeedAfterAction = true;
         }
 
+        public List<BaseSearchItem> Filter { get; set; }
+
+        public string[] Include { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Page { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Limit { get; set; }
 
         /// <summary>
         /// 增删改时 后台是否触发验证 默认触发

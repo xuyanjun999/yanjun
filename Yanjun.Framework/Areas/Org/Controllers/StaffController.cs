@@ -18,28 +18,16 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
         public IStaffService StaffService { get; set; }
         // GET: Org/Staff
         [NotCheckUserAttribute]
+        [NoTransaction]
         public virtual JsonResult IsLogin()
         {
             EntityResponseDto res = new EntityResponseDto();
-            try
-            {
-                string ip = Request.UserHostAddress;
-                StaffEntity staff = WebHelper.GetSessionObj(WebHelper.USER_LOGIN_SESSION) as StaffEntity;
-                if (staff != null)
-                {
-                    res.Success = true;
-                }
-                else
-                {
-                    res.Success = false;
-                }
 
-            }
-            catch (Exception ex)
+            string ip = Request.UserHostAddress;
+            User user = Repository.GetCurrentUser();
+            if (user != null)
             {
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
+                res.Success = true;
             }
             return Json(res, JsonRequestBehavior.AllowGet);
         }
@@ -49,54 +37,33 @@ namespace Yanjun.Framework.Mvc.Areas.Org.Controllers
         public virtual JsonResult Login(string userName, string pwd)
         {
             EntityResponseDto res = new EntityResponseDto();
-            try
+            string ip = Request.UserHostAddress;
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(pwd))
             {
-                string ip = Request.UserHostAddress;
-                if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(pwd))
-                {
-                    throw new Exception("用户名和密码不能为空!");
-                }
-                StaffService.Repository.BeginTran();
-                StaffEntity staff = StaffService.Login(userName, pwd, ip);
-                if (staff != null)
-                {
-                    res.Dic.Add("user", staff);
-                }
-                else
-                {
-                    throw new Exception("登陆失败!");
-                }
-
-                StaffService.Repository.Commit();
-                res.Success = true;
+                throw new Exception("用户名和密码不能为空!");
             }
-            catch (Exception ex)
+            StaffEntity staff = StaffService.Login(userName, pwd, ip);
+            if (staff != null)
             {
-                Log.Error(ex);
-                StaffService.Repository.Rollback();
-                res.Success = false;
-                res.Message = ex.Message;
-                
+                res.Dic.Add("user", staff);
             }
+            else
+            {
+                throw new Exception("登录失败!");
+            }
+            res.Success = true;
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         [NotCheckUserAttribute]
+        [NoTransaction]
         public virtual JsonResult Logout()
         {
             EntityResponseDto res = new EntityResponseDto();
-            try
-            {
                 string ip = Request.UserHostAddress;
-                WebHelper.RemoveSession(WebHelper.USER_LOGIN_SESSION);
+                WebHelper.RemoveUser();
                 res.Success = true;
-            }
-            catch (Exception ex)
-            {
-                res.Success = false;
-                res.Message = ex.Message;
-                Log.Error(ex);
-            }
+
             return Json(res, JsonRequestBehavior.AllowGet);
         }
     }
