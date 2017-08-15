@@ -9,7 +9,6 @@ using System.Web;
 using System.Web.Mvc;
 using Yanjun.Framework.Code.Web;
 using Yanjun.Framework.Data.Repository;
-using Yanjun.Framework.Domain.DrawingArg;
 using Yanjun.Framework.Domain.Entity.Org;
 using Yanjun.Framework.Mvc.Filter.Attribute;
 

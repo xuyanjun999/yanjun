@@ -11,6 +11,7 @@
     <title>Index</title>
 
     <link href="~/Extjs/resources/sef-all.css" rel="stylesheet" />
+    <link href="~/assets/css/splash.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -24,32 +25,19 @@
 
 
 
-    @*<script src="~/app/model/sys/Menu.js"></script>*@
-    @*<script src="~/sef/interfaces/IAppPage.js"></script>
-    <script src="~/sef/interfaces/IDialogContent.js"></script>
-    <script src="~/sef/components/page/PageCtrl.js"></script>
-    <script src="~/sef/view/viewport/ViewportCtrl.js"></script>*@
-
-   
-   
 
     <script type="text/javascript">
-        console.log("111");
+
         Ext.Loader.setConfig({
             enable: true,
             paths: {
                 "sef": "/",
                 "sef.core": "/sef",
                 "sef.app": '/apps',
-              
+
             }
         });
         Ext.onReady(function () {
-            console.log("333");
-            //Ext.require('sef.cctv');
-           // Ext.toast("欢迎使用EAP", "欢迎", "t");
-            console.log("222");
-
             Ext.application("sef.core.Application");
         });
 

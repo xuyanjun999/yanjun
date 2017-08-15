@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yanjun.Framework.Domain.DrawingArg;
+using Yanjun.Framework.Domain.Cad;
 using Yanjun.Framework.Domain.Entity.Data;
 using Yanjun.Framework.Domain.Entity.Project;
 using Yanjun.Framework.Domain.Service.ProjectInfo;
@@ -27,21 +27,20 @@ namespace Yanjun.Framework.Service.ProjectInfo
             project.DrawingTaskID = task.ID;
             Repository.Update<ProjectEntity>(project, x => x.DrawingTaskID);
 
-            CadDrawingArgs drawingArg = new CadDrawingArgs()
+            CadTaskArgs drawingArg = new CadTaskArgs()
             {
-                ID = task.ID,
+                TaskID = task.ID,
                 CompanyName = task.CompanyName,
                 TaskCode = task.TaskCode,
                 TaskDate = task.TaskDate,
                 TaskOwner = task.TaskOwner
             };
 
-            List<DynamicBlockEntity> blocks = Repository.QueryAll<DynamicBlockEntity>(x => x.ID == 1).ToList();
+            List<BlockEntity> blocks = Repository.QueryAll<BlockEntity>(c=>c.Status == 0).Take(10).ToList();
             foreach (var item in blocks)
             {
-                drawingArg.Blocks.Add(new CadDrawingBlockArgs()
+                drawingArg.Blocks.Add(new CadTaskBlockArgs()
                 {
-
                     BlockName = item.Name,
                 });
             }

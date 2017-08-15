@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Yanjun.Framework.Domain.DrawingArg
+namespace Yanjun.Framework.Domain.Cad
 {
-    /// <summary>
-    /// CAD 绘图信息
-    /// </summary>
-    public class CadDrawingArgs
+    public class CadTaskArgs
     {
-        public CadDrawingArgs()
+        public CadTaskArgs()
         {
-            Blocks = new List<CadDrawingBlockArgs>();
+            Blocks = new List<CadTaskBlockArgs>();
+            TaskMsg = "等待";
         }
         /// <summary>
         /// ID (必输项)
         /// </summary>
-        public long ID { get; set; }
+        public long TaskID { get; set; }
         /// <summary>
         /// 任务类型 默认绘制CAD
         /// </summary>
-        public TaskType TaskType { get; set; }
+        public TaskTypeEnum TaskType { get; set; }
         /// <summary>
         /// 任务编号 (必输项)
         /// </summary>
@@ -44,16 +39,19 @@ namespace Yanjun.Framework.Domain.DrawingArg
         /// <summary>
         /// 包含块 (必输项)
         /// </summary>
-        [NotMapped]
-        public List<CadDrawingBlockArgs> Blocks { get; set; }
+        public List<CadTaskBlockArgs> Blocks { get; set; }
         /// <summary>
         /// 任务状态 默认
         /// </summary>
-        public TaskStatus TaskStatus { get; set; }
+        public TaskStatusEnum TaskStatus { get; set; }
         /// <summary>
         /// 任务处理异常重试次数 
         /// </summary>
         public int ErrorCount { get; set; }
+        /// <summary>
+        /// 处理信息
+        /// </summary>
+        public string TaskMsg { get; set; }
         /// <summary>
         /// 任务处理开始时间
         /// </summary>
@@ -63,65 +61,44 @@ namespace Yanjun.Framework.Domain.DrawingArg
         /// </summary>
         public DateTime? EndTime { get; set; }
         /// <summary>
-        /// 输出文件
+        /// 输出文件路径
         /// </summary>
         public string Output { get; set; }
-        /// <summary>
-        /// 待处理任务源文件名
-        /// </summary>
-        [NotMapped]
-        public string FileName {
-            get {
-                if (File.Exists(SourceFile))
-                    return new FileInfo(SourceFile).Name;
-                return SourceFile;
-            }
-            set { }
-        }
         /// <summary>
         /// 待处理任务源文件路径
         /// </summary>
         public string SourceFile { get; set; }
-    }
 
-    /// <summary>
-    /// CAD 绘图块信息
-    /// </summary>
-    public class CadDrawingBlockArgs
-    {
-        public CadDrawingBlockArgs()
+        public void Start()
         {
-            BlockParams = new List<CadDrawingParamArgs>();
-            BlockPoint = new double[3] { 0, 0, 0 };
+            this.TaskStatus = TaskStatusEnum.Doing;
+            this.TaskMsg = "执行";
         }
-        public string BlockName { get; set; }
-        public double[] BlockPoint { get; set; }
 
-        public List<CadDrawingParamArgs> BlockParams { get; set; }
-    }
-
-    /// <summary>
-    /// CAD 绘图块参数信息
-    /// </summary>
-    public class CadDrawingParamArgs
-    {
-        public CadDrawingParamArgs()
+        public void Complete()
         {
-            DataType = "string";
+            this.TaskStatus = TaskStatusEnum.Complete;
+            this.TaskMsg = "完毕";
         }
-        public string ParamCode { get; set; }
-        public dynamic ParamValue { get; set; }
-        /// <summary>
-        /// double / string
-        /// </summary>
-        public string DataType { get; set; }
-        public int DrawingType { get; set; }
+
+        public void TryAgain(string msg)
+        {
+            this.ErrorCount++;
+            this.TaskStatus = TaskStatusEnum.TryAgain;
+            this.TaskMsg = msg;
+        }
+
+        public void Error(string msg)
+        {
+            this.TaskStatus = TaskStatusEnum.Error;
+            this.TaskMsg = msg;
+        }
     }
 
     /// <summary>
     /// CAD 绘图任务状态
     /// </summary>
-    public enum TaskStatus
+    public enum TaskStatusEnum
     {
         /// <summary>
         /// 默认状态
@@ -129,28 +106,30 @@ namespace Yanjun.Framework.Domain.DrawingArg
         Created = 0,
 
         /// <summary>
-        /// 执行中
+        /// 重试中
         /// </summary>
-        Doing = 1,
+        TryAgain = 2,
+
+        /// <summary>
+        /// 处理中
+        /// </summary>
+        Doing = 4,
 
         /// <summary>
         /// 完成
         /// </summary>
-        Complete = 2,
+        Complete = 6,
 
         /// <summary>
         /// 异常
         /// </summary>
-        Error = 3
+        Error = 9
     }
-    
-    /// <summary>
-    /// CAD 绘图任务类型
-    /// </summary>
-    public enum TaskType
+
+    public enum TaskTypeEnum
     {
         /// <summary>
-        /// 绘图
+        /// 生成井道图
         /// </summary>
         Drawing = 0,
 

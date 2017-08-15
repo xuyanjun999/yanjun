@@ -51,8 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cad\CadTaskArgs.cs" />
+    <Compile Include="Cad\CadTaskBlockArgs.cs" />
+    <Compile Include="Cad\CadTaskParamArgs.cs" />
     <Compile Include="Class1.cs" />
-    <Compile Include="DrawingArg\CadDrawingArg.cs" />
     <Compile Include="Entity\BaseAcsRecEntity.cs" />
     <Compile Include="Entity\BaseAcsRecTreeNodeEntity.cs" />
     <Compile Include="Entity\BaseData\ParamCompareEntity.cs" />
