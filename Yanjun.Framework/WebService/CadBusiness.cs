@@ -7,9 +7,9 @@ using System.IO;
 using Newtonsoft.Json;
 using Yanjun.Framework.Domain.Entity.Data;
 using SGEAP.CadDrawingEntity;
-using Yanjun.Framework.Domain.DrawingArg;
 using log4net;
 using Yanjun.Framework.Domain.Entity.Org;
+using Yanjun.Framework.Domain.Cad;
 
 namespace SGEAP.CadDrawingEntity
 {
@@ -76,13 +76,13 @@ namespace SGEAP.CadDrawingEntity
             var retObj = new CadReturnObj();
             try
             {
-                var taskArgs = Newtonsoft.Json.JsonConvert.DeserializeObject<CadDrawingArgs>(jsonData);
+                var taskArgs = Newtonsoft.Json.JsonConvert.DeserializeObject<CadTaskArgs>(jsonData);
 
-                var task = CadBlockDBUtil.GetDrawingTask(taskArgs.ID);
+                var task = CadBlockDBUtil.GetDrawingTask(taskArgs.TaskID);
                 if (task == null)
                 {
                     retObj.Success = false;
-                    retObj.Message = "无效的处理任务[ID=" + taskArgs.ID + "]";
+                    retObj.Message = "无效的处理任务[ID=" + taskArgs.TaskID + "]";
                     return retObj;
                 }
                 var phyPath = GetTaskResultPhyPath();
@@ -98,14 +98,14 @@ namespace SGEAP.CadDrawingEntity
 
                     task.Output = relPath + postFile.FileName;
                     task.EndTime = DateTime.Now;
-                    task.TaskStatus = (int)TaskStatus.Complete;
+                    task.TaskStatus = (int)TaskStatusEnum.Complete;
                     CadBlockDBUtil.UpdateDrawingTask(task);
                 }
                 if (files.Count == 0)
                 {
                     task.Output = null;
                     task.EndTime = DateTime.Now;
-                    task.TaskStatus = (int)TaskStatus.Error;
+                    task.TaskStatus = (int)TaskStatusEnum.Error;
                     CadBlockDBUtil.UpdateDrawingTask(task);
                 }
             }

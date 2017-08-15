@@ -166,16 +166,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\ApiControllerBase.cs" />
-    <Compile Include="Api\BaseData\ParamDefineController.cs" />
-    <Compile Include="Api\Data\DynamicBlockController.cs" />
-    <Compile Include="Api\Data\DynamicBlockParamController.cs" />
-    <Compile Include="Api\Org\CompanyController.cs" />
-    <Compile Include="Api\Org\StaffController.cs" />
-    <Compile Include="Api\ProjectInfo\ProjectController.cs" />
-    <Compile Include="Api\RestApiController.cs" />
-    <Compile Include="Api\Sys\DicConfigController.cs" />
-    <Compile Include="Api\Sys\MenuController.cs" />
     <Compile Include="App_Start\AutoFacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -187,10 +177,7 @@
     <Compile Include="Areas\CADController.cs" />
     <Compile Include="Areas\Data\Controllers\BlockController.cs" />
     <Compile Include="Areas\Data\Controllers\BlockParamController.cs" />
-    <Compile Include="Areas\Data\Controllers\DynamicBlockController.cs" />
-    <Compile Include="Areas\Data\Controllers\DynamicBlockParamController.cs" />
     <Compile Include="Areas\Data\Controllers\ModelBlockController.cs" />
-    <Compile Include="Areas\Data\Controllers\ModelConfigController.cs" />
     <Compile Include="Areas\Data\Controllers\ModelController.cs" />
     <Compile Include="Areas\Data\Controllers\ModelGroupController.cs" />
     <Compile Include="Areas\Data\DataAreaRegistration.cs" />

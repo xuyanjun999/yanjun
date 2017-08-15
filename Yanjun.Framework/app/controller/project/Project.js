@@ -49,7 +49,7 @@
                 } catch (e) {
                     console.log(e);
                 } finally {
-                    sggrid.setLoading(false);
+                   // sggrid.setLoading(false);
                 }
 
             },
