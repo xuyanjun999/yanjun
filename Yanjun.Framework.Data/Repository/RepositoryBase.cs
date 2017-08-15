@@ -45,6 +45,7 @@ namespace Yanjun.Framework.Data.Repository
         /// </summary>
         public void BeginTran()
         {
+            if (Tran != null) return;
             Conn = MyContext.Database.Connection;
             if (Conn.State == System.Data.ConnectionState.Closed)
                 Conn.Open();
@@ -59,6 +60,7 @@ namespace Yanjun.Framework.Data.Repository
 
         public void BeginTran(IsolationLevel isolationLevel)
         {
+            if (Tran != null) return;
             Conn = MyContext.Database.Connection;
             if (Conn.State == System.Data.ConnectionState.Closed)
                 Conn.Open();
@@ -70,7 +72,7 @@ namespace Yanjun.Framework.Data.Repository
         /// </summary>
         public void Commit()
         {
-            if (Tran != null)
+            if (Tran != null && Tran.Connection != null)
                 Tran.Commit();
         }
 
@@ -79,7 +81,7 @@ namespace Yanjun.Framework.Data.Repository
         /// </summary>
         public void Rollback()
         {
-            if (Tran != null)
+            if (Tran != null && Tran.Connection != null)
                 Tran.Rollback();
         }
 
@@ -433,6 +435,11 @@ namespace Yanjun.Framework.Data.Repository
             if (Tran != null)
                 comm.Transaction = Tran;
             return comm.ExecuteScalar();
+        }
+
+        public User GetCurrentUser()
+        {
+            return WebHelper.GetUser();
         }
 
         public void Dispose()

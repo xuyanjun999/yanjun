@@ -8,7 +8,7 @@ using Yanjun.Framework.Data.Repository;
 
 namespace Yanjun.Framework.Mvc.Filter.Attribute
 {
-    public class AfterActionAttribute : ActionFilterAttribute
+    public class MyActionAttribute : ActionFilterAttribute
     {
 
 

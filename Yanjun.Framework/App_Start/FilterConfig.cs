@@ -10,7 +10,7 @@ namespace Yanjun.Framework.Mvc
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
 
-            filters.Add(new AfterActionAttribute());
+            filters.Add(new MyActionAttribute());
             filters.Add(new LoginFilterAttribute());
             filters.Add(new MyExceptionHandleAttribute());
             // filters.Add(new HandleErrorAttribute());

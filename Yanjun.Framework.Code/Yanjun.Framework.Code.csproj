@@ -53,6 +53,7 @@
     <Compile Include="Web\Dto\BaseAjaxArgs.cs" />
     <Compile Include="Web\Dto\BaseSearchItem.cs" />
     <Compile Include="Web\Dto\CommonAjaxArgs.cs" />
+    <Compile Include="Web\User.cs" />
     <Compile Include="Web\WebHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -19,6 +19,9 @@ namespace Yanjun.Framework.Data.Repository
         void Commit();
 
         void Rollback();
+
+        User GetCurrentUser();
+
         long Insert<TEntity>(TEntity entity) where TEntity : class;
         void Insert<TEntity>(IEnumerable<TEntity> entitys) where TEntity : class;
 

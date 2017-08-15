@@ -35,7 +35,7 @@ namespace Yanjun.Framework.Mvc.Filter.Attribute
                     }
                 }
 
-                filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
                 filterContext.ExceptionHandled = true;
                 filterContext.Result = new JsonResult
                 {
@@ -47,11 +47,6 @@ namespace Yanjun.Framework.Mvc.Filter.Attribute
                     JsonRequestBehavior = JsonRequestBehavior.AllowGet
                 };
             }
-
-
-
-
-
 
         }
     }

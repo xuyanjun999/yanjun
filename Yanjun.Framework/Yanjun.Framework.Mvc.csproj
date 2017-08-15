@@ -196,9 +196,10 @@
     <Compile Include="Areas\TreeQuery\Controllers\OrgTreeController.cs" />
     <Compile Include="Areas\TreeQuery\TreeQueryAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Filter\Attribute\AfterActionAttribute.cs" />
+    <Compile Include="Filter\Attribute\MyActionAttribute.cs" />
     <Compile Include="Filter\Attribute\MyExceptionHandleAttribute.cs" />
     <Compile Include="Filter\Attribute\NotCheckUserAttribute.cs" />
+    <Compile Include="Filter\Attribute\NoTransactionAttribute.cs" />
     <Compile Include="Filter\LoginApiFilter.cs" />
     <Compile Include="Filter\LoginFilter.cs" />
     <Compile Include="Global.asax.cs">

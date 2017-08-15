@@ -71,6 +71,39 @@ namespace Yanjun.Framework.Code.Web
             HttpContext.Current.Session.Contents.Remove(key);
         }
 
+        /// <summary>
+        /// 获取当前用户
+        /// </summary>
+        /// <param name="key">获取当前用户</param>        
+        public static User GetUser()
+        {
+            if (HttpContext.Current.Session == null)
+                return null;
+            return HttpContext.Current.Session[USER_LOGIN_SESSION] as User;
+        }
+
+        /// <summary>
+        /// 获取当前用户
+        /// </summary>
+        /// <param name="key">获取当前用户</param>        
+        public static void SetUser(User user)
+        {
+            if (HttpContext.Current.Session == null)
+                return;
+            HttpContext.Current.Session[USER_LOGIN_SESSION] = user;
+        }
+
+        /// <summary>
+        /// 移除当前用户
+        /// </summary>
+        /// <param name="key">移除当前用户</param>        
+        public static void RemoveUser()
+        {
+            if (HttpContext.Current.Session == null)
+                return;
+            HttpContext.Current.Session[USER_LOGIN_SESSION] = null;
+        }
+
         #endregion
     }
 }
