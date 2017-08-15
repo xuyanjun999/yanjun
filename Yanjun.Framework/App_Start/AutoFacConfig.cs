@@ -36,14 +36,14 @@ namespace Yanjun.Framework.Mvc.App_Start
 
             RegisterMvc(builder);
 
-            RegisterApi(builder, config);
+            //RegisterApi(builder, config);
 
             var container = builder.Build();
          
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+           // config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
 
 

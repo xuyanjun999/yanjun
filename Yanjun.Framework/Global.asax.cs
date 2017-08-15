@@ -27,20 +27,20 @@ namespace Yanjun.Framework.Mvc
         }
 
 
-        private const string WebApiPrefix = "APi";
-        private static string WebApiExecutePath = string.Format("~/{0}", WebApiPrefix);
+        //private const string WebApiPrefix = "APi";
+        //private static string WebApiExecutePath = string.Format("~/{0}", WebApiPrefix);
 
-        private bool isWebAPiRequest()
-        {
-            return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith(WebApiExecutePath, StringComparison.CurrentCultureIgnoreCase);
-        }
+        //private bool isWebAPiRequest()
+        //{
+        //    return HttpContext.Current.Request.AppRelativeCurrentExecutionFilePath.StartsWith(WebApiExecutePath, StringComparison.CurrentCultureIgnoreCase);
+        //}
 
-        protected void Application_PostAuthorizeRequest()
-        {
-            if (isWebAPiRequest())
-            {
-                HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
-            }
-        }
+        //protected void Application_PostAuthorizeRequest()
+        //{
+        //    if (isWebAPiRequest())
+        //    {
+        //        HttpContext.Current.SetSessionStateBehavior(System.Web.SessionState.SessionStateBehavior.Required);
+        //    }
+        //}
     }
 }
